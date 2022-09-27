@@ -1,6 +1,8 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # --== Пункт 1 ==--
+
+# Создание иерархии директорий и файлов
 
 mkdir lab0
 cd lab0
@@ -16,6 +18,8 @@ touch nuzleaf5/ludicolo
 
 mkdir octillery5/primeape octillery5/clamperl
 touch octillery5/spearow
+
+# Заполнение файлов содержимым
 
 echo 'Живет  Desert Mountain' > golurk3
 
@@ -112,5 +116,3 @@ chmod u=rwx,g=rx,o=w octillery5/clamperl
 # группа-владелец должна читать и записывать файл;
 # остальные пользователи должны не иметь никаких прав
 chmod u=,g=rw,o= poliwag3
-
-# --== Пункт 3 ==--
