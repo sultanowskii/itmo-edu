@@ -365,18 +365,19 @@ ls: ./octillery5/primeape: Permission denied
     Для удобства сортировки по дате указал флаг `-D` у `ls`, отвечающий за формат даты.
 
     ```bash
-    $ ls -lahd -D ' %Y %m %d ' lab0/* lab0/*/* lab0/*/*/* lab0/*/*/*/* lab0/*/*/*/*/* 2>&1 | grep -v '^d' | grep 'lu\|^ls:' | sort -k1 -k6n -k7n -k8n
-    ----r--r--  1 s367553  studs    36B  2022 09 19  lab0/nuzleaf5/wurmple/magmortar6/jumpluffninjask
-    ----r--rw-  2 s367553  studs    36B  2022 09 19  lab0/Copy_62/jumpluffninjask
-    ----r--rw-  2 s367553  studs    36B  2022 09 19  lab0/magmortar6/jumpluffninjask
-    -r--------  1 s367553  studs    35B  2022 09 19  lab0/Copy_62/jumpluff
-    -r--------  1 s367553  studs    35B  2022 09 19  lab0/magmortar6/jumpluff
-    -r--------  1 s367553  studs    35B  2022 09 19  lab0/nuzleaf5/wurmple/magmortar6/jumpluff
-    -r--r-----  1 s367553  studs   101B  2022 09 19  lab0/nuzleaf5/ludicolo
-    -rw----r--  1 s367553  studs    28B  2022 09 19  lab0/golurk3
-    -rw----r--  1 s367553  studs    28B  2022 09 19  lab0/nuzleaf5/wurmple/magmortar6/rattatagolurk
-    lrwxr-xr-x  1 s367553  studs    32B  2022 09 19  lab0/Copy_62/rattatagolurk -> /home/studs/s367553/lab0/golurk3
-    lrwxr-xr-x  1 s367553  studs    32B  2022 09 19  lab0/magmortar6/rattatagolurk -> /home/studs/s367553/lab0/golurk3
+    $ ls -lahLR -D ' %Y %m %d ' lab0 2>&1 | grep -v '^d' | grep -v '^lab0/\|^total' | grep -v '^$' | grep 'lu\|^ls:' | sort -k1 -k6n -k7n -k8n
+    ----r--r--  1 s367553  studs    36B  2022 09 19  jumpluffninjask
+    ----r--rw-  2 s367553  studs    36B  2022 09 19  jumpluffninjask
+    ----r--rw-  2 s367553  studs    36B  2022 09 19  jumpluffninjask
+    -r--------  1 s367553  studs    35B  2022 09 19  jumpluff
+    -r--------  1 s367553  studs    35B  2022 09 19  jumpluff
+    -r--------  1 s367553  studs    35B  2022 09 19  jumpluff
+    -r--r-----  1 s367553  studs   101B  2022 09 19  ludicolo
+    -rw----r--  1 s367553  studs    28B  2022 09 19  golurk3
+    -rw----r--  1 s367553  studs    28B  2022 09 19  rattatagolurk
+    -rw----r--  1 s367553  studs    28B  2022 09 19  rattatagolurk
+    -rw----r--  1 s367553  studs    28B  2022 09 19  rattatagolurk
+    ls: lab0/nuzleaf5/ariados: Permission denied
     ```
 
 3. _Вывести содержимое файла ninjask7 с номерами строк, оставить только строки, заканчивающиеся на 'G', ошибки доступа не подавлять и не перенаправлять_
@@ -394,18 +395,18 @@ ls: ./octillery5/primeape: Permission denied
 4. _Вывести рекурсивно список имен и атрибутов файлов в директории lab0, содержащих строку "lu", список отсортировать по имени z->a, подавить вывод ошибок доступа_
 
     ```bash
-    $ ls -lahd -D ' %Y %m %d ' lab0/* lab0/*/* lab0/*/*/* lab0/*/*/*/* lab0/*/*/*/*/* 2>>/dev/null | grep -v '^d' | grep 'lu' | sort -r -k9
-    -rw----r--  1 s367553  studs    28B  2022 09 19  lab0/nuzleaf5/wurmple/magmortar6/rattatagolurk
-    ----r--r--  1 s367553  studs    36B  2022 09 19  lab0/nuzleaf5/wurmple/magmortar6/jumpluffninjask
-    -r--------  1 s367553  studs    35B  2022 09 19  lab0/nuzleaf5/wurmple/magmortar6/jumpluff
-    -r--r-----  1 s367553  studs   101B  2022 09 19  lab0/nuzleaf5/ludicolo
-    lrwxr-xr-x  1 s367553  studs    32B  2022 09 19  lab0/magmortar6/rattatagolurk -> /home/studs/s367553/lab0/golurk3
-    ----r--rw-  2 s367553  studs    36B  2022 09 19  lab0/magmortar6/jumpluffninjask
-    -r--------  1 s367553  studs    35B  2022 09 19  lab0/magmortar6/jumpluff
-    -rw----r--  1 s367553  studs    28B  2022 09 19  lab0/golurk3
-    lrwxr-xr-x  1 s367553  studs    32B  2022 09 19  lab0/Copy_62/rattatagolurk -> /home/studs/s367553/lab0/golurk3
-    ----r--rw-  2 s367553  studs    36B  2022 09 19  lab0/Copy_62/jumpluffninjask
-    -r--------  1 s367553  studs    35B  2022 09 19  lab0/Copy_62/jumpluff
+    $ ls -lahLR -D ' %Y %m %d ' lab0 2>>/dev/null | grep -v '^d' | grep -v '^lab0/\|^total' | grep -v '^$' | grep 'lu' | sort -r -k9
+    -rw----r--  1 s367553  studs    28B  2022 09 19  rattatagolurk
+    -rw----r--  1 s367553  studs    28B  2022 09 19  rattatagolurk
+    -rw----r--  1 s367553  studs    28B  2022 09 19  rattatagolurk
+    -r--r-----  1 s367553  studs   101B  2022 09 19  ludicolo
+    ----r--rw-  2 s367553  studs    36B  2022 09 19  jumpluffninjask
+    ----r--rw-  2 s367553  studs    36B  2022 09 19  jumpluffninjask
+    ----r--r--  1 s367553  studs    36B  2022 09 19  jumpluffninjask
+    -r--------  1 s367553  studs    35B  2022 09 19  jumpluff
+    -r--------  1 s367553  studs    35B  2022 09 19  jumpluff
+    -r--------  1 s367553  studs    35B  2022 09 19  jumpluff
+    -rw----r--  1 s367553  studs    28B  2022 09 19  golurk3
     ```
 
 5. _Подсчитать количество строк содержимого файлов в директории magmortar6, отсортировать вывод по уменьшению количества, ошибки доступа не подавлять и не перенаправлять_
@@ -423,10 +424,36 @@ ls: ./octillery5/primeape: Permission denied
 6. _Вывести три первых элемента рекурсивного списка имен и атрибутов файлов в директории lab0, содержащих строку "lu", список отсортировать по убыванию даты модификации файла, ошибки доступа перенаправить в файл в директории /tmp_
 
     ```bash
-    $ ls -lahd -D ' %Y %m %d ' lab0/* lab0/*/* lab0/*/*/* lab0/*/*/*/* lab0/*/*/*/*/* 2>>/tmp/lab0_err | grep -v '^d' | grep 'lu' | sort -k6rn -k7rn -k8rn | head -n 3
-    ----r--r--  1 s367553  studs    36B  2022 09 19  lab0/nuzleaf5/wurmple/magmortar6/jumpluffninjask
-    ----r--rw-  2 s367553  studs    36B  2022 09 19  lab0/Copy_62/jumpluffninjask
-    ----r--rw-  2 s367553  studs    36B  2022 09 19  lab0/magmortar6/jumpluffninjask
+    $ ls -lahLR -D ' %Y %m %d ' lab0 2>/tmp/lab0_err | grep -v '^d' | grep -v '^lab0/\|^total' | grep -v '^$' | grep 'lu'  | sort -k6rn -k7rn -k8rn | head -n 3
+    ----r--r--  1 s367553  studs    36B  2022 09 19  jumpluffninjask
+    ----r--rw-  2 s367553  studs    36B  2022 09 19  jumpluffninjask
+    ----r--rw-  2 s367553  studs    36B  2022 09 19  jumpluffninjask
+    ```
+
+7. _Вывести список имен и атрибутов файлов (рекурсивно в директории lab0), у которых кол-во жестких ссылок больше 2, в отсортированном порядке по уменьшению количества жестких ссылок_
+
+    ```bash
+    $ ls -lahLR -D ' %Y %m %d ' lab0 | grep -v '^d' | grep -v '^lab0/\|^total' | grep -v '^$' | grep -E -v '^[ldrwx-]{10}  [12]{1} ' | sort -k2rn
+    ```
+
+8. _Вывести строки из файлов каталога lab0 рекурсивно, в которых есть 2 подряд идущие цифры_
+
+    ```bash
+    $ grep -hr -E '[0-9]{2}' lab0
+    height=31.0 atk=6 def=7
+    grep: lab0/Copy_62/jumpluffninjask: Permission denied
+    grep: lab0/octillery5/primeape: Permission denied
+    grep: lab0/octillery5/spearowninjask: Permission denied
+    grep: lab0/ninjask7: Permission denied
+    height=31.0 atk=6 def=7
+    grep: lab0/nuzleaf5/wurmple/magmortar6/jumpluffninjask: Permission denied
+    grep: lab0/nuzleaf5/ariados: Permission denied
+    Возможности  Overland=6 Surface=10 Underwater=6
+    height=31.0 atk=6 def=7
+    grep: lab0/magmortar6/jumpluffninjask: Permission denied
+    Возможности  Overland=6 Surface=10 Underwater=6
+    Возможности  Overland=6 Surface=10 Underwater=6
+    grep: lab0/poliwag3: Permission denied
     ```
 
 ### 5. Удаление

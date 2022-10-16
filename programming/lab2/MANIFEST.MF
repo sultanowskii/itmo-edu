@@ -1,0 +1,2 @@
+Main-Class: ru.itmo.lab2.Program
+Class-Path: libs/Pokemon.jar build/classes
