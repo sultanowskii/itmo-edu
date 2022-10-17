@@ -7,7 +7,6 @@ public class HydroPump extends SpecialMove {
         super(Type.WATER, 110, 80);
     }
 
-    @Override
     protected String describe() {
         return "uses Hydro Pump";
     }

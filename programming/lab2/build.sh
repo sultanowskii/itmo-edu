@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 find -name "*.java" > sources.txt
 javac -d build/classes/ -cp libs/Pokemon.jar @sources.txt

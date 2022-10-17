@@ -1,6 +1,7 @@
 package ru.itmo.lab2.moves;
 
 import ru.ifmo.se.pokemon.*;
+
 public class RockPolish extends StatusMove {
     public RockPolish() {
         super(Type.ROCK, 0, 100);
