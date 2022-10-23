@@ -1,0 +1,55 @@
+"""
+Вариант: 3
+
+Вывесили списки стипендиатов текущего семестра, которые представляют из себя
+список людей ФИО и номер группы этого человека. Вы решили подшутить над
+некоторыми из своих одногруппников и удалить их из списка.
+
+С помощью регулярного выражения найдите всех студентов своей группы, у которых
+инициалы начинаются на одну и туже букву и исключите их из списка.
+
+Могут существовать двойные фамилии, которые тоже нужно учитывать (студенты с
+такими фамилиями тоже должны иметь право быть удаленными из списка
+стипендиатов текущего семестра).
+"""
+
+import re
+
+
+REGEX = r'^([А-Я]{1})(?=[а-я\- .]*)(?:[а-я\- .]*(\1))+[а-я\- .]* %s$'
+
+
+def get_joked_list(lines: str, group: str) -> 'list[str]':
+    same_capitals_our_group = [i.group() for i in re.finditer(REGEX % (group,), '\n'.join(lines), re.MULTILINE)]
+
+    result = []
+
+    for line in lines:
+        if not line in same_capitals_our_group:
+            result.append(line)
+
+    return result
+
+
+def main() -> None:
+    raw_line_count = input('Число строк: ')
+    if not raw_line_count.isdecimal():
+        print('Введите число!')
+        return
+    
+    line_count = int(raw_line_count)
+
+    lines = []
+
+    print(f'Введите {line_count} строк:')
+
+    for _ in range(line_count):
+        lines.append(input())
+
+    group = input('Введите группу:\n')
+
+    print('\n'.join(get_joked_list(lines, group)))
+
+
+if __name__ == '__main__':
+    main()

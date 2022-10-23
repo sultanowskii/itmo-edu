@@ -2,3 +2,4 @@
 .vscode/
 .idea/
 classes/
+__pycache__/
