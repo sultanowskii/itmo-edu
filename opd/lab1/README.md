@@ -365,7 +365,7 @@ ls: ./octillery5/primeape: Permission denied
     Для удобства сортировки по дате указал флаг `-D` у `ls`, отвечающий за формат даты.
 
     ```bash
-    $ ls -lahLR -D ' %Y %m %d ' lab0 2>&1 | grep -v '^d' | grep -v '^lab0/\|^total' | grep -v '^$' | grep 'lu\|^ls:' | sort -k1 -k6n -k7n -k8n
+    $ ls -lahLR -D ' %Y %m %d ' lab0 2>&1 | grep -v '^d' | grep -v '^lab0/\|^total' | grep -v '^$' | grep 'lu\|^ls:' | sort -k6n -k7n -k8n -k1
     ----r--r--  1 s367553  studs    36B  2022 09 19  jumpluffninjask
     ----r--rw-  2 s367553  studs    36B  2022 09 19  jumpluffninjask
     ----r--rw-  2 s367553  studs    36B  2022 09 19  jumpluffninjask
