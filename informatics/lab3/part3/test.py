@@ -1,7 +1,7 @@
 import sys
 sys.path.append('..')
 
-from part3.joke import get_joked_list
+from part3.joke import get_student_list_after_a_joke
 from ftest import ftest
 
 
@@ -87,7 +87,7 @@ TEST_CASES = [
 
 
 def test() -> None:
-    ftest(get_joked_list, TEST_CASES, test_name='Lab 3. Joking with students.')
+    ftest(get_student_list_after_a_joke, TEST_CASES, test_name='Lab 3. Joking with students.')
 
 
 if __name__ == '__main__':
