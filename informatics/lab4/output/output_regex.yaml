@@ -1,0 +1,139 @@
+timetable:
+  value:
+    days:
+      value:
+        day:
+          attrs:
+            id: 3day
+            name: wednesday
+          value:
+            lessons:
+              value:
+                - lesson:
+                    value:
+                      time:
+                        value: 11:40-13:10
+                      weeks:
+                        value:
+                          - week:
+                              value: 2
+                          - week:
+                              value: 4
+                          - week:
+                              value: 6
+                          - week:
+                              value: 8
+                          - week:
+                              value: 10
+                          - week:
+                              value: 12
+                          - week:
+                              value: 14
+                          - week:
+                              value: 16
+                      room:
+                        value:
+                          address:
+                            value: Кронверкский пр., д.49, лит.А
+                          name:
+                            value: 2308 (бывш. 306) ауд.
+                      detail:
+                        value:
+                          name:
+                            value: Информатика(Лаб)
+                          teacher:
+                            value: Белозубов Александр Владимирович
+                          format:
+                            value: Очно - дистанционный
+                - lesson:
+                    value:
+                      time:
+                        value: 13:30-15:00
+                      weeks:
+                        value:
+                          - week:
+                              value: 2
+                          - week:
+                              value: 4
+                          - week:
+                              value: 6
+                          - week:
+                              value: 8
+                          - week:
+                              value: 10
+                          - week:
+                              value: 12
+                          - week:
+                              value: 14
+                          - week:
+                              value: 16
+                      room:
+                        value:
+                          address:
+                            value: Кронверкский пр., д.49, лит.А
+                          name:
+                            value: 2308 (бывш. 306) ауд.
+                      detail:
+                        value:
+                          name:
+                            value: Информатика(Лаб)
+                          teacher:
+                            value: Белозубов Александр Владимирович
+                          format:
+                            value: Очно - дистанционный
+                - lesson:
+                    value:
+                      time:
+                        value: 13:30-15:00
+                      weeks:
+                        value:
+                          - week:
+                              value: 2
+                          - week:
+                              value: 4
+                          - week:
+                              value: 6
+                          - week:
+                              value: 8
+                          - week:
+                              value: 10
+                          - week:
+                              value: 12
+                          - week:
+                              value: 14
+                          - week:
+                              value: 16
+                      room:
+                        value:
+                          address:
+                            value: Кронверкский пр., д.49, лит.А
+                          name:
+                            value: 2308 (бывш. 306) ауд.
+                      detail:
+                        value:
+                          name:
+                            value: Информатика(Лаб)
+                          teacher:
+                            value: Белозубов Александр Владимирович
+                          format:
+                            value: Очно - дистанционный
+                - lesson:
+                    value:
+                      time:
+                        value: 15:20-16:50
+                      weeks:
+                        value: null
+                      room:
+                        value:
+                          address:
+                            value: Кронверкский пр., д.49, лит.А
+                          name:
+                            value: 2304 (бывш. 302) ауд.
+                      detail:
+                        value:
+                          name:
+                            value: Дискретная математика (базовый уровень)(лек)
+                          teacher:
+                            value: Поляков Владимир Иванович
+                          format:
+                            value: Очно - дистанционный

@@ -1,7 +1,7 @@
 import sys
 sys.path.append('..')
 
-from part1.smile import count_smiles
+from part1.script import count_smiles
 from ftest import ftest
 
 

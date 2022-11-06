@@ -1,7 +1,7 @@
 import sys
 sys.path.append('..')
 
-from part3.joke import get_student_list_after_a_joke
+from part3.script import get_student_list_after_a_joke
 from ftest import ftest
 
 

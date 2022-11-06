@@ -1,7 +1,7 @@
 import sys
 sys.path.append('..')
 
-from part2.word_finder import find_all_special_words
+from part2.script import find_all_special_words
 from ftest import ftest
 
 

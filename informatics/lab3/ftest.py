@@ -13,7 +13,16 @@ def call_func_with_args_type_detection(func: Callable, arg: Any) -> Any:
 def _exec_test_cases(func: Callable, test_cases: 'list[(Any,Any)]') -> None:
     """Запуск тестируемой функции на тестовых примерах."""
     for i, (arg, expected) in enumerate(test_cases):
-        result = call_func_with_args_type_detection(func, arg)
+        try:
+            result = call_func_with_args_type_detection(func, arg)
+        except Exception as e:
+            print(
+                (
+                    f'[!] Test case #{i + 1}: Exception is thrown:\n'
+                    f'{e}'
+                )
+            )
+            continue
 
         if result != expected:
             print(

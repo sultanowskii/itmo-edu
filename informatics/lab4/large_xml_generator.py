@@ -1,0 +1,100 @@
+
+header = """<?xml version="1.0" encoding="UTF-8"?>
+<timetable>
+    <days>"""
+
+body = """
+        <day id="3day" name="wednesday">
+            <lessons>
+                <lesson>
+                    <time>11:40-13:10</time>
+                    <weeks>
+                        <week>2</week>
+                        <week>4</week>
+                        <week>6</week>
+                        <week>8</week>
+                        <week>10</week>
+                        <week>12</week>
+                        <week>14</week>
+                        <week>16</week>
+                    </weeks>
+                    <room>
+                        <address>Кронверкский пр., д.49, лит.А</address>
+                        <name>2308 (бывш. 306) ауд.</name>
+                    </room>
+                    <detail>
+                        <name>Информатика(Лаб)</name>
+                        <teacher>Белозубов Александр Владимирович</teacher>
+                        <format>Очно - дистанционный</format>
+                    </detail>
+                </lesson>
+                <lesson>
+                    <time>13:30-15:00</time>
+                    <weeks>
+                        <week>2</week>
+                        <week>4</week>
+                        <week>6</week>
+                        <week>8</week>
+                        <week>10</week>
+                        <week>12</week>
+                        <week>14</week>
+                        <week>16</week>
+                    </weeks>
+                    <room>
+                        <address>Кронверкский пр., д.49, лит.А</address>
+                        <name>2308 (бывш. 306) ауд.</name>
+                    </room>
+                    <detail>
+                        <name>Информатика(Лаб)</name>
+                        <teacher>Белозубов Александр Владимирович</teacher>
+                        <format>Очно - дистанционный</format>
+                    </detail>
+                </lesson>
+                <lesson>
+                    <time>13:30-15:00</time>
+                    <weeks>
+                        <week>2</week>
+                        <week>4</week>
+                        <week>6</week>
+                        <week>8</week>
+                        <week>10</week>
+                        <week>12</week>
+                        <week>14</week>
+                        <week>16</week>
+                    </weeks>
+                    <room>
+                        <address>Кронверкский пр., д.49, лит.А</address>
+                        <name>2308 (бывш. 306) ауд.</name>
+                    </room>
+                    <detail>
+                        <name>Информатика(Лаб)</name>
+                        <teacher>Белозубов Александр Владимирович</teacher>
+                        <format>Очно - дистанционный</format>
+                    </detail>
+                </lesson>
+                <lesson>
+                    <time>15:20-16:50</time>
+                    <weeks>
+                    </weeks>
+                    <room>
+                        <address>Кронверкский пр., д.49, лит.А</address>
+                        <name>2304 (бывш. 302) ауд.</name>
+                    </room>
+                    <detail>
+                        <name>Дискретная математика (базовый уровень)(лек)</name>
+                        <teacher>Поляков Владимир Иванович</teacher>
+                        <format>Очно - дистанционный</format>
+                    </detail>
+                </lesson>
+            </lessons>
+        </day>"""
+
+footer = """
+    </days>
+</timetable>
+"""
+
+data = header + body * 1000 + footer
+
+with open('input/large.xml', 'w', encoding='utf-8') as f:
+    f.write(data)
