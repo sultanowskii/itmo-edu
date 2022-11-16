@@ -2,4 +2,4 @@
 
 yet another ITMO SE labs/hws repo
 
-have a great day :)
+have no idea why am I doing this
