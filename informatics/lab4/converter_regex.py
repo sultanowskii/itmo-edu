@@ -15,49 +15,39 @@ captures returns a list of all the captures of a group
 capturesdict returns a dict of the named groups and lists of all the captures of those groups.
 """
 
-VWS = 'аеёиоуэыюя'
-CNS = 'бвгджзйклмнпрстфчйчшщ'
-RUS = 'а-яё'
-
-ENG = 'a-z'
-
-LTS = RUS + ENG
-
-PUNCT = r'!"#$%&()*+,-./:;<=>?@[]^_`{|}~' + '\''
-NMS = '0-9'
-
-PRINTABLE = LTS + PUNCT + NMS
-
 RE_TAG = regex.compile(
     r'<'
     r'(?P<name>[_a-z]{1}[a-z0-9_]*)'
-    r'(?: +(?P<attr_name>[_a-z]{1}[a-z0-9_]*)="(?P<attr_value>[^"]*)")*'
-    r'>'
+    r'(?: +(?P<attr_name>[_a-z]{1}[a-z0-9_\-]*)="(?P<attr_value>[^"]*)")*'
+    r'>',
+    regex.IGNORECASE,
 )
 
 RE_TAG_CLOSE = regex.compile(
     r'<'
-    r'\/(?P<name>[a-z_]{1}[a-z0-9_]*)'
-    r'>'
+    r'\/(?P<name>[a-z_]{1}[a-z0-9_\-]*)'
+    r'>',
+    regex.IGNORECASE,
 )
 
 RE_TOKENIZER = re.compile(
     r'('
 
     r'<'
-    r'[a-z_]{1}[a-z0-9_]*'
-    r'(?: +[a-z_]{1}[a-z0-9_]*="[^"]*")*'
+    r'[a-z_]{1}[a-z0-9_\-]*'
+    r'(?: +[a-z_]{1}[a-z0-9_\-]*="[^"]*")*'
     r'>'
 
     r'|'
 
-    r'<\/[a-z_]{1}[a-z0-9_]*>'
+    r'<\/[a-z_]{1}[a-z0-9_\-]*>'
 
     r'|'
 
     r'(?<=>).+(?=<)'
 
-    r')'
+    r')',
+    re.IGNORECASE,
 )
 
 class XMLRegexConverterException(Exception):
@@ -128,7 +118,7 @@ def _tokens_to_dict(tokens: 'list[str]', parent_tag_name: str = None, index: int
 
 
 def tokenize(xml_data: str) -> 'list[str]':
-    m = RE_TOKENIZER.findall(xml_data, re.IGNORECASE)
+    m = RE_TOKENIZER.findall(xml_data)
     return m
 
 

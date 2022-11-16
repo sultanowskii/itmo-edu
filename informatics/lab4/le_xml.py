@@ -96,6 +96,7 @@ def clear_xml(xml_raw_data: str) -> str:
 
 
 def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str = '') -> 'tuple[dict, int, str]':
+    """Рекурсивный парсинг XML-строки."""
     state = XMLParseState.TAG_START
 
     data = dict()
@@ -113,24 +114,72 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
     closing_tag = False
     i = index
 
+    def init_new_tag() -> None:
+        """Инициализация нового тэга (или добавление оного в массив)."""
+        nonlocal data
+        nonlocal tag_name, tag_name_completed, closing_tag
+
+        if not tag_name_completed and not closing_tag:
+            tag_name_completed = True
+            if tag_name in data:
+                if not isinstance(data[tag_name], list):
+                    el = data[tag_name]
+                    data[tag_name] = [el]
+                data[tag_name].append(
+                    {
+                        'value': None,
+                        'attrs': dict(),
+                    }
+                )
+            else:
+                data[tag_name] = {
+                    'value': None,
+                    'attrs': dict(),
+                }
+
+    def cleanup() -> None:
+        """Очистка переменных, возврат к изначальному состоянию (после успешной полной обработки конкретного тэга)."""
+        nonlocal tag_name, tag_value, tag_attr_name, tag_attr_value, tag_attrs
+        nonlocal tag_name_completed, tag_is_closed, processing_instruction, closing_tag
+
+        tag_name = ''
+        tag_name_completed = False
+        tag_value = None
+
+        tag_attr_name = ''
+        tag_attr_value = ''
+        tag_attrs = dict()
+        tag_is_closed = False
+
+        processing_instruction = False
+        closing_tag = False
+
+    def assign_tag_value_and_attrs() -> None:
+        """Присвоить текущему тэгу значение и атрибуты."""
+        nonlocal data
+        nonlocal tag_name, tag_value, tag_attrs
+
+        if isinstance(data[tag_name], list):
+            data[tag_name][-1] = {
+                'value': tag_value,
+                'attrs': tag_attrs,
+            }
+        else:
+            data[tag_name] = {
+                'value': tag_value,
+                'attrs': tag_attrs,
+            }
+
     while i < len(clean_xml_raw_data):
         c = clean_xml_raw_data[i]
         match state:
             case XMLParseState.TAG_START:
                 match c:
-                    case '<':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '>':
+                    case '<' | '>' | '=' | ' ' | '"':
                         raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case '/':
                         closing_tag = True
                         state = XMLParseState.TAG_CLOSE
-                    case '=':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case ' ':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '"':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case '?':
                         state = XMLParseState.PROCESSING_INSTRUCTION_START
                         processing_instruction = True
@@ -141,54 +190,16 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                         tag_name = c
             case XMLParseState.TAG_NAME:
                 match c:
-                    case '<':
+                    case '<' | '/' | '=' | '"':
                         raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case '>':
                         state = XMLParseState.TAG_END
                         if processing_instruction:
                             raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                        if not tag_name_completed and not closing_tag:
-                            tag_name_completed = True
-                            if tag_name in data:
-                                if not isinstance(data[tag_name], list):
-                                    el = data[tag_name]
-                                    data[tag_name] = [el]
-                                data[tag_name].append(
-                                    {
-                                        'value': None,
-                                        'attrs': dict(),
-                                    }
-                                )
-                            else:
-                                data[tag_name] = {
-                                    'value': None,
-                                    'attrs': dict(),
-                                }
-                    case '/':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '=':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
+                        init_new_tag()
                     case ' ':
                         state = XMLParseState.TAG_SPACE
-                        if not tag_name_completed and not closing_tag:
-                            tag_name_completed = True
-                            if tag_name in data:
-                                if not isinstance(data[tag_name], list):
-                                    el = data[tag_name]
-                                    data[tag_name] = [el]
-                                data[tag_name].append(
-                                    {
-                                        'value': None,
-                                        'attrs': dict(),
-                                    }
-                                )
-                            else:
-                                data[tag_name] = {
-                                    'value': None,
-                                    'attrs': dict(),
-                                }
-                    case '"':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
+                        init_new_tag()
                     case '?':
                         if not processing_instruction:
                             raise XMLParseSyntaxException(clean_xml_raw_data, i)
@@ -199,20 +210,12 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                         tag_name += c
             case XMLParseState.TAG_SPACE:
                 match c:
-                    case '<':
+                    case '<' | '/' | '=' | ' ' | '"':
                         raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case '>':
                         if processing_instruction:
                             raise XMLParseSyntaxException(clean_xml_raw_data, i)
                         state = XMLParseState.TAG_END
-                    case '/':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '=':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case ' ':
-                        pass
-                    case '"':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case '?':
                         if not processing_instruction:
                             raise XMLParseSyntaxException(clean_xml_raw_data, i)
@@ -226,11 +229,7 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                         tag_attr_name = c
             case XMLParseState.TAG_ATTR_NAME:
                 match c:
-                    case '<':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '>':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '/':
+                    case '<' | '>' | '/' | '"' | '?':
                         raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case '=':
                         state = XMLParseState.TAG_ATTR_EQ
@@ -238,92 +237,41 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                             raise XMLParseNonUniqueAttrException(clean_xml_raw_data, i)
                     case ' ':
                         pass
-                    case '"':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '?':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case _:
                         if c not in ALLOWED_NAME_SYMBOLS:
                             raise XMLParseSyntaxException(clean_xml_raw_data, i)
                         tag_attr_name += c
             case XMLParseState.TAG_ATTR_EQ:
                 match c:
-                    case '<':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '>':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '/':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '=':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case ' ':
                         pass
                     case '"':
                         state = XMLParseState.TAG_ATTR_VALUE_START_QUOTE
-                    case '?':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case _:
                         raise XMLParseSyntaxException(clean_xml_raw_data, i)
             case XMLParseState.TAG_ATTR_VALUE_START_QUOTE:
                 match c:
-                    case '<':
-                        state = XMLParseState.TAG_ATTR_VALUE
-                        tag_attr_value = c
-                    case '>':
-                        state = XMLParseState.TAG_ATTR_VALUE
-                    case '/':
-                        state = XMLParseState.TAG_ATTR_VALUE
-                        tag_attr_value = c
-                    case '=':
-                        state = XMLParseState.TAG_ATTR_VALUE
-                        tag_attr_value = c
-                    case ' ':
-                        state = XMLParseState.TAG_ATTR_VALUE
-                        tag_attr_value = c
                     case '"':
                         state = XMLParseState.TAG_ATTR_VALUE_END_QUOTE
                         tag_attrs[tag_attr_name] = tag_attr_value
-                    case '?':
-                        state = XMLParseState.TAG_ATTR_VALUE
-                        tag_attr_value = c
                     case _:
                         state = XMLParseState.TAG_ATTR_VALUE
                         tag_attr_value = c
             case XMLParseState.TAG_ATTR_VALUE:
                 match c:
-                    case '<':
-                        tag_attr_value += c
-                    case '>':
-                        tag_attr_value += c
-                    case '/':
-                        tag_attr_value += c
-                    case '=':
-                        tag_attr_value += c
-                    case ' ':
-                        tag_attr_value += c
                     case '"':
                         state = XMLParseState.TAG_ATTR_VALUE_END_QUOTE
                         tag_attrs[tag_attr_name] = tag_attr_value
-                    case '?':
-                        tag_attr_value += c
                     case _:
                         tag_attr_value += c
             case XMLParseState.TAG_ATTR_VALUE_END_QUOTE:
                 match c:
-                    case '<':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case '>':
                         if processing_instruction:
                             raise XMLParseSyntaxException(clean_xml_raw_data, i)
                         state = XMLParseState.TAG_END
-                    case '/':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '=':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case ' ':
                         state = XMLParseState.TAG_SPACE
-                    case '"':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case '?':
                         if not processing_instruction:
                             raise XMLParseSyntaxException(clean_xml_raw_data, i)
@@ -331,6 +279,7 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                     case _:
                         raise XMLParseSyntaxException(clean_xml_raw_data, i)
             case XMLParseState.TAG_END:
+                # Текущий тэг - закрывающийся. Пора возвращаться к родительскому
                 if closing_tag:
                     return {
                         'single_closing_tag': True,
@@ -345,16 +294,7 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
 
                             tag_value = inner_data['data']
 
-                        if isinstance(data[tag_name], list):
-                            data[tag_name][-1] = {
-                                'value': tag_value,
-                                'attrs': tag_attrs,
-                            }
-                        else:
-                            data[tag_name] = {
-                                'value': tag_value,
-                                'attrs': tag_attrs,
-                            }
+                        assign_tag_value_and_attrs()
 
                         if not processing_instruction:
                             i = inner_data['index']
@@ -366,14 +306,11 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                                     'tag_name': tag_name,
                                 }
 
+                            # Закрылся непонятный тэг (ни текущий, ни родительский)
                             if inner_data['tag_name'] not in (tag_name, parent_tag_name):
                                 raise XMLParseInvalidCloseException(clean_xml_raw_data, i)
 
-                            if not tag_is_closed:
-                                if tag_name != inner_data['tag_name']:
-                                    raise XMLParseInvalidCloseException(clean_xml_raw_data, i)
-                                tag_is_closed = True
-                            else:
+                            if tag_is_closed:
                                 if parent_tag_name != inner_data['tag_name']:
                                     raise XMLParseInvalidCloseException(clean_xml_raw_data, i)
                                 return {
@@ -382,57 +319,21 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                                     'tag_name': tag_name,
                                 }
 
-                        tag_name = ''
-                        tag_name_completed = False
-                        tag_value = None
+                            if tag_name != inner_data['tag_name']:
+                                raise XMLParseInvalidCloseException(clean_xml_raw_data, i)
+                            tag_is_closed = True
 
-                        tag_attr_name = ''
-                        tag_attr_value = ''
-                        tag_attrs = dict()
-                        tag_is_closed = False
-
-                        processing_instruction = False
-                        closing_tag = False
+                        cleanup()
                         i += 1
 
                         state = XMLParseState.TAG_START
                         continue
-                    case '>':
-                        state = XMLParseState.VALUE
-                        tag_value = c
-                    case '/':
-                        state = XMLParseState.VALUE
-                        tag_value = c
-                    case '=':
-                        state = XMLParseState.VALUE
-                        tag_value = c
-                    case ' ':
-                        state = XMLParseState.VALUE
-                        tag_value = c
-                    case '"':
-                        state = XMLParseState.VALUE
-                        tag_value = c
-                    case '?':
-                        state = XMLParseState.VALUE
-                        tag_value = c
                     case _:
                         state = XMLParseState.VALUE
                         tag_value = c
             case XMLParseState.TAG_CLOSE:
                 match c:
-                    case '<':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '>':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '/':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '=':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case ' ':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '"':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '?':
+                    case '<' | '>' | '/' | '=' | '"' | '?' | ' ':
                         raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case _:
                         if c not in ALLOWED_NAME_FIRST_SYMBOLS:
@@ -444,17 +345,9 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                     case '<':
                         inner_data = _rec_xml_parse(clean_xml_raw_data, i + 1, tag_name)
 
-                        if isinstance(data[tag_name], list):
-                            data[tag_name][-1] = {
-                                'value': tag_value,
-                                'attrs': tag_attrs,
-                            }
-                        else:
-                            data[tag_name] = {
-                                'value': tag_value,
-                                'attrs': tag_attrs,
-                            }
+                        assign_tag_value_and_attrs()
 
+                        # Обработка частного случая
                         if index == 1:
                             return {
                                 'data': data,
@@ -462,17 +355,15 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                                 'tag_name': tag_name,
                             }
 
+                        # После значения не может идти открывающийся тэг
                         if 'single_closing_tag' not in inner_data or not inner_data['single_closing_tag']:
                             raise XMLParseSyntaxException(clean_xml_raw_data, i)
 
+                        # Закрылся непонятный тэг (ни текущий, ни родительский)
                         if inner_data['tag_name'] not in (tag_name, parent_tag_name):
                             raise XMLParseInvalidCloseException(clean_xml_raw_data, inner_data['index'])
 
-                        if not tag_is_closed:
-                            if tag_name != inner_data['tag_name']:
-                                raise XMLParseInvalidCloseException(clean_xml_raw_data, i)
-                            tag_is_closed = True
-                        else:
+                        if tag_is_closed:
                             if parent_tag_name != inner_data['tag_name']:
                                 raise XMLParseInvalidCloseException(clean_xml_raw_data, i)
                             return {
@@ -481,50 +372,20 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                                 'tag_name': tag_name,
                             }
 
-                        tag_name = ''
-                        tag_name_completed = False
-                        tag_value = None
+                        if tag_name != inner_data['tag_name']:
+                            raise XMLParseInvalidCloseException(clean_xml_raw_data, i)
+                        tag_is_closed = True
 
-                        tag_attr_name = ''
-                        tag_attr_value = ''
-                        tag_attrs = dict()
-                        tag_is_closed = False
-
-                        processing_instruction = False
-                        closing_tag = False
+                        cleanup()
                         i = inner_data['index'] + 1
 
                         state = XMLParseState.TAG_START
                         continue
-                    case '>':
-                        tag_value += c
-                    case '/':
-                        tag_value += c
-                    case '=':
-                        tag_value += c
-                    case ' ':
-                        tag_value += c
-                    case '"':
-                        tag_value += c
-                    case '?':
-                        tag_value += c
                     case _:
                         tag_value += c
             case XMLParseState.PROCESSING_INSTRUCTION_START:
                 match c:
-                    case '<':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '>':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '/':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '=':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case ' ':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '"':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '?':
+                    case '<' | '?' | '"' | ' ' | '=' | '/' | '>':
                         raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case _:
                         if c not in ALLOWED_NAME_SYMBOLS:
@@ -533,20 +394,8 @@ def _rec_xml_parse(clean_xml_raw_data: str, index: int = 0, parent_tag_name: str
                         tag_name = c
             case XMLParseState.PROCESSING_INSTRUCTION_END:
                 match c:
-                    case '<':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case '>':
                         state = XMLParseState.TAG_END
-                    case '/':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '=':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case ' ':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '"':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
-                    case '?':
-                        raise XMLParseSyntaxException(clean_xml_raw_data, i)
                     case _:
                         raise XMLParseSyntaxException(clean_xml_raw_data, i)
             case _:
