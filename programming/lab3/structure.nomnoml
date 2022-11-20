@@ -1,0 +1,96 @@
+#.interface: fill=#6de383 dashed bold italic
+#.abstract: fill=#6dd1e3 bold italic
+#.enum: fill=#edc974 bold
+
+[<abstract>Entity|
+ private String name|
+ public String getName()
+ public void setName(String newName)
+]
+
+[<class>Location|
+ private final List<Location> containedLocations|
+ public void addInnerLocation(Location otherLocation)
+]
+
+[<class>Human|
+ private CryLevel cryLevel
+ private final List<Memory> memories
+ private int nextMemoryIndex|
+ public void moveTo(Movement movement, Location destination)
+ public void addMemory(Memory memory)
+ public void rememberNextMemoryDetails()
+]
+
+
+[<class>Event|
+ private String name
+ private EventState state|
+ public String getName()
+ public void setName(String newName)
+ public EventState getState()
+ public void worsen()
+ public void improve()
+]
+
+[<class>Memory|
+ private final String description|
+ public String getDescription()
+]
+
+[<interface>Remembering|
+ public Memory nextMemory()
+ public int getMemoriesLeftCount()
+]
+
+[<interface>Crying|
+ public void cry()
+ public void decreaseCryLevel()
+ public void increaseCryLevel()
+]
+
+[<interface>Movement|
+ public void moveTo(Location destination)
+]
+
+[<class>Burrow]
+[<class>Jump]
+[<class>Run]
+
+[<enum>EventState|
+ RUINED
+ SPOILED
+ USUAL
+ COOL
+ AWESOME
+ private String description|
+ private static final EventState\[\] allValues
+ private static final int allValuesLength|
+ public String getDescription()
+ public EventState prev()
+ public EventState next()
+]
+
+[<enum>CryLevel|
+ NOT_CRYING
+ SNIFFLING
+ MODERATE
+ TREMBLING
+ MOANING
+ HYSTERICAL|
+ private String description
+ private static final EventState\[\] allValues
+ private static final int allValuesLength|
+ public String getDescription()
+ public CryLevel prev()
+ public CryLevel next()
+]
+
+[Entity]<-[Location]
+[Entity]<-[Human]
+[Crying]<--[Human]
+[Remembering]<--[Human]
+[Movement]<--[Burrow]
+[Movement]<--[Jump]
+[Movement]<--[Run]
+

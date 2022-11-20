@@ -1,0 +1,440 @@
+<svg version="1.1" baseProfile="full" width="2526.0" height="508.0" viewbox="0 0 2526 508" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events">
+	<desc >#.interface: fill=#6de383 dashed bold italic
+	#.abstract: fill=#6dd1e3 bold italic
+	#.enum: fill=#edc974 bold
+	
+	[&lt;abstract&gt;Entity|
+	 private String name|
+	 public String getName()
+	 public void setName(String newName)
+	]
+	
+	[&lt;class&gt;Location|
+	 private final List&lt;Location&gt; containedLocations|
+	 public void addInnerLocation(Location otherLocation)
+	]
+	
+	[&lt;class&gt;Human|
+	 private CryLevel cryLevel
+	 private final List&lt;Memory&gt; memories
+	 private int nextMemoryIndex|
+	 public void moveTo(Movement movement, Location destination)
+	 public void addMemory(Memory memory)
+	 public void rememberNextMemoryDetails()
+	]
+	
+	
+	[&lt;class&gt;Event|
+	 private String name
+	 private EventState state|
+	 public String getName()
+	 public void setName(String newName)
+	 public EventState getState()
+	 public void worsen()
+	 public void improve()
+	]
+	
+	[&lt;class&gt;Memory|
+	 private final String description|
+	 public String getDescription()
+	]
+	
+	[&lt;interface&gt;Remembering|
+	 public Memory nextMemory()
+	 public int getMemoriesLeftCount()
+	]
+	
+	[&lt;interface&gt;Crying|
+	 public void cry()
+	 public void decreaseCryLevel()
+	 public void increaseCryLevel()
+	]
+	
+	[&lt;interface&gt;Movement|
+	 public void moveTo(Location destination)
+	]
+	
+	[&lt;class&gt;Burrow]
+	[&lt;class&gt;Jump]
+	[&lt;class&gt;Run]
+	
+	[&lt;enum&gt;EventState|
+	 RUINED
+	 SPOILED
+	 USUAL
+	 COOL
+	 AWESOME
+	 private String description|
+	 private static final EventState\[\] allValues
+	 private static final int allValuesLength|
+	 public String getDescription()
+	 public EventState prev()
+	 public EventState next()
+	]
+	
+	[&lt;enum&gt;CryLevel|
+	 NOT_CRYING
+	 SNIFFLING
+	 MODERATE
+	 TREMBLING
+	 MOANING
+	 HYSTERICAL|
+	 private String description
+	 private static final EventState\[\] allValues
+	 private static final int allValuesLength|
+	 public String getDescription()
+	 public CryLevel prev()
+	 public CryLevel next()
+	]
+	
+	[Entity]&lt;-[Location]
+	[Entity]&lt;-[Human]
+	[Crying]&lt;--[Human]
+	[Remembering]&lt;--[Human]
+	[Movement]&lt;--[Burrow]
+	[Movement]&lt;--[Jump]
+	[Movement]&lt;--[Run]
+	
+	</desc>
+	<g stroke-width="1.0" text-align="left" font="12pt Helvetica, Arial, sans-serif" font-size="12pt" font-family="Helvetica" font-weight="bold" font-style="normal">
+		<g transform="translate(0.5, 0.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" stroke="#33322E">
+			<g stroke="transparent" fill="transparent">
+				<rect x="0.0" y="0.0" height="508.0" width="2526.0" stroke="none"></rect>
+			</g>
+			<g transform="translate(8, 8)" fill="#33322E">
+				<g transform="translate(20, 20)" fill="#33322E" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal">
+					<path d="M809.9 190.1 L798 279 L798 329 L798.0 329.0 " fill="none"></path>
+					<path d="M814.3 197.4 L809.9 190.1 L803.7 196.0 L810.8 183.5 Z"></path>
+					<path d="M968.3 182.1 L1245.25 279 L1480 327.48234349919744 L1480.0 327.5 " fill="none"></path>
+					<path d="M976.3 179.3 L968.3 182.1 L972.8 189.3 L962.0 179.9 Z"></path>
+					<g stroke-dasharray="6 6">
+						<path d="M1712.5 182.2 L1712.5 279 L1712.5 299 L1712.5 299.0 " fill="none"></path>
+					</g>
+					<path d="M1717.8 188.8 L1712.5 182.2 L1707.2 188.8 L1712.5 175.5 Z"></path>
+					<g stroke-dasharray="6 6">
+						<path d="M1998.0 174.7 L1998 279 L1938.8290155440413 299 L1938.8 299.0 " fill="none"></path>
+					</g>
+					<path d="M2003.3 181.3 L1998.0 174.7 L1992.7 181.3 L1998.0 168.0 Z"></path>
+					<g stroke-dasharray="6 6">
+						<path d="M2281.7 165.2 L2166 279 L2166 360 L2166.0 360.0 " fill="none"></path>
+					</g>
+					<path d="M2280.7 173.7 L2281.7 165.2 L2273.2 166.0 L2286.5 160.5 Z"></path>
+					<g stroke-dasharray="6 6">
+						<path d="M2306.4 166.9 L2271.5 279 L2271.5 360 L2271.5 360.0 " fill="none"></path>
+					</g>
+					<path d="M2309.5 174.8 L2306.4 166.9 L2299.3 171.6 L2308.4 160.5 Z"></path>
+					<g stroke-dasharray="6 6">
+						<path d="M2329.6 166.9 L2364.5 279 L2364.5 360 L2364.5 360.0 " fill="none"></path>
+					</g>
+					<path d="M2336.7 171.6 L2329.6 166.9 L2326.5 174.8 L2327.6 160.5 Z"></path>
+					<g data-name="EventState">
+						<g fill="#edc974" stroke="#33322E" data-name="EventState">
+							<rect x="0.0" y="8.0" height="244.0" width="297.0" data-name="EventState"></rect>
+							<path d="M0.0 39.0 L297.0 39.0" fill="none" data-name="EventState"></path>
+							<path d="M0.0 145.0 L297.0 145.0" fill="none" data-name="EventState"></path>
+							<path d="M0.0 191.0 L297.0 191.0" fill="none" data-name="EventState"></path>
+						</g>
+						<g transform="translate(0, 8)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="EventState">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="EventState">
+								<text x="140.5" y="13.5" stroke="none" text-anchor="middle" data-name="EventState">EventState</text>
+								
+							</g>
+						</g>
+						<g transform="translate(0, 39)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="EventState">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="EventState">
+								<text x="0.0" y="13.5" stroke="none" data-name="EventState">RUINED</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="EventState">SPOILED</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="EventState">USUAL</text>
+								<text x="0.0" y="58.5" stroke="none" data-name="EventState">COOL</text>
+								<text x="0.0" y="73.5" stroke="none" data-name="EventState">AWESOME</text>
+								<text x="0.0" y="88.5" stroke="none" data-name="EventState">private String description</text>
+								
+							</g>
+						</g>
+						<g transform="translate(0, 145)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="EventState">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="EventState">
+								<text x="0.0" y="13.5" stroke="none" data-name="EventState">private static final EventState[] allValues</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="EventState">private static final int allValuesLength</text>
+								
+							</g>
+						</g>
+						<g transform="translate(0, 191)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="EventState">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="EventState">
+								<text x="0.0" y="13.5" stroke="none" data-name="EventState">public String getDescription()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="EventState">public EventState prev()</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="EventState">public EventState next()</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="CryLevel">
+						<g fill="#edc974" stroke="#33322E" data-name="CryLevel">
+							<rect x="337.0" y="0.0" height="259.0" width="297.0" data-name="CryLevel"></rect>
+							<path d="M337.0 31.0 L634.0 31.0" fill="none" data-name="CryLevel"></path>
+							<path d="M337.0 137.0 L634.0 137.0" fill="none" data-name="CryLevel"></path>
+							<path d="M337.0 198.0 L634.0 198.0" fill="none" data-name="CryLevel"></path>
+						</g>
+						<g transform="translate(337, 0)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="CryLevel">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="CryLevel">
+								<text x="140.5" y="13.5" stroke="none" text-anchor="middle" data-name="CryLevel">CryLevel</text>
+								
+							</g>
+						</g>
+						<g transform="translate(337, 31)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CryLevel">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CryLevel">
+								<text x="0.0" y="13.5" stroke="none" data-name="CryLevel">NOT_CRYING</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="CryLevel">SNIFFLING</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="CryLevel">MODERATE</text>
+								<text x="0.0" y="58.5" stroke="none" data-name="CryLevel">TREMBLING</text>
+								<text x="0.0" y="73.5" stroke="none" data-name="CryLevel">MOANING</text>
+								<text x="0.0" y="88.5" stroke="none" data-name="CryLevel">HYSTERICAL</text>
+								
+							</g>
+						</g>
+						<g transform="translate(337, 137)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CryLevel">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CryLevel">
+								<text x="0.0" y="13.5" stroke="none" data-name="CryLevel">private String description</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="CryLevel">private static final EventState[] allValues</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="CryLevel">private static final int allValuesLength</text>
+								
+							</g>
+						</g>
+						<g transform="translate(337, 198)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CryLevel">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CryLevel">
+								<text x="0.0" y="13.5" stroke="none" data-name="CryLevel">public String getDescription()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="CryLevel">public CryLevel prev()</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="CryLevel">public CryLevel next()</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Entity">
+						<g fill="#6dd1e3" stroke="#33322E" data-name="Entity">
+							<rect x="674.0" y="76.0" height="108.0" width="288.0" data-name="Entity"></rect>
+							<path d="M674.0 107.0 L962.0 107.0" fill="none" data-name="Entity"></path>
+							<path d="M674.0 138.0 L962.0 138.0" fill="none" data-name="Entity"></path>
+						</g>
+						<g transform="translate(674, 76)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="Entity">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Entity">
+								<text x="136.0" y="13.5" stroke="none" text-anchor="middle" data-name="Entity">Entity</text>
+								
+							</g>
+						</g>
+						<g transform="translate(674, 107)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Entity">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Entity">
+								<text x="0.0" y="13.5" stroke="none" data-name="Entity">private String name</text>
+								
+							</g>
+						</g>
+						<g transform="translate(674, 138)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Entity">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Entity">
+								<text x="0.0" y="13.5" stroke="none" data-name="Entity">public String getName()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Entity">public void setName(String newName)</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Location">
+						<g fill="#eee8d5" stroke="#33322E" data-name="Location">
+							<rect x="603.0" y="329.0" height="93.0" width="391.0" data-name="Location"></rect>
+							<path d="M603.0 360.0 L994.0 360.0" fill="none" data-name="Location"></path>
+							<path d="M603.0 391.0 L994.0 391.0" fill="none" data-name="Location"></path>
+						</g>
+						<g transform="translate(603, 329)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Location">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Location">
+								<text x="187.5" y="13.5" stroke="none" text-anchor="middle" data-name="Location">Location</text>
+								
+							</g>
+						</g>
+						<g transform="translate(603, 360)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Location">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Location">
+								<text x="0.0" y="13.5" stroke="none" data-name="Location">private final List&lt;Location&gt; containedLocations</text>
+								
+							</g>
+						</g>
+						<g transform="translate(603, 391)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Location">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Location">
+								<text x="0.0" y="13.5" stroke="none" data-name="Location">public void addInnerLocation(Location otherLocation)</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Human">
+						<g fill="#eee8d5" stroke="#33322E" data-name="Human">
+							<rect x="1480.0" y="299.0" height="153.0" width="465.0" data-name="Human"></rect>
+							<path d="M1480.0 330.0 L1945.0 330.0" fill="none" data-name="Human"></path>
+							<path d="M1480.0 391.0 L1945.0 391.0" fill="none" data-name="Human"></path>
+						</g>
+						<g transform="translate(1480, 299)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Human">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Human">
+								<text x="224.5" y="13.5" stroke="none" text-anchor="middle" data-name="Human">Human</text>
+								
+							</g>
+						</g>
+						<g transform="translate(1480, 330)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Human">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Human">
+								<text x="0.0" y="13.5" stroke="none" data-name="Human">private CryLevel cryLevel</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Human">private final List&lt;Memory&gt; memories</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="Human">private int nextMemoryIndex</text>
+								
+							</g>
+						</g>
+						<g transform="translate(1480, 391)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Human">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Human">
+								<text x="0.0" y="13.5" stroke="none" data-name="Human">public void moveTo(Movement movement, Location destination)</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Human">public void addMemory(Memory memory)</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="Human">public void rememberNextMemoryDetails()</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Event">
+						<g fill="#eee8d5" stroke="#33322E" data-name="Event">
+							<rect x="1002.0" y="46.0" height="168.0" width="288.0" data-name="Event"></rect>
+							<path d="M1002.0 77.0 L1290.0 77.0" fill="none" data-name="Event"></path>
+							<path d="M1002.0 123.0 L1290.0 123.0" fill="none" data-name="Event"></path>
+						</g>
+						<g transform="translate(1002, 46)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Event">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Event">
+								<text x="136.0" y="13.5" stroke="none" text-anchor="middle" data-name="Event">Event</text>
+								
+							</g>
+						</g>
+						<g transform="translate(1002, 77)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Event">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Event">
+								<text x="0.0" y="13.5" stroke="none" data-name="Event">private String name</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Event">private EventState state</text>
+								
+							</g>
+						</g>
+						<g transform="translate(1002, 123)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Event">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Event">
+								<text x="0.0" y="13.5" stroke="none" data-name="Event">public String getName()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Event">public void setName(String newName)</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="Event">public EventState getState()</text>
+								<text x="0.0" y="58.5" stroke="none" data-name="Event">public void worsen()</text>
+								<text x="0.0" y="73.5" stroke="none" data-name="Event">public void improve()</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Memory">
+						<g fill="#eee8d5" stroke="#33322E" data-name="Memory">
+							<rect x="1330.0" y="83.0" height="93.0" width="225.0" data-name="Memory"></rect>
+							<path d="M1330.0 114.0 L1555.0 114.0" fill="none" data-name="Memory"></path>
+							<path d="M1330.0 145.0 L1555.0 145.0" fill="none" data-name="Memory"></path>
+						</g>
+						<g transform="translate(1330, 83)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Memory">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Memory">
+								<text x="104.5" y="13.5" stroke="none" text-anchor="middle" data-name="Memory">Memory</text>
+								
+							</g>
+						</g>
+						<g transform="translate(1330, 114)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Memory">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Memory">
+								<text x="0.0" y="13.5" stroke="none" data-name="Memory">private final String description</text>
+								
+							</g>
+						</g>
+						<g transform="translate(1330, 145)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Memory">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Memory">
+								<text x="0.0" y="13.5" stroke="none" data-name="Memory">public String getDescription()</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Remembering">
+						<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="Remembering">
+							<rect x="1870.0" y="91.0" height="77.0" width="256.0" data-name="Remembering"></rect>
+							<path d="M1870.0 122.0 L2126.0 122.0" fill="none" data-name="Remembering"></path>
+						</g>
+						<g transform="translate(1870, 91)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="Remembering">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Remembering">
+								<text x="120.0" y="13.5" stroke="none" text-anchor="middle" data-name="Remembering">Remembering</text>
+								
+							</g>
+						</g>
+						<g transform="translate(1870, 122)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Remembering">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Remembering">
+								<text x="0.0" y="13.5" stroke="none" data-name="Remembering">public Memory nextMemory()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Remembering">public int getMemoriesLeftCount()</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Crying">
+						<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="Crying">
+							<rect x="1595.0" y="84.0" height="92.0" width="235.0" data-name="Crying"></rect>
+							<path d="M1595.0 115.0 L1830.0 115.0" fill="none" data-name="Crying"></path>
+						</g>
+						<g transform="translate(1595, 84)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="Crying">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Crying">
+								<text x="109.5" y="13.5" stroke="none" text-anchor="middle" data-name="Crying">Crying</text>
+								
+							</g>
+						</g>
+						<g transform="translate(1595, 115)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Crying">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Crying">
+								<text x="0.0" y="13.5" stroke="none" data-name="Crying">public void cry()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Crying">public void decreaseCryLevel()</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="Crying">public void increaseCryLevel()</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Movement">
+						<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="Movement">
+							<rect x="2166.0" y="99.0" height="62.0" width="304.0" data-name="Movement"></rect>
+							<path d="M2166.0 130.0 L2470.0 130.0" fill="none" data-name="Movement"></path>
+						</g>
+						<g transform="translate(2166, 99)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="Movement">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Movement">
+								<text x="144.0" y="13.5" stroke="none" text-anchor="middle" data-name="Movement">Movement</text>
+								
+							</g>
+						</g>
+						<g transform="translate(2166, 130)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Movement">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Movement">
+								<text x="0.0" y="13.5" stroke="none" data-name="Movement">public void moveTo(Location destination)</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Burrow">
+						<g fill="#eee8d5" stroke="#33322E" data-name="Burrow">
+							<rect x="2130.0" y="360.0" height="31.0" width="72.0" data-name="Burrow"></rect>
+						</g>
+						<g transform="translate(2130, 360)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Burrow">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Burrow">
+								<text x="28.0" y="13.5" stroke="none" text-anchor="middle" data-name="Burrow">Burrow</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Jump">
+						<g fill="#eee8d5" stroke="#33322E" data-name="Jump">
+							<rect x="2242.0" y="360.0" height="31.0" width="59.0" data-name="Jump"></rect>
+						</g>
+						<g transform="translate(2242, 360)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Jump">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Jump">
+								<text x="21.5" y="13.5" stroke="none" text-anchor="middle" data-name="Jump">Jump</text>
+								
+							</g>
+						</g>
+					</g>
+					<g data-name="Run">
+						<g fill="#eee8d5" stroke="#33322E" data-name="Run">
+							<rect x="2341.0" y="360.0" height="31.0" width="47.0" data-name="Run"></rect>
+						</g>
+						<g transform="translate(2341, 360)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Run">
+							<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Run">
+								<text x="15.5" y="13.5" stroke="none" text-anchor="middle" data-name="Run">Run</text>
+								
+							</g>
+						</g>
+					</g>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>
