@@ -27,7 +27,8 @@ def _exec_test_cases(func: Callable, test_cases: 'list[(Any,Any)]') -> None:
         if result != expected:
             print(
                 (
-                    f'[!] Test case #{i + 1}: Error. Args: {arg}\n'
+                    f'[!] Test case #{i + 1}: Error.\n'
+                    f'  Args: {arg}\n'
                     f'  expected: {expected}\n'
                     f'  got:      {result}'
                 )
