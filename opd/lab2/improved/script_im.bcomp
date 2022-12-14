@@ -1,0 +1,13 @@
+org 0x40
+WORD 0xE04C ; A
+WORD 0x0200 ; B
+WORD 0x4041 ; D
+WORD ?      ; R
+
+org 0x44
+START:
+LD 0x040
+SUB 0x041   ; C = A - B
+AND 0x042   ; C & D
+ST 0x043
+HLT

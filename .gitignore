@@ -5,3 +5,4 @@ classes/
 __pycache__/
 bcomp-ng.jar
 bcomp.jar
+.~lock*
