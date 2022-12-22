@@ -1,0 +1,195 @@
+#.interface: fill=#6de383 dashed bold italic
+#.abstract: fill=#6dd1e3 bold italic
+#.enum: fill=#edc974 bold
+#.exception: fill=#f55d42 bold
+#.static: fill=#8a96db bold
+
+[<exception>NotImprovableEventException|
+]
+
+[<exception>NoMemoriesLeftException|
+]
+
+[<class>Event|
+ [<enum>EventState|
+  RUINED
+  SPOILED
+  USUAL
+  COOL
+  AWESOME
+  private String description|
+  private static final EventState\[\] allValues
+  private static final int allValuesLength|
+  public String getDescription()
+  public EventState previous()
+  public EventState next()
+  public int previousIndex()
+  public int nextIndex()
+  public boolean hasPrevious()
+  public boolean hasNext()
+ ]|
+ private String name
+ private EventState state|
+ public String getName()
+ public void setName(String newName)
+ public EventState getState()
+ public void worsen()
+ public void improve()
+]
+
+[<class>Memory|
+ private final String description|
+ public String getDescription()
+]
+
+[<class>Thought|
+ private final String description|
+ public String getDescription()
+]
+
+[<abstract>Entity|
+ private String name|
+ public String getName()
+ public void setName(String newName)
+]
+
+[<class>Location|
+ private final List<Location> containedLocations|
+ public void addInnerLocation(Location otherLocation)
+]
+
+[<abstract>HumanCapable|
+ private CryLevel cryLevel
+ private final List<Memory> memories
+ private int nextMemoryIndex|
+ public void moveTo(Movement movement, Location destination)
+ public void addMemory(Memory memory)
+ public void rememberNextMemoryDetails()
+]
+
+[<class>Human
+]
+
+[<class>HumanGroup|
+ [<static>GroupMembersStringGenerator|
+  public static String generateGroupHumansString(Set<Human> humans)
+ ]|
+    public void addHuman(Human human)
+    public void removeHuman(Human human)
+]
+
+[<interface>Remembering|
+ Memory nextMemory()
+ int getMemoriesLeftCount()
+]
+
+[<interface>Crying|
+ void cry()
+ void decreaseCryLevel()
+ void increaseCryLevel()
+]
+
+[<interface>HasMood|
+ void feel(MoodLevel moodLevel)
+]
+
+[<interface>Hugging<T>|
+ void hug(T other)
+]
+
+[<interface>Thinking|
+ void think(Thought thought)
+]
+
+[<interface>Movement|
+ void moveTo(Location location)
+]
+
+[<interface>MovementTo|
+ void moveTo(Location destination)
+]
+
+[<interface>MovementInto|
+ void moveTo(Location destination)
+]
+
+[<interface>MovementOnto|
+ void moveTo(Location destination)
+]
+
+[<interface>MovementFrom|
+ void moveFrom(Location source)
+]
+
+[<interface>MovementNear|
+ void moveFrom(Location source)
+]
+
+[<class>BreakOutFrom]
+[<class>BurrowInto]
+[<class>JumpOnto]
+[<class>RunInto]
+[<class>StayNear]
+
+[<enum>CryLevel|
+ NOT_CRYING
+ SNIFFLING
+ MODERATE
+ TREMBLING
+ MOANING
+ HYSTERICAL|
+ private String description
+ private static final EventState\[\] allValues
+ private static final int allValuesLength|
+ public String getDescription()
+ public CryLevel previous()
+ public CryLevel next()
+ public int previousIndex()
+ public int nextIndex()
+ public boolean hasPrevious()
+ public boolean hasNext()
+]
+
+[<enum>MoodLevel|
+ DEPRESSED
+ DISAPPOINTED
+ UPSET
+ SAD
+ NEUTRAL
+ OK
+ COOL
+ POSITIVE
+ FUN
+ HAPPY|
+ private String description
+ private static final MoodLevel\[\] allValues
+ private static final int allValuesLength|
+ public String getDescription()
+ public MoodLevel previous()
+ public MoodLevel next()
+ public int previousIndex()
+ public int nextIndex()
+ public boolean hasPrevious()
+ public boolean hasNext()
+]
+
+[Entity]<-[Location]
+[Entity]<-[HumanCapable]
+[Crying]<--[HumanCapable]
+[Remembering]<--[HumanCapable]
+[Hugging<T>]<--[HumanCapable]
+[Thinking]<--[HumanCapable]
+[HasMood]<--[HumanCapable]
+[HumanCapable]<-[Human]
+[HumanCapable]<-[HumanGroup]
+[Movement]<-[MovementFrom]
+[Movement]<-[MovementTo]
+[Movement]<-[MovementNear]
+[MovementTo]<-[MovementInto]
+[MovementTo]<-[MovementOnto]
+[MovementFrom]<--[BreakOutFrom]
+[MovementInto]<--[BurrowInto]
+[MovementOnto]<--[JumpOnto]
+[MovementInto]<--[RunInto]
+[MovementNear]<--[StayNear]
+

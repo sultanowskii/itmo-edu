@@ -1,0 +1,917 @@
+<svg version="1.1" baseProfile="full" width="4530.8" height="1083.0" viewbox="0 0 4530.75 1083" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events">
+		<desc >#.interface: fill=#6de383 dashed bold italic
+	#.abstract: fill=#6dd1e3 bold italic
+	#.enum: fill=#edc974 bold
+	#.exception: fill=#f55d42 bold
+	#.static: fill=#8a96db bold
+	
+	[&lt;exception&gt;NotImprovableEventException|
+	]
+	
+	[&lt;exception&gt;NoMemoriesLeftException|
+	]
+	
+	[&lt;class&gt;Event|
+	 [&lt;enum&gt;EventState|
+	  RUINED
+	  SPOILED
+	  USUAL
+	  COOL
+	  AWESOME
+	  private String description|
+	  private static final EventState\[\] allValues
+	  private static final int allValuesLength|
+	  public String getDescription()
+	  public EventState previous()
+	  public EventState next()
+	  public int previousIndex()
+	  public int nextIndex()
+	  public boolean hasPrevious()
+	  public boolean hasNext()
+	 ]|
+	 private String name
+	 private EventState state|
+	 public String getName()
+	 public void setName(String newName)
+	 public EventState getState()
+	 public void worsen()
+	 public void improve()
+	]
+	
+	[&lt;class&gt;Memory|
+	 private final String description|
+	 public String getDescription()
+	]
+	
+	[&lt;class&gt;Thought|
+	 private final String description|
+	 public String getDescription()
+	]
+	
+	[&lt;abstract&gt;Entity|
+	 private String name|
+	 public String getName()
+	 public void setName(String newName)
+	]
+	
+	[&lt;class&gt;Location|
+	 private final List&lt;Location&gt; containedLocations|
+	 public void addInnerLocation(Location otherLocation)
+	]
+	
+	[&lt;abstract&gt;HumanCapable|
+	 private CryLevel cryLevel
+	 private final List&lt;Memory&gt; memories
+	 private int nextMemoryIndex|
+	 public void moveTo(Movement movement, Location destination)
+	 public void addMemory(Memory memory)
+	 public void rememberNextMemoryDetails()
+	]
+	
+	[&lt;class&gt;Human
+	]
+	
+	[&lt;class&gt;HumanGroup|
+	 [&lt;static&gt;GroupMembersStringGenerator|
+	  public static String generateGroupHumansString(Set&lt;Human&gt; humans)
+	 ]|
+	    public void addHuman(Human human)
+	    public void removeHuman(Human human)
+	]
+	
+	[&lt;interface&gt;Remembering|
+	 Memory nextMemory()
+	 int getMemoriesLeftCount()
+	]
+	
+	[&lt;interface&gt;Crying|
+	 void cry()
+	 void decreaseCryLevel()
+	 void increaseCryLevel()
+	]
+	
+	[&lt;interface&gt;HasMood|
+	 void feel(MoodLevel moodLevel)
+	]
+	
+	[&lt;interface&gt;Hugging&lt;T&gt;|
+	 void hug(T other)
+	]
+	
+	[&lt;interface&gt;Thinking|
+	 void think(Thought thought)
+	]
+	
+	[&lt;interface&gt;Movement|
+	 void moveTo(Location location)
+	]
+	
+	[&lt;interface&gt;MovementTo|
+	 void moveTo(Location destination)
+	]
+	
+	[&lt;interface&gt;MovementInto|
+	 void moveTo(Location destination)
+	]
+	
+	[&lt;interface&gt;MovementOnto|
+	 void moveTo(Location destination)
+	]
+	
+	[&lt;interface&gt;MovementFrom|
+	 void moveFrom(Location source)
+	]
+	
+	[&lt;interface&gt;MovementNear|
+	 void moveFrom(Location source)
+	]
+	
+	[&lt;class&gt;BreakOutFrom]
+	[&lt;class&gt;BurrowInto]
+	[&lt;class&gt;JumpOnto]
+	[&lt;class&gt;RunInto]
+	[&lt;class&gt;StayNear]
+	
+	[&lt;enum&gt;CryLevel|
+	 NOT_CRYING
+	 SNIFFLING
+	 MODERATE
+	 TREMBLING
+	 MOANING
+	 HYSTERICAL|
+	 private String description
+	 private static final EventState\[\] allValues
+	 private static final int allValuesLength|
+	 public String getDescription()
+	 public CryLevel previous()
+	 public CryLevel next()
+	 public int previousIndex()
+	 public int nextIndex()
+	 public boolean hasPrevious()
+	 public boolean hasNext()
+	]
+	
+	[&lt;enum&gt;MoodLevel|
+	 DEPRESSED
+	 DISAPPOINTED
+	 UPSET
+	 SAD
+	 NEUTRAL
+	 OK
+	 COOL
+	 POSITIVE
+	 FUN
+	 HAPPY|
+	 private String description
+	 private static final MoodLevel\[\] allValues
+	 private static final int allValuesLength|
+	 public String getDescription()
+	 public MoodLevel previous()
+	 public MoodLevel next()
+	 public int previousIndex()
+	 public int nextIndex()
+	 public boolean hasPrevious()
+	 public boolean hasNext()
+	]
+	
+	[Entity]&lt;-[Location]
+	[Entity]&lt;-[HumanCapable]
+	[Crying]&lt;--[HumanCapable]
+	[Remembering]&lt;--[HumanCapable]
+	[Hugging&lt;T&gt;]&lt;--[HumanCapable]
+	[Thinking]&lt;--[HumanCapable]
+	[HasMood]&lt;--[HumanCapable]
+	[HumanCapable]&lt;-[Human]
+	[HumanCapable]&lt;-[HumanGroup]
+	[Movement]&lt;-[MovementFrom]
+	[Movement]&lt;-[MovementTo]
+	[Movement]&lt;-[MovementNear]
+	[MovementTo]&lt;-[MovementInto]
+	[MovementTo]&lt;-[MovementOnto]
+	[MovementFrom]&lt;--[BreakOutFrom]
+	[MovementInto]&lt;--[BurrowInto]
+	[MovementOnto]&lt;--[JumpOnto]
+	[MovementInto]&lt;--[RunInto]
+	[MovementNear]&lt;--[StayNear]
+	
+	</desc>
+	<g stroke-width="1.0" text-align="left" font="12pt Helvetica, Arial, sans-serif" font-size="12pt" font-family="Helvetica" font-weight="bold" font-style="normal">
+			<g transform="translate(0.5, 0.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" stroke="#33322E">
+				<g stroke="transparent" fill="transparent">
+					<rect x="0.0" y="0.0" height="1083.0" width="4530.8" stroke="none"></rect>
+				</g>
+			<g transform="translate(8, 8)" fill="#33322E">
+					<g transform="translate(20, 20)" fill="#33322E" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal">
+						<path d="M1737.7 324.7 L1722 548 L1722 598 L1722.0 598.0 " fill="none"></path>
+					<path d="M1742.6 331.7 L1737.7 324.7 L1731.9 330.9 L1738.2 318.0 Z"></path>
+					<path d="M1821.7 321.9 L2133 548 L2677.25 615.6152236884454 L2677.3 615.6 " fill="none"></path>
+					<path d="M1830.3 321.5 L1821.7 321.9 L1824.0 330.2 L1816.3 318.0 Z"></path>
+					<g stroke-dasharray="6 6">
+							<path d="M2564.0 316.7 L2564 548 L2677.25 579.6084598698482 L2677.3 579.6 " fill="none"></path>
+						</g>
+					<path d="M2569.3 323.3 L2564.0 316.7 L2558.7 323.3 L2564.0 310.0 Z"></path>
+					<g stroke-dasharray="6 6">
+							<path d="M2803.0 309.2 L2803 548 L2825.124352331606 568 L2825.1 568.0 " fill="none"></path>
+						</g>
+					<path d="M2808.3 315.8 L2803.0 309.2 L2797.7 315.8 L2803.0 302.5 Z"></path>
+					<g stroke-dasharray="6 6">
+							<path d="M3016.5 301.7 L3016.5 548 L2994.375647668394 568 L2994.4 568.0 " fill="none"></path>
+						</g>
+					<path d="M3021.8 308.3 L3016.5 301.7 L3011.2 308.3 L3016.5 295.0 Z"></path>
+					<g stroke-dasharray="6 6">
+							<path d="M3230.0 301.7 L3230 548 L3142.25 574.4414519906323 L3142.3 574.4 " fill="none"></path>
+						</g>
+					<path d="M3235.3 308.3 L3230.0 301.7 L3224.7 308.3 L3230.0 295.0 Z"></path>
+					<g stroke-dasharray="6 6">
+							<path d="M3497.5 301.7 L3497.5 548 L3142.25 606.3268821777967 L3142.3 606.3 " fill="none"></path>
+						</g>
+					<path d="M3502.8 308.3 L3497.5 301.7 L3492.2 308.3 L3497.5 295.0 Z"></path>
+					<path d="M2739.8 723.8 L2703 741 L2703 843 L2703.0 843.0 " fill="none"></path>
+					<path d="M2736.0 731.5 L2739.8 723.8 L2731.5 721.8 L2745.8 721.0 Z"></path>
+					<path d="M3100.2 723.6 L3142.25 741 L3142.25 761 L3142.3 761.0 " fill="none"></path>
+					<path d="M3108.4 721.2 L3100.2 723.6 L3104.3 731.0 L3094.1 721.0 Z"></path>
+					<path d="M3899.0 298.8 L3537.5 548 L3537.5 613.5 L3537.5 613.5 " fill="none"></path>
+					<path d="M3896.6 307.0 L3899.0 298.8 L3890.5 298.2 L3904.5 295.0 Z"></path>
+					<path d="M3963.7 301.2 L4057.75 548 L4057.75 613.5 L4057.8 613.5 " fill="none"></path>
+					<path d="M3971.0 305.6 L3963.7 301.2 L3961.1 309.4 L3961.3 295.0 Z"></path>
+					<path d="M3998.7 298.9 L4350.75 548 L4350.75 613.5 L4350.8 613.5 " fill="none"></path>
+					<path d="M4007.3 298.3 L3998.7 298.9 L4001.1 307.1 L3993.3 295.0 Z"></path>
+					<path d="M3968.9 677.8 L3800.5 741 L3800.5 827.5 L3800.5 827.5 " fill="none"></path>
+					<path d="M3964.5 685.2 L3968.9 677.8 L3960.8 675.2 L3975.1 675.5 Z"></path>
+					<path d="M4073.4 681.6 L4098.5 741 L4098.5 827.5 L4098.5 827.5 " fill="none"></path>
+					<path d="M4080.9 685.7 L4073.4 681.6 L4071.1 689.9 L4070.8 675.5 Z"></path>
+					<g stroke-dasharray="6 6">
+							<path d="M3537.5 682.2 L3537.5 741 L3537.5 843 L3537.5 843.0 " fill="none"></path>
+						</g>
+					<path d="M3542.8 688.8 L3537.5 682.2 L3532.2 688.8 L3537.5 675.5 Z"></path>
+					<g stroke-dasharray="6 6">
+							<path d="M3780.4 895.3 L3736.25 976 L3736.25 996 L3736.3 996.0 " fill="none"></path>
+						</g>
+					<path d="M3781.8 903.8 L3780.4 895.3 L3772.5 898.6 L3783.5 889.5 Z"></path>
+					<g stroke-dasharray="6 6">
+							<path d="M4098.5 896.2 L4098.5 976 L4098.5 996 L4098.5 996.0 " fill="none"></path>
+						</g>
+					<path d="M4103.8 902.8 L4098.5 896.2 L4093.2 902.8 L4098.5 889.5 Z"></path>
+					<g stroke-dasharray="6 6">
+							<path d="M3827.1 894.9 L3886.5 976 L3886.5 996 L3886.5 996.0 " fill="none"></path>
+						</g>
+					<path d="M3835.4 897.1 L3827.1 894.9 L3826.8 903.4 L3823.2 889.5 Z"></path>
+					<g stroke-dasharray="6 6">
+							<path d="M4350.8 682.2 L4350.75 741 L4350.75 843 L4350.8 843.0 " fill="none"></path>
+						</g>
+					<path d="M4356.1 688.8 L4350.8 682.2 L4345.4 688.8 L4350.8 675.5 Z"></path>
+					<g data-name="Event">
+							<g fill="#eee8d5" stroke="#33322E" data-name="Event">
+								<rect x="0.0" y="0.0" height="528.0" width="353.0" data-name="Event"></rect>
+							<path d="M0.0 31.0 L353.0 31.0" fill="none" data-name="Event"></path>
+							<path d="M0.0 391.0 L353.0 391.0" fill="none" data-name="Event"></path>
+							<path d="M0.0 437.0 L353.0 437.0" fill="none" data-name="Event"></path>
+							</g>
+						<g transform="translate(0, 0)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Event">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Event">
+									<text x="168.5" y="13.5" stroke="none" text-anchor="middle" data-name="Event">Event</text>
+								
+								</g>
+							</g>
+						<g transform="translate(0, 31)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Event">
+								<g transform="translate(8, 8)" fill="#33322E" data-name="Event">
+									<g transform="translate(20, 20)" data-name="Event">
+										<g data-name="EventState">
+											<g fill="#edc974" stroke="#33322E" data-name="EventState">
+												<rect x="0.0" y="0.0" height="304.0" width="297.0" data-name="EventState"></rect>
+											<path d="M0.0 31.0 L297.0 31.0" fill="none" data-name="EventState"></path>
+											<path d="M0.0 137.0 L297.0 137.0" fill="none" data-name="EventState"></path>
+											<path d="M0.0 183.0 L297.0 183.0" fill="none" data-name="EventState"></path>
+											</g>
+										<g transform="translate(0, 0)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="EventState">
+												<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="EventState">
+													<text x="140.5" y="13.5" stroke="none" text-anchor="middle" data-name="EventState">EventState</text>
+												
+												</g>
+											</g>
+										<g transform="translate(0, 31)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="EventState">
+												<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="EventState">
+													<text x="0.0" y="13.5" stroke="none" data-name="EventState">RUINED</text>
+												<text x="0.0" y="28.5" stroke="none" data-name="EventState">SPOILED</text>
+												<text x="0.0" y="43.5" stroke="none" data-name="EventState">USUAL</text>
+												<text x="0.0" y="58.5" stroke="none" data-name="EventState">COOL</text>
+												<text x="0.0" y="73.5" stroke="none" data-name="EventState">AWESOME</text>
+												<text x="0.0" y="88.5" stroke="none" data-name="EventState">private String description</text>
+												
+												</g>
+											</g>
+										<g transform="translate(0, 137)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="EventState">
+												<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="EventState">
+													<text x="0.0" y="13.5" stroke="none" data-name="EventState">private static final EventState[] allValues</text>
+												<text x="0.0" y="28.5" stroke="none" data-name="EventState">private static final int allValuesLength</text>
+												
+												</g>
+											</g>
+										<g transform="translate(0, 183)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="EventState">
+												<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="EventState">
+													<text x="0.0" y="13.5" stroke="none" data-name="EventState">public String getDescription()</text>
+												<text x="0.0" y="28.5" stroke="none" data-name="EventState">public EventState previous()</text>
+												<text x="0.0" y="43.5" stroke="none" data-name="EventState">public EventState next()</text>
+												<text x="0.0" y="58.5" stroke="none" data-name="EventState">public int previousIndex()</text>
+												<text x="0.0" y="73.5" stroke="none" data-name="EventState">public int nextIndex()</text>
+												<text x="0.0" y="88.5" stroke="none" data-name="EventState">public boolean hasPrevious()</text>
+												<text x="0.0" y="103.5" stroke="none" data-name="EventState">public boolean hasNext()</text>
+												
+												</g>
+											</g>
+										</g>
+									</g>
+								</g>
+							</g>
+						<g transform="translate(0, 391)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Event">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Event">
+									<text x="0.0" y="13.5" stroke="none" data-name="Event">private String name</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Event">private EventState state</text>
+								
+								</g>
+							</g>
+						<g transform="translate(0, 437)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Event">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Event">
+									<text x="0.0" y="13.5" stroke="none" data-name="Event">public String getName()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Event">public void setName(String newName)</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="Event">public EventState getState()</text>
+								<text x="0.0" y="58.5" stroke="none" data-name="Event">public void worsen()</text>
+								<text x="0.0" y="73.5" stroke="none" data-name="Event">public void improve()</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="CryLevel">
+							<g fill="#edc974" stroke="#33322E" data-name="CryLevel">
+								<rect x="393.0" y="105.0" height="319.0" width="297.0" data-name="CryLevel"></rect>
+							<path d="M393.0 136.0 L690.0 136.0" fill="none" data-name="CryLevel"></path>
+							<path d="M393.0 242.0 L690.0 242.0" fill="none" data-name="CryLevel"></path>
+							<path d="M393.0 303.0 L690.0 303.0" fill="none" data-name="CryLevel"></path>
+							</g>
+						<g transform="translate(393, 105)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="CryLevel">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="CryLevel">
+									<text x="140.5" y="13.5" stroke="none" text-anchor="middle" data-name="CryLevel">CryLevel</text>
+								
+								</g>
+							</g>
+						<g transform="translate(393, 136)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CryLevel">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CryLevel">
+									<text x="0.0" y="13.5" stroke="none" data-name="CryLevel">NOT_CRYING</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="CryLevel">SNIFFLING</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="CryLevel">MODERATE</text>
+								<text x="0.0" y="58.5" stroke="none" data-name="CryLevel">TREMBLING</text>
+								<text x="0.0" y="73.5" stroke="none" data-name="CryLevel">MOANING</text>
+								<text x="0.0" y="88.5" stroke="none" data-name="CryLevel">HYSTERICAL</text>
+								
+								</g>
+							</g>
+						<g transform="translate(393, 242)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CryLevel">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CryLevel">
+									<text x="0.0" y="13.5" stroke="none" data-name="CryLevel">private String description</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="CryLevel">private static final EventState[] allValues</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="CryLevel">private static final int allValuesLength</text>
+								
+								</g>
+							</g>
+						<g transform="translate(393, 303)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="CryLevel">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="CryLevel">
+									<text x="0.0" y="13.5" stroke="none" data-name="CryLevel">public String getDescription()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="CryLevel">public CryLevel previous()</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="CryLevel">public CryLevel next()</text>
+								<text x="0.0" y="58.5" stroke="none" data-name="CryLevel">public int previousIndex()</text>
+								<text x="0.0" y="73.5" stroke="none" data-name="CryLevel">public int nextIndex()</text>
+								<text x="0.0" y="88.5" stroke="none" data-name="CryLevel">public boolean hasPrevious()</text>
+								<text x="0.0" y="103.5" stroke="none" data-name="CryLevel">public boolean hasNext()</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="MoodLevel">
+							<g fill="#edc974" stroke="#33322E" data-name="MoodLevel">
+								<rect x="730.0" y="75.0" height="379.0" width="298.0" data-name="MoodLevel"></rect>
+							<path d="M730.0 106.0 L1028.0 106.0" fill="none" data-name="MoodLevel"></path>
+							<path d="M730.0 272.0 L1028.0 272.0" fill="none" data-name="MoodLevel"></path>
+							<path d="M730.0 333.0 L1028.0 333.0" fill="none" data-name="MoodLevel"></path>
+							</g>
+						<g transform="translate(730, 75)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="MoodLevel">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="MoodLevel">
+									<text x="141.0" y="13.5" stroke="none" text-anchor="middle" data-name="MoodLevel">MoodLevel</text>
+								
+								</g>
+							</g>
+						<g transform="translate(730, 106)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MoodLevel">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MoodLevel">
+									<text x="0.0" y="13.5" stroke="none" data-name="MoodLevel">DEPRESSED</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="MoodLevel">DISAPPOINTED</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="MoodLevel">UPSET</text>
+								<text x="0.0" y="58.5" stroke="none" data-name="MoodLevel">SAD</text>
+								<text x="0.0" y="73.5" stroke="none" data-name="MoodLevel">NEUTRAL</text>
+								<text x="0.0" y="88.5" stroke="none" data-name="MoodLevel">OK</text>
+								<text x="0.0" y="103.5" stroke="none" data-name="MoodLevel">COOL</text>
+								<text x="0.0" y="118.5" stroke="none" data-name="MoodLevel">POSITIVE</text>
+								<text x="0.0" y="133.5" stroke="none" data-name="MoodLevel">FUN</text>
+								<text x="0.0" y="148.5" stroke="none" data-name="MoodLevel">HAPPY</text>
+								
+								</g>
+							</g>
+						<g transform="translate(730, 272)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MoodLevel">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MoodLevel">
+									<text x="0.0" y="13.5" stroke="none" data-name="MoodLevel">private String description</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="MoodLevel">private static final MoodLevel[] allValues</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="MoodLevel">private static final int allValuesLength</text>
+								
+								</g>
+							</g>
+						<g transform="translate(730, 333)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MoodLevel">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MoodLevel">
+									<text x="0.0" y="13.5" stroke="none" data-name="MoodLevel">public String getDescription()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="MoodLevel">public MoodLevel previous()</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="MoodLevel">public MoodLevel next()</text>
+								<text x="0.0" y="58.5" stroke="none" data-name="MoodLevel">public int previousIndex()</text>
+								<text x="0.0" y="73.5" stroke="none" data-name="MoodLevel">public int nextIndex()</text>
+								<text x="0.0" y="88.5" stroke="none" data-name="MoodLevel">public boolean hasPrevious()</text>
+								<text x="0.0" y="103.5" stroke="none" data-name="MoodLevel">public boolean hasNext()</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="Memory">
+							<g fill="#eee8d5" stroke="#33322E" data-name="Memory">
+								<rect x="1068.0" y="218.0" height="93.0" width="225.0" data-name="Memory"></rect>
+							<path d="M1068.0 249.0 L1293.0 249.0" fill="none" data-name="Memory"></path>
+							<path d="M1068.0 280.0 L1293.0 280.0" fill="none" data-name="Memory"></path>
+							</g>
+						<g transform="translate(1068, 218)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Memory">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Memory">
+									<text x="104.5" y="13.5" stroke="none" text-anchor="middle" data-name="Memory">Memory</text>
+								
+								</g>
+							</g>
+						<g transform="translate(1068, 249)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Memory">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Memory">
+									<text x="0.0" y="13.5" stroke="none" data-name="Memory">private final String description</text>
+								
+								</g>
+							</g>
+						<g transform="translate(1068, 280)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Memory">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Memory">
+									<text x="0.0" y="13.5" stroke="none" data-name="Memory">public String getDescription()</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="Thought">
+							<g fill="#eee8d5" stroke="#33322E" data-name="Thought">
+								<rect x="1333.0" y="218.0" height="93.0" width="225.0" data-name="Thought"></rect>
+							<path d="M1333.0 249.0 L1558.0 249.0" fill="none" data-name="Thought"></path>
+							<path d="M1333.0 280.0 L1558.0 280.0" fill="none" data-name="Thought"></path>
+							</g>
+						<g transform="translate(1333, 218)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Thought">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Thought">
+									<text x="104.5" y="13.5" stroke="none" text-anchor="middle" data-name="Thought">Thought</text>
+								
+								</g>
+							</g>
+						<g transform="translate(1333, 249)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Thought">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Thought">
+									<text x="0.0" y="13.5" stroke="none" data-name="Thought">private final String description</text>
+								
+								</g>
+							</g>
+						<g transform="translate(1333, 280)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Thought">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Thought">
+									<text x="0.0" y="13.5" stroke="none" data-name="Thought">public String getDescription()</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="Entity">
+							<g fill="#6dd1e3" stroke="#33322E" data-name="Entity">
+								<rect x="1598.0" y="210.0" height="108.0" width="288.0" data-name="Entity"></rect>
+							<path d="M1598.0 241.0 L1886.0 241.0" fill="none" data-name="Entity"></path>
+							<path d="M1598.0 272.0 L1886.0 272.0" fill="none" data-name="Entity"></path>
+							</g>
+						<g transform="translate(1598, 210)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="Entity">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Entity">
+									<text x="136.0" y="13.5" stroke="none" text-anchor="middle" data-name="Entity">Entity</text>
+								
+								</g>
+							</g>
+						<g transform="translate(1598, 241)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Entity">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Entity">
+									<text x="0.0" y="13.5" stroke="none" data-name="Entity">private String name</text>
+								
+								</g>
+							</g>
+						<g transform="translate(1598, 272)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Entity">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Entity">
+									<text x="0.0" y="13.5" stroke="none" data-name="Entity">public String getName()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Entity">public void setName(String newName)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="Location">
+							<g fill="#eee8d5" stroke="#33322E" data-name="Location">
+								<rect x="1527.0" y="598.0" height="93.0" width="391.0" data-name="Location"></rect>
+							<path d="M1527.0 629.0 L1918.0 629.0" fill="none" data-name="Location"></path>
+							<path d="M1527.0 660.0 L1918.0 660.0" fill="none" data-name="Location"></path>
+							</g>
+						<g transform="translate(1527, 598)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Location">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Location">
+									<text x="187.5" y="13.5" stroke="none" text-anchor="middle" data-name="Location">Location</text>
+								
+								</g>
+							</g>
+						<g transform="translate(1527, 629)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Location">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Location">
+									<text x="0.0" y="13.5" stroke="none" data-name="Location">private final List&lt;Location&gt; containedLocations</text>
+								
+								</g>
+							</g>
+						<g transform="translate(1527, 660)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Location">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Location">
+									<text x="0.0" y="13.5" stroke="none" data-name="Location">public void addInnerLocation(Location otherLocation)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="HumanCapable">
+							<g fill="#6dd1e3" stroke="#33322E" data-name="HumanCapable">
+								<rect x="2677.0" y="568.0" height="153.0" width="465.0" data-name="HumanCapable"></rect>
+							<path d="M2677.0 599.0 L3142.0 599.0" fill="none" data-name="HumanCapable"></path>
+							<path d="M2677.0 660.0 L3142.0 660.0" fill="none" data-name="HumanCapable"></path>
+							</g>
+						<g transform="translate(2677, 568)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="HumanCapable">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="HumanCapable">
+									<text x="224.5" y="13.5" stroke="none" text-anchor="middle" data-name="HumanCapable">HumanCapable</text>
+								
+								</g>
+							</g>
+						<g transform="translate(2677, 599)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HumanCapable">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="HumanCapable">
+									<text x="0.0" y="13.5" stroke="none" data-name="HumanCapable">private CryLevel cryLevel</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="HumanCapable">private final List&lt;Memory&gt; memories</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="HumanCapable">private int nextMemoryIndex</text>
+								
+								</g>
+							</g>
+						<g transform="translate(2677, 660)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HumanCapable">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="HumanCapable">
+									<text x="0.0" y="13.5" stroke="none" data-name="HumanCapable">public void moveTo(Movement movement, Location destination)</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="HumanCapable">public void addMemory(Memory memory)</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="HumanCapable">public void rememberNextMemoryDetails()</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="HumanGroup">
+							<g fill="#eee8d5" stroke="#33322E" data-name="HumanGroup">
+								<rect x="2852.0" y="761.0" height="195.0" width="580.0" data-name="HumanGroup"></rect>
+							<path d="M2852.0 792.0 L3432.0 792.0" fill="none" data-name="HumanGroup"></path>
+							<path d="M2852.0 910.0 L3432.0 910.0" fill="none" data-name="HumanGroup"></path>
+							</g>
+						<g transform="translate(2852, 761)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="HumanGroup">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="HumanGroup">
+									<text x="282.0" y="13.5" stroke="none" text-anchor="middle" data-name="HumanGroup">HumanGroup</text>
+								
+								</g>
+							</g>
+						<g transform="translate(2852, 792)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HumanGroup">
+								<g transform="translate(8, 8)" fill="#33322E" data-name="HumanGroup">
+									<g transform="translate(20, 20)" data-name="HumanGroup">
+										<g data-name="GroupMembersStringGenerator">
+											<g fill="#8a96db" stroke="#33322E" data-name="GroupMembersStringGenerator">
+												<rect x="0.0" y="0.0" height="62.0" width="524.0" data-name="GroupMembersStringGenerator"></rect>
+											<path d="M0.0 31.0 L524.0 31.0" fill="none" data-name="GroupMembersStringGenerator"></path>
+											</g>
+										<g transform="translate(0, 0)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="GroupMembersStringGenerator">
+												<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="GroupMembersStringGenerator">
+													<text x="254.0" y="13.5" stroke="none" text-anchor="middle" data-name="GroupMembersStringGenerator">GroupMembersStringGenerator</text>
+												
+												</g>
+											</g>
+										<g transform="translate(0, 31)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="GroupMembersStringGenerator">
+												<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="GroupMembersStringGenerator">
+													<text x="0.0" y="13.5" stroke="none" data-name="GroupMembersStringGenerator">public static String generateGroupHumansString(Set&lt;Human&gt; humans)</text>
+												
+												</g>
+											</g>
+										</g>
+									</g>
+								</g>
+							</g>
+						<g transform="translate(2852, 910)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HumanGroup">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="HumanGroup">
+									<text x="0.0" y="13.5" stroke="none" data-name="HumanGroup">public void addHuman(Human human)</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="HumanGroup">public void removeHuman(Human human)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="NotImprovableEventException">
+							<g fill="#f55d42" stroke="#33322E" data-name="NotImprovableEventException">
+								<rect x="1926.0" y="245.0" height="39.0" width="246.0" data-name="NotImprovableEventException"></rect>
+							<path d="M1926.0 276.0 L2172.0 276.0" fill="none" data-name="NotImprovableEventException"></path>
+							</g>
+						<g transform="translate(1926, 245)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="NotImprovableEventException">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="NotImprovableEventException">
+									<text x="115.0" y="13.5" stroke="none" text-anchor="middle" data-name="NotImprovableEventException">NotImprovableEventException</text>
+								
+								</g>
+							</g>
+						<g transform="translate(1926, 276)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="NotImprovableEventException">
+								<g transform="translate(8, 8)" fill="#33322E" data-name="NotImprovableEventException">
+									
+								</g>
+							</g>
+						</g>
+					<g data-name="NoMemoriesLeftException">
+							<g fill="#f55d42" stroke="#33322E" data-name="NoMemoriesLeftException">
+								<rect x="2212.0" y="245.0" height="39.0" width="218.0" data-name="NoMemoriesLeftException"></rect>
+							<path d="M2212.0 276.0 L2430.0 276.0" fill="none" data-name="NoMemoriesLeftException"></path>
+							</g>
+						<g transform="translate(2212, 245)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="NoMemoriesLeftException">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="NoMemoriesLeftException">
+									<text x="101.0" y="13.5" stroke="none" text-anchor="middle" data-name="NoMemoriesLeftException">NoMemoriesLeftException</text>
+								
+								</g>
+							</g>
+						<g transform="translate(2212, 276)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="NoMemoriesLeftException">
+								<g transform="translate(8, 8)" fill="#33322E" data-name="NoMemoriesLeftException">
+									
+								</g>
+							</g>
+						</g>
+					<g data-name="Remembering">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="Remembering">
+								<rect x="2698.0" y="226.0" height="77.0" width="210.0" data-name="Remembering"></rect>
+							<path d="M2698.0 257.0 L2908.0 257.0" fill="none" data-name="Remembering"></path>
+							</g>
+						<g transform="translate(2698, 226)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="Remembering">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Remembering">
+									<text x="97.0" y="13.5" stroke="none" text-anchor="middle" data-name="Remembering">Remembering</text>
+								
+								</g>
+							</g>
+						<g transform="translate(2698, 257)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Remembering">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Remembering">
+									<text x="0.0" y="13.5" stroke="none" data-name="Remembering">Memory nextMemory()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Remembering">int getMemoriesLeftCount()</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="Crying">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="Crying">
+								<rect x="2470.0" y="218.0" height="92.0" width="188.0" data-name="Crying"></rect>
+							<path d="M2470.0 249.0 L2658.0 249.0" fill="none" data-name="Crying"></path>
+							</g>
+						<g transform="translate(2470, 218)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="Crying">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Crying">
+									<text x="86.0" y="13.5" stroke="none" text-anchor="middle" data-name="Crying">Crying</text>
+								
+								</g>
+							</g>
+						<g transform="translate(2470, 249)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Crying">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Crying">
+									<text x="0.0" y="13.5" stroke="none" data-name="Crying">void cry()</text>
+								<text x="0.0" y="28.5" stroke="none" data-name="Crying">void decreaseCryLevel()</text>
+								<text x="0.0" y="43.5" stroke="none" data-name="Crying">void increaseCryLevel()</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="HasMood">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="HasMood">
+								<rect x="3375.0" y="233.0" height="62.0" width="245.0" data-name="HasMood"></rect>
+							<path d="M3375.0 264.0 L3620.0 264.0" fill="none" data-name="HasMood"></path>
+							</g>
+						<g transform="translate(3375, 233)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="HasMood">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="HasMood">
+									<text x="114.5" y="13.5" stroke="none" text-anchor="middle" data-name="HasMood">HasMood</text>
+								
+								</g>
+							</g>
+						<g transform="translate(3375, 264)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HasMood">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="HasMood">
+									<text x="0.0" y="13.5" stroke="none" data-name="HasMood">void feel(MoodLevel moodLevel)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="Hugging&lt;T&gt;">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="Hugging&lt;T&gt;">
+								<rect x="2948.0" y="233.0" height="62.0" width="137.0" data-name="Hugging&lt;T&gt;"></rect>
+							<path d="M2948.0 264.0 L3085.0 264.0" fill="none" data-name="Hugging&lt;T&gt;"></path>
+							</g>
+						<g transform="translate(2948, 233)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="Hugging&lt;T&gt;">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Hugging&lt;T&gt;">
+									<text x="60.5" y="13.5" stroke="none" text-anchor="middle" data-name="Hugging&lt;T&gt;">Hugging&lt;T&gt;</text>
+								
+								</g>
+							</g>
+						<g transform="translate(2948, 264)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Hugging&lt;T&gt;">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Hugging&lt;T&gt;">
+									<text x="0.0" y="13.5" stroke="none" data-name="Hugging&lt;T&gt;">void hug(T other)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="Thinking">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="Thinking">
+								<rect x="3125.0" y="233.0" height="62.0" width="210.0" data-name="Thinking"></rect>
+							<path d="M3125.0 264.0 L3335.0 264.0" fill="none" data-name="Thinking"></path>
+							</g>
+						<g transform="translate(3125, 233)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="Thinking">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Thinking">
+									<text x="97.0" y="13.5" stroke="none" text-anchor="middle" data-name="Thinking">Thinking</text>
+								
+								</g>
+							</g>
+						<g transform="translate(3125, 264)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Thinking">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Thinking">
+									<text x="0.0" y="13.5" stroke="none" data-name="Thinking">void think(Thought thought)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="Movement">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="Movement">
+								<rect x="3832.0" y="233.0" height="62.0" width="236.0" data-name="Movement"></rect>
+							<path d="M3832.0 264.0 L4068.0 264.0" fill="none" data-name="Movement"></path>
+							</g>
+						<g transform="translate(3832, 233)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="Movement">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Movement">
+									<text x="110.0" y="13.5" stroke="none" text-anchor="middle" data-name="Movement">Movement</text>
+								
+								</g>
+							</g>
+						<g transform="translate(3832, 264)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Movement">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Movement">
+									<text x="0.0" y="13.5" stroke="none" data-name="Movement">void moveTo(Location location)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="MovementTo">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="MovementTo">
+								<rect x="3929.0" y="614.0" height="62.0" width="258.0" data-name="MovementTo"></rect>
+							<path d="M3929.0 645.0 L4187.0 645.0" fill="none" data-name="MovementTo"></path>
+							</g>
+						<g transform="translate(3929, 614)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="MovementTo">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="MovementTo">
+									<text x="121.0" y="13.5" stroke="none" text-anchor="middle" data-name="MovementTo">MovementTo</text>
+								
+								</g>
+							</g>
+						<g transform="translate(3929, 645)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MovementTo">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MovementTo">
+									<text x="0.0" y="13.5" stroke="none" data-name="MovementTo">void moveTo(Location destination)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="MovementInto">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="MovementInto">
+								<rect x="3672.0" y="828.0" height="62.0" width="258.0" data-name="MovementInto"></rect>
+							<path d="M3672.0 859.0 L3930.0 859.0" fill="none" data-name="MovementInto"></path>
+							</g>
+						<g transform="translate(3672, 828)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="MovementInto">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="MovementInto">
+									<text x="121.0" y="13.5" stroke="none" text-anchor="middle" data-name="MovementInto">MovementInto</text>
+								
+								</g>
+							</g>
+						<g transform="translate(3672, 859)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MovementInto">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MovementInto">
+									<text x="0.0" y="13.5" stroke="none" data-name="MovementInto">void moveTo(Location destination)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="MovementOnto">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="MovementOnto">
+								<rect x="3970.0" y="828.0" height="62.0" width="258.0" data-name="MovementOnto"></rect>
+							<path d="M3970.0 859.0 L4228.0 859.0" fill="none" data-name="MovementOnto"></path>
+							</g>
+						<g transform="translate(3970, 828)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="MovementOnto">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="MovementOnto">
+									<text x="121.0" y="13.5" stroke="none" text-anchor="middle" data-name="MovementOnto">MovementOnto</text>
+								
+								</g>
+							</g>
+						<g transform="translate(3970, 859)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MovementOnto">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MovementOnto">
+									<text x="0.0" y="13.5" stroke="none" data-name="MovementOnto">void moveTo(Location destination)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="MovementFrom">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="MovementFrom">
+								<rect x="3414.0" y="614.0" height="62.0" width="248.0" data-name="MovementFrom"></rect>
+							<path d="M3414.0 645.0 L3662.0 645.0" fill="none" data-name="MovementFrom"></path>
+							</g>
+						<g transform="translate(3414, 614)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="MovementFrom">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="MovementFrom">
+									<text x="116.0" y="13.5" stroke="none" text-anchor="middle" data-name="MovementFrom">MovementFrom</text>
+								
+								</g>
+							</g>
+						<g transform="translate(3414, 645)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MovementFrom">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MovementFrom">
+									<text x="0.0" y="13.5" stroke="none" data-name="MovementFrom">void moveFrom(Location source)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="MovementNear">
+							<g fill="#6de383" stroke="#33322E" stroke-dasharray="6 6" data-name="MovementNear">
+								<rect x="4227.0" y="614.0" height="62.0" width="248.0" data-name="MovementNear"></rect>
+							<path d="M4227.0 645.0 L4475.0 645.0" fill="none" data-name="MovementNear"></path>
+							</g>
+						<g transform="translate(4227, 614)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="italic" data-name="MovementNear">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="MovementNear">
+									<text x="116.0" y="13.5" stroke="none" text-anchor="middle" data-name="MovementNear">MovementNear</text>
+								
+								</g>
+							</g>
+						<g transform="translate(4227, 645)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MovementNear">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MovementNear">
+									<text x="0.0" y="13.5" stroke="none" data-name="MovementNear">void moveFrom(Location source)</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="Human">
+							<g fill="#eee8d5" stroke="#33322E" data-name="Human">
+								<rect x="2668.0" y="843.0" height="31.0" width="70.0" data-name="Human"></rect>
+							</g>
+						<g transform="translate(2668, 843)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Human">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Human">
+									<text x="27.0" y="13.5" stroke="none" text-anchor="middle" data-name="Human">Human</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="BreakOutFrom">
+							<g fill="#eee8d5" stroke="#33322E" data-name="BreakOutFrom">
+								<rect x="3474.0" y="843.0" height="31.0" width="128.0" data-name="BreakOutFrom"></rect>
+							</g>
+						<g transform="translate(3474, 843)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="BreakOutFrom">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="BreakOutFrom">
+									<text x="56.0" y="13.5" stroke="none" text-anchor="middle" data-name="BreakOutFrom">BreakOutFrom</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="BurrowInto">
+							<g fill="#eee8d5" stroke="#33322E" data-name="BurrowInto">
+								<rect x="3686.0" y="996.0" height="31.0" width="101.0" data-name="BurrowInto"></rect>
+							</g>
+						<g transform="translate(3686, 996)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="BurrowInto">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="BurrowInto">
+									<text x="42.5" y="13.5" stroke="none" text-anchor="middle" data-name="BurrowInto">BurrowInto</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="JumpOnto">
+							<g fill="#eee8d5" stroke="#33322E" data-name="JumpOnto">
+								<rect x="4051.0" y="996.0" height="31.0" width="96.0" data-name="JumpOnto"></rect>
+							</g>
+						<g transform="translate(4051, 996)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="JumpOnto">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="JumpOnto">
+									<text x="40.0" y="13.5" stroke="none" text-anchor="middle" data-name="JumpOnto">JumpOnto</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="RunInto">
+							<g fill="#eee8d5" stroke="#33322E" data-name="RunInto">
+								<rect x="3849.0" y="996.0" height="31.0" width="76.0" data-name="RunInto"></rect>
+							</g>
+						<g transform="translate(3849, 996)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RunInto">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RunInto">
+									<text x="30.0" y="13.5" stroke="none" text-anchor="middle" data-name="RunInto">RunInto</text>
+								
+								</g>
+							</g>
+						</g>
+					<g data-name="StayNear">
+							<g fill="#eee8d5" stroke="#33322E" data-name="StayNear">
+								<rect x="4308.0" y="843.0" height="31.0" width="85.0" data-name="StayNear"></rect>
+							</g>
+						<g transform="translate(4308, 843)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="StayNear">
+								<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="StayNear">
+									<text x="34.5" y="13.5" stroke="none" text-anchor="middle" data-name="StayNear">StayNear</text>
+								
+								</g>
+							</g>
+						</g>
+					</g>
+				</g>
+			</g>
+		</g>
+	</svg>
