@@ -1,0 +1,31 @@
+                org 0x400
+ARRAY_BEGIN:    WORD 0x0415          ; ARRAY
+ARRAY_ELEM_PTR: WORD 0x0200
+CNTR:           WORD 0x4000
+RESULT:         WORD 0x0200
+
+START:          CLA
+                ST RESULT            ; 0 -> IP-3 (RESULT)
+                LD #5                ; 5 -> AC
+                ST CNTR              ; 5 -> IP-6 (CNTR)
+                LD ARRAY_BEGIN       ; IP-9 (ARRAY_BEGIN)
+                ST ARRAY_ELEM_PTR    ; IP-9 (ARRAY_ELEM_PTR)
+
+LOOP_START:     LD (ARRAY_ELEM_PTR)+ ; IP-10 (ARRAY_ELEM_PTR)
+                ROR                  ; /= 2
+                BHIS LOOP_REPEAT     ; goto(LOOP_REPEAT) if C==1 (% 2 == 1)
+                ROR                  ; /= 2
+                BHIS LOOP_REPEAT     ; goto(LOOP_REPEAT) if C==1 (% 2 == 1)
+                ROL                  ; *= 2
+                ROL                  ; *= 2
+                CMP (RESULT)+        ; IP-15 (RESULT) cmp(AC, [RESULT])
+LOOP_REPEAT:    LOOP CNTR            ; 0x402 (CNTR)
+
+                JUMP LOOP_START      ; IP-10 (LOOP_START)
+                HLT
+
+ARRAY:          WORD 0x0400
+                WORD 0xE400
+                WORD 0x0780
+                WORD 0xF701
+                WORD 0x0903
