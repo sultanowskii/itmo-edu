@@ -1,0 +1,16 @@
+                org 0x400
+PTR:            WORD 0x409
+TMP:            WORD ?
+START:
+                CLA
+                LD PTR
+                INC
+                SWAM PTR
+                ST TMP
+                LD (TMP)
+                HLT
+
+DATA:           WORD 100
+                WORD 200
+                WORD 300
+                WORD 400

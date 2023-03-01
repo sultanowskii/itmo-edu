@@ -60,8 +60,8 @@ public class Person {
     private Location location; //Поле не может быть null
 }
 public class Coordinates {
-    private Long x; //Поле не может быть null
-    private Integer y; //Максимальное значение поля: 897, Поле не может быть null
+    private Float x; //Значение поля должно быть больше -527, Поле не может быть null
+    private int y; //Максимальное значение поля: 897
 }
 public class Location {
     private long x;

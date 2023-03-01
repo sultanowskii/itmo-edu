@@ -7,12 +7,12 @@ import java.util.*;
 
 public class HelpCommand extends Command {
 
-    public HelpCommand(Scanner scanner, PrintWriter printWriter) {
-        super("help", scanner, printWriter);
+    public HelpCommand() {
+        super("help");
     }
 
     @Override
-    public void exec(List<String> args, Context context) {
+    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
         CommandManager commandManager = context.getCommandManager();
         List<Command> commands = commandManager.getCommands();
 
@@ -20,7 +20,6 @@ public class HelpCommand extends Command {
         int commandNameSpaceSize = longestName.length();
 
         for (Command command : commands) {
-            // TODO: вынести
             String paddedCommandName = String.format("%-" + commandNameSpaceSize + "s", command.getName());
             printWriter.println(paddedCommandName + " " + command.getHelp());
         }

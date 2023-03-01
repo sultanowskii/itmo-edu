@@ -9,12 +9,12 @@ import java.util.Scanner;
 
 public class ExitCommand extends Command {
 
-    public ExitCommand(Scanner scanner, PrintWriter printWriter) {
-        super("exit", scanner, printWriter);
+    public ExitCommand() {
+        super("exit");
     }
 
     @Override
-    public void exec(List<String> args, Context context) {
+    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
         ProgramStateManager programStateManager = ProgramStateManager.getInstance();
         printWriter.println("Exiting...");
         programStateManager.setIsRunning(false);

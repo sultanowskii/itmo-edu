@@ -13,32 +13,35 @@ import java.util.Scanner;
 
 public class ExecuteScriptCommand extends Command {
 
-    public ExecuteScriptCommand(Scanner scanner, PrintWriter printWriter) {
-        super("execute_script", scanner, printWriter);
+    public ExecuteScriptCommand() {
+        super("execute_script");
     }
 
     // TODO: Как-то отследить рекурсивный вызов
     @Override
-    public void exec(List<String> args, Context context) throws InvalidCommandArgumentException {
+    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) throws InvalidCommandArgumentException {
         if (args.size() != 1) {
            throw new InvalidCommandArgumentException("Command syntax:\n " + this.getName() + " <script_file_name>");
         }
 
-        CommandManager commandManager = context.getCommandManager();
+        Iterable<Command> commands = context.getCommandManager().getCommands();
+        CommandManager commandManager = new CommandManager(commands);
 
-        for (String filename : args) {
+        for (String scriptFilename : args) {
+            Scanner scriptFileScanner;
             try {
-                scanner = new Scanner(new FileReader(filename));
+                scriptFileScanner = new Scanner(new FileReader(scriptFilename));
             } catch (FileNotFoundException e) {
-                throw new InvalidCommandArgumentException("File `" + filename + "` is inaccessible (doesn't exist, is a directory or is unreadable due to permissions.");
+                throw new InvalidCommandArgumentException("File `" + scriptFilename + "` is inaccessible (doesn't exist, is a directory or is unreadable due to permissions.");
             }
 
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
+            while (scriptFileScanner.hasNextLine()) {
+                String line = scriptFileScanner.nextLine();
                 CommandInputInfo commandInputInfo = CommandParser.parseString(line);
-                commandManager.execCommandByCommandInputInfo(commandInputInfo);
+                commandManager.execCommandByCommandInputInfo(scriptFileScanner, printWriter, commandInputInfo, context);
+                printWriter.println();
             }
-            scanner.close();
+            scriptFileScanner.close();
         }
     }
 

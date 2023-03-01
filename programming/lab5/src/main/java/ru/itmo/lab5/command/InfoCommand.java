@@ -9,12 +9,12 @@ import java.util.Scanner;
 
 public class InfoCommand extends Command {
 
-    public InfoCommand(Scanner scanner, PrintWriter printWriter) {
-        super("info", scanner, printWriter);
+    public InfoCommand() {
+        super("info");
     }
 
     @Override
-    public void exec(List<String> args, Context context) {
+    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
         PersonManager personStorage = context.getPersonManager();
         printWriter.println("Person storage.");
         printWriter.println("Init date: " + personStorage.getInitDateTime());

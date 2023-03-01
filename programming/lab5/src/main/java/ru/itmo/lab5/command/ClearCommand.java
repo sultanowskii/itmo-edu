@@ -10,14 +10,18 @@ import java.util.Scanner;
 
 public class ClearCommand extends Command {
 
-    public ClearCommand(Scanner scanner, PrintWriter printWriter) {
-        super("clear", scanner, printWriter);
+    public ClearCommand() {
+        super("clear");
     }
 
     @Override
-    public void exec(List<String> args, Context context) {
+    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
         LinkedHashSet<Person> persons = context.getPersonManager().getStorage();
+        int removedElementCounter = persons.size();
+
         persons.clear();
+
+        printWriter.println("Removed " + removedElementCounter + " element(s).");
     }
 
 

@@ -47,4 +47,40 @@ public class Location implements Comparable<Location> {
 
         return 0;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = hash * 23 + this.x.hashCode();
+        hash = hash * 23 + y;
+        hash = hash * 23 + name.hashCode();
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        final Location other = (Location) obj;
+
+        if (Double.compare(this.x, other.x) != 0) {
+            return false;
+        }
+
+        if (this.y != other.y) {
+            return false;
+        }
+
+        if (!this.name.equals(other.name)) {
+            return false;
+        }
+
+        return true;
+    }
 }

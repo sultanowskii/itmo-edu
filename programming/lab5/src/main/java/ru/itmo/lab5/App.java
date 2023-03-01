@@ -9,8 +9,10 @@ import ru.itmo.lab5.form.validation.ValidationException;
 import ru.itmo.lab5.manager.Context;
 import ru.itmo.lab5.manager.PersonManager;
 import ru.itmo.lab5.manager.ProgramStateManager;
+import ru.itmo.lab5.schema.*;
 
 import java.io.*;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class App
@@ -19,7 +21,8 @@ public class App
     {
         // TODO: Переименовать
         // TODO: Проверить на то, что название файла существует
-        String dataContainerFileName = System.getenv("DATA_CONTAINER_FILE");
+        // TODO: Проинициализировать PersonManager (в том числе и время инициализации)
+        String containerFileName = System.getenv("CONTAINER_FILE");
 
         Scanner scanner = new Scanner(System.in);
         PrintWriter printWriter = new PrintWriter(System.out);
@@ -31,19 +34,47 @@ public class App
 
         Context context = new Context();
 
-        CommandManager cmdManager = new CommandManager(context);
+        CommandManager cmdManager = new CommandManager();
         context.setCommandManager(cmdManager);
         context.setPersonManager(personStorage);
 
-        cmdManager.addCommand(new HelpCommand(scanner, printWriter));
-        cmdManager.addCommand(new InfoCommand(scanner, printWriter));
-        cmdManager.addCommand(new ShowCommand(scanner, printWriter));
-        cmdManager.addCommand(new AddCommand(scanner, printWriter));
-        cmdManager.addCommand(new UpdateCommand(scanner, printWriter));
-        cmdManager.addCommand(new RemoveByIDCommand(scanner, printWriter));
-        cmdManager.addCommand(new ClearCommand(scanner, printWriter));
-        cmdManager.addCommand(new ExecuteScriptCommand(scanner, printWriter));
-        cmdManager.addCommand(new ExitCommand(scanner, printWriter));
+        // TODO: выпилить
+        for (int i = 0; i < 5; i++) {
+            Coordinates coordinates = new Coordinates();
+            coordinates.setX(1.0f + i);
+            coordinates.setY(2 + i);
+            Location location = new Location();
+            location.setName("city #" + i);
+            location.setX(3d + i);
+            location.setY(4 + i);
+            Person person = new Person();
+            person.setCoordinates(coordinates);
+            person.setCreationDate(ZonedDateTime.now());
+            person.setNationality(Country.THAILAND);
+            person.setName("ivan");
+            person.setHeight(170);
+            person.setEyeColor(Color.RED);
+            person.setPassportID("aaaa");
+            person.setLocation(location);
+            personStorage.add(person);
+        }
+
+        cmdManager.addCommand(new HelpCommand());
+        cmdManager.addCommand(new InfoCommand());
+        cmdManager.addCommand(new ShowCommand());
+        cmdManager.addCommand(new AddCommand());
+        cmdManager.addCommand(new UpdateCommand());
+        cmdManager.addCommand(new RemoveByIDCommand());
+        cmdManager.addCommand(new ClearCommand());
+        cmdManager.addCommand(new ExecuteScriptCommand());
+        cmdManager.addCommand(new ExitCommand());
+        cmdManager.addCommand(new AddIfMinCommand());
+        cmdManager.addCommand(new RemoveGreaterCommand());
+        cmdManager.addCommand(new RemoveLowerCommand());
+        cmdManager.addCommand(new RemoveAllByLocationCommand());
+        cmdManager.addCommand(new CountGreaterThanLocationCommand());
+        cmdManager.addCommand(new PrintFieldDescendingNationalityCommand());
+        cmdManager.addCommand(new DoNothingCommand());
 
         while (programStateManager.getIsRunning()) {
             printWriter.print("> ");
@@ -51,7 +82,7 @@ public class App
             String line = scanner.nextLine();
             CommandInputInfo commandInputInfo = CommandParser.parseString(line);
             try {
-                cmdManager.execCommandByCommandInputInfo(commandInputInfo);
+                cmdManager.execCommandByCommandInputInfo(scanner, printWriter, commandInputInfo, context);
             } catch (NoSuchElementException e) {
                 printWriter.println(e.getMessage());
             } catch (InvalidCommandArgumentException e) {

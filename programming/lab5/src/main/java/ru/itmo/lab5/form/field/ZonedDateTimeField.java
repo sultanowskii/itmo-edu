@@ -9,19 +9,32 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 public class ZonedDateTimeField extends Field<ZonedDateTime> {
     protected DateTimeFormatter formatter;
     protected String pattern;
 
-    public ZonedDateTimeField(String name, DateTimeFormatter formatter, String formatPattern, Scanner scanner, PrintWriter printWriter) {
+    public ZonedDateTimeField(
+            String name,
+            DateTimeFormatter formatter,
+            String formatPattern,
+            Scanner scanner,
+            PrintWriter printWriter
+    ) {
         super(name, scanner, printWriter);
         this.formatter = formatter;
         this.pattern = formatPattern;
     }
 
-    public ZonedDateTimeField(String name, DateTimeFormatter formatter, String formatPattern,  List<Validator<String>> rawValueValidators, List<Validator<ZonedDateTime>> valueValidators, Scanner scanner, PrintWriter printWriter) {
+    public ZonedDateTimeField(
+            String name,
+            DateTimeFormatter formatter,
+            String formatPattern,
+            List<Validator<String>> rawValueValidators,
+            List<Validator<ZonedDateTime>> valueValidators,
+            Scanner scanner,
+            PrintWriter printWriter
+    ) {
         super(name, rawValueValidators, valueValidators, scanner, printWriter);
         this.formatter = formatter;
         this.pattern = formatPattern;
@@ -51,7 +64,7 @@ public class ZonedDateTimeField extends Field<ZonedDateTime> {
         super.validateRawValue();
         try {
             ZonedDateTime.parse(this.rawValue, formatter);
-        } catch(DateTimeParseException e){
+        } catch (DateTimeParseException e) {
             throw new ValidationException("Please enter datetime in the following format: " + this.pattern + ".");
         }
     }

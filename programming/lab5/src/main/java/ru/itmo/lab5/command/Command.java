@@ -9,17 +9,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public abstract class Command {
-    protected Scanner scanner;
-    protected PrintWriter printWriter;
     protected String name;
 
-    public Command(String name, Scanner scanner, PrintWriter printWriter) {
+    public Command(String name) {
         this.name = name;
-        this.scanner = scanner;
-        this.printWriter = printWriter;
     }
 
-    public abstract void exec(List<String> args, Context context) throws InvalidCommandArgumentException, ValidationException;
+    public abstract void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) throws InvalidCommandArgumentException, ValidationException;
 
     public String getName() {
         return this.name;

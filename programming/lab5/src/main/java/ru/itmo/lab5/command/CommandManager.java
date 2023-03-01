@@ -3,23 +3,28 @@ package ru.itmo.lab5.command;
 import ru.itmo.lab5.command.parse.CommandInputInfo;
 import ru.itmo.lab5.manager.Context;
 
+import java.io.PrintWriter;
 import java.util.*;
 
 public class CommandManager {
-    private final Map<String, Command> commands = new HashMap<>();
-    private final Context context;
+    protected final Map<String, Command> commands = new HashMap<>();
 
-    public CommandManager( Context context) {
-        this.context = context;
+    public CommandManager() {
+
+    }
+
+    public CommandManager(Iterable<Command> commands) {
+        for (Command command : commands) {
+            this.addCommand(command);
+        }
     }
 
     public void addCommand(Command newCommand) {
         this.commands.put(newCommand.getName(), newCommand);
     }
 
-    // TODO: Подумать, как получить описание команд (и как прокидывать их)
     public ArrayList<Command> getCommands() {
-        return new ArrayList<Command>(this.commands.values());
+        return new ArrayList<>(this.commands.values());
     }
 
     public Command getCommandByName(String commandName) throws NoSuchElementException {
@@ -30,12 +35,12 @@ public class CommandManager {
         return command;
     }
 
-    public void execCommandByName(String commandName, List<String> args) throws NoSuchElementException {
+    public void execCommandByName(Scanner scanner, PrintWriter printWriter, String commandName, List<String> args, Context context) throws NoSuchElementException {
         Command cmd = getCommandByName(commandName);
-        cmd.exec(args, this.context);
+        cmd.exec(scanner, printWriter, args, context);
     }
 
-    public void execCommandByCommandInputInfo(CommandInputInfo commandInputInfo) throws NoSuchElementException {
-        execCommandByName(commandInputInfo.getCommandName(), commandInputInfo.getArgs());
+    public void execCommandByCommandInputInfo(Scanner scanner, PrintWriter printWriter, CommandInputInfo commandInputInfo, Context context) throws NoSuchElementException {
+        execCommandByName(scanner, printWriter, commandInputInfo.getCommandName(), commandInputInfo.getArgs(), context);
     }
 }

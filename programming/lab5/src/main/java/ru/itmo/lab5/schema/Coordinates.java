@@ -1,5 +1,7 @@
 package ru.itmo.lab5.schema;
 
+import java.util.Objects;
+
 public class Coordinates implements Comparable<Coordinates> {
     private Float x; //Значение поля должно быть больше -527, Поле не может быть null
     private int y; //Максимальное значение поля: 897
@@ -32,5 +34,36 @@ public class Coordinates implements Comparable<Coordinates> {
             return yComparisonResult;
         }
         return 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = hash * 23 + Float.floatToIntBits(this.x);
+        hash = hash * 23 + y;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        final Coordinates other = (Coordinates) obj;
+
+        if (Float.compare(this.x, other.x) != 0) {
+            return false;
+        }
+
+        if (this.y != other.y) {
+            return false;
+        }
+
+        return true;
     }
 }

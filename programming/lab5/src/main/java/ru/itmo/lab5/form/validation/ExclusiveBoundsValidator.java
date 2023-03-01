@@ -4,6 +4,9 @@ public class ExclusiveBoundsValidator<T extends Comparable<T>> implements Valida
     protected T lowerBound = null;
     protected T upperBound = null;
 
+    public ExclusiveBoundsValidator() {
+    }
+
     public ExclusiveBoundsValidator(T lowerBound, T upperBound) {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
@@ -14,7 +17,7 @@ public class ExclusiveBoundsValidator<T extends Comparable<T>> implements Valida
     }
 
     public static <T extends Comparable<T>> ExclusiveBoundsValidator<T> newExclusiveUpperBoundValidator(T upperBound) {
-        return new ExclusiveBoundsValidator<>(upperBound, null);
+        return new ExclusiveBoundsValidator<>(null, upperBound);
     }
 
     @Override

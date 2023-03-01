@@ -14,12 +14,12 @@ import java.util.Scanner;
 
 public class RemoveByIDCommand extends Command {
 
-    public RemoveByIDCommand(Scanner scanner, PrintWriter printWriter) {
-        super("remove_by_id", scanner, printWriter);
+    public RemoveByIDCommand() {
+        super("remove_by_id");
     }
 
     @Override
-    public void exec(List<String> args, Context context) throws InvalidCommandArgumentException, ValidationException {
+    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) throws InvalidCommandArgumentException, ValidationException {
         // TODO: Вынести обработку аргументов
         if (args.size() != 1) {
             throw new InvalidCommandArgumentException("Syntax:\n" + this.getName() + " <id>");
@@ -41,6 +41,7 @@ public class RemoveByIDCommand extends Command {
         PersonManager personManager = context.getPersonManager();
         try {
             personManager.removeByID(idToRemove);
+            printWriter.println("Removed 1 element");
         } catch (NoSuchElementException e) {
             printWriter.println("Element with id=" + idToRemove + " not found.");
         }

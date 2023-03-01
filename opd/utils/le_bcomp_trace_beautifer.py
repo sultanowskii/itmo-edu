@@ -87,6 +87,7 @@ def main() -> None:
         dest='input_filename',
         help='Read data from file (ignores STDIN)',
         metavar='INPUT_FILE',
+        required=True,
     )
     parser.add_argument(
         '-o',
@@ -94,6 +95,7 @@ def main() -> None:
         dest='output_filename',
         help="Read data from file (doesn't write to STDOUT)",
         metavar='OUTPUT_FILE',
+        required=True,
     )
 
     args = parser.parse_args()

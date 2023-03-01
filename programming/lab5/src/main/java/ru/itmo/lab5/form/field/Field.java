@@ -35,12 +35,18 @@ public abstract class Field<T> {
         this.printWriter = printWriter;
     }
 
-    public void addValueValidator(Validator<T> newValidator) {
-        this.valueValidators.add(newValidator);
+    protected String getOffset(int offsetSize) {
+        return " ".repeat(offsetSize);
     }
 
-    public void addRawValueValidator(Validator<String> newValidator) {
+    public Field<T> addValueValidator(Validator<T> newValidator) {
+        this.valueValidators.add(newValidator);
+        return this;
+    }
+
+    public Field<T> addRawValueValidator(Validator<String> newValidator) {
         this.rawValueValidators.add(newValidator);
+        return this;
     }
 
     public abstract void printInfoMessage();
@@ -53,7 +59,6 @@ public abstract class Field<T> {
         return null;
     }
 
-    // TODO: Докинуть функционал, который спросит у валидатора текстовое ограничение поля ("value has to be in the range [0; 4]")
     public void getRawValueFromUser(int offsetSize) {
         printWriter.print(" ".repeat(offsetSize));
         this.printInfoMessage();
@@ -137,8 +142,6 @@ public abstract class Field<T> {
         }
         fieldToGet.setAccessible(true);
 
-        String offset = " ".repeat(offsetSize);
-
-        return offset + this.name + ": " + fieldToGet.get(object) + "\n";
+        return getOffset(offsetSize) + this.name + ": " + fieldToGet.get(object) + "\n";
     }
 }

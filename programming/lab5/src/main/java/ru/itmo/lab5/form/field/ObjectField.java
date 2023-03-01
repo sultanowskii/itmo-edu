@@ -103,8 +103,9 @@ public class ObjectField<T> extends Field<T> {
         super.setValueToObject(object);
     }
 
-    public String getStringifiedValueFromObject(Object object, int offsetLength) throws NoSuchFieldException, IllegalAccessException {
-        StringBuilder stringBuilder = new StringBuilder();
+    public String getStringifiedValueFromObject(Object object, int offsetSize) throws NoSuchFieldException, IllegalAccessException {
+        StringBuilder stringBuilder = new StringBuilder(getOffset(offsetSize) + this.name + ":\n");
+
         java.lang.reflect.Field fieldToGet = null;
         try {
             fieldToGet = object.getClass().getDeclaredField(this.name);
@@ -115,7 +116,7 @@ public class ObjectField<T> extends Field<T> {
         Object nestedObject = fieldToGet.get(object);
 
         for (Field<?> field : this.fields) {
-            stringBuilder.append(field.getStringifiedValueFromObject(nestedObject, offsetLength + 1));
+            stringBuilder.append(field.getStringifiedValueFromObject(nestedObject, offsetSize + 1));
         }
 
         return stringBuilder.toString();

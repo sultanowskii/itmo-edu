@@ -3,7 +3,7 @@ package ru.itmo.lab5.schema;
 import java.time.ZonedDateTime;
 
 public class Person implements Comparable<Person> {
-    private static int nextId = 1;
+    private static int nextID = 1;
     private Integer id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -16,26 +16,26 @@ public class Person implements Comparable<Person> {
 
     public Person() {
         this.creationDate = ZonedDateTime.now();
-        this.id = getIncNextId();
+        this.id = getNextIDAndIncrement();
         this.coordinates = new Coordinates();
         this.location = new Location();
     }
 
-    public int getNextId() {
-        return nextId;
+    public int getNextID() {
+        return nextID;
     }
 
     // TODO: Придумать название получше
-    public int getIncNextId() {
-        return nextId++;
+    public int getNextIDAndIncrement() {
+        return nextID++;
     }
 
     // Для случаев, когда загрузили данные из файла и нужно выставить релевантный ID
-    public static void setNextId(int newNextId) {
-        nextId = newNextId;
+    public static void setNextID(int newNextID) {
+        nextID = newNextID;
     }
 
-    public Integer getId() {
+    public Integer getID() {
         return this.id;
     }
 
@@ -71,7 +71,7 @@ public class Person implements Comparable<Person> {
         return this.location;
     }
 
-    public void setId(Integer id) {
+    public void setID(Integer id) {
         this.id = id;
     }
 
@@ -129,10 +129,6 @@ public class Person implements Comparable<Person> {
             return this.coordinates.compareTo(other.coordinates);
         }
 
-        if (!this.id.equals(other.id)) {
-            return this.id.compareTo(other.id);
-        }
-
         if (!this.eyeColor.equals(other.eyeColor)) {
             return this.eyeColor.compareTo(other.eyeColor);
         }
@@ -146,5 +142,71 @@ public class Person implements Comparable<Person> {
         }
 
         return 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = hash * 23 + this.coordinates.hashCode();
+        hash = hash * 23 + this.creationDate.hashCode();
+        hash = hash * 23 + this.eyeColor.hashCode();
+        hash = hash * 23 + (int)(this.height >>> 32);
+        hash = hash * 23 + this.id;
+        hash = hash * 23 + this.location.hashCode();
+        hash = hash * 23 + this.name.hashCode();
+        hash = hash * 23 + this.nationality.hashCode();
+        hash = hash * 23 + this.passportID.hashCode();
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        final Person other = (Person) obj;
+
+        if ((int) this.id != other.id) {
+            return false;
+        }
+
+        if (!this.passportID.equals(other.passportID)) {
+            return false;
+        }
+
+        if (!this.name.equals(other.name)) {
+            return false;
+        }
+
+        if (!this.creationDate.equals(other.creationDate)) {
+            return false;
+        }
+
+        if (!this.eyeColor.equals(other.eyeColor)) {
+            return false;
+        }
+
+        if (!this.nationality.equals(other.nationality)) {
+            return false;
+        }
+
+        if (this.height != other.height) {
+            return false;
+        }
+
+        if (!this.location.equals(other.location)) {
+            return false;
+        }
+
+        if (!this.coordinates.equals(other.coordinates)) {
+            return false;
+        }
+
+        return true;
     }
 }
