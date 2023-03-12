@@ -52,8 +52,8 @@ public class Location implements Comparable<Location> {
     public int hashCode() {
         int hash = 17;
         hash = hash * 23 + this.x.hashCode();
-        hash = hash * 23 + y;
-        hash = hash * 23 + name.hashCode();
+        hash = hash * 23 + this.y;
+        hash = hash * 23 + this.name.hashCode();
         return hash;
     }
 

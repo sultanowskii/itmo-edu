@@ -35,6 +35,10 @@ public abstract class Field<T> {
         this.printWriter = printWriter;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     protected String getOffset(int offsetSize) {
         return " ".repeat(offsetSize);
     }
@@ -143,5 +147,24 @@ public abstract class Field<T> {
         fieldToGet.setAccessible(true);
 
         return getOffset(offsetSize) + this.name + ": " + fieldToGet.get(object) + "\n";
+    }
+
+    public void parseAndSetValue(Object object, String rawValue) throws NoSuchFieldException, IllegalAccessException {
+        this.parseAndGetValue(rawValue);
+        this.setValueToObject(object);
+    }
+
+    public T parseAndGetValue(String rawValue) {
+        try {
+            this.setRawValue(rawValue);
+            this.validateRawValue();
+            this.parseRawValue();
+            this.validateParsedValue();
+        } catch (ValidationException e) {
+            throw new ValidationException("Validation error on field `" + this.name + "`: " + e.getMessage());
+        } catch (NullPointerException e) {
+            throw new ValidationException("Validation error on field `" + this.name + "`: " + "This field is required.");
+        }
+        return this.value;
     }
 }

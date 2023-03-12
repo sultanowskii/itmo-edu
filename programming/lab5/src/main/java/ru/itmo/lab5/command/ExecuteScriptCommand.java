@@ -17,7 +17,6 @@ public class ExecuteScriptCommand extends Command {
         super("execute_script");
     }
 
-    // TODO: Как-то отследить рекурсивный вызов
     @Override
     public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) throws InvalidCommandArgumentException {
         if (args.size() != 1) {
@@ -38,6 +37,10 @@ public class ExecuteScriptCommand extends Command {
             while (scriptFileScanner.hasNextLine()) {
                 String line = scriptFileScanner.nextLine();
                 CommandInputInfo commandInputInfo = CommandParser.parseString(line);
+                if (commandInputInfo.getCommandName().equals(this.getName()) && commandInputInfo.getArgs().get(0).equals(scriptFilename)) {
+                    printWriter.println("Direct recursion call is detected. Ignoring.");
+                    continue;
+                }
                 commandManager.execCommandByCommandInputInfo(scriptFileScanner, printWriter, commandInputInfo, context);
                 printWriter.println();
             }

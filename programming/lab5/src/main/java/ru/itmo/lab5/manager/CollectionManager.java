@@ -4,12 +4,31 @@ import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 
-public abstract class SchemaCollectionManager<T> {
+public abstract class CollectionManager<T> {
     protected LinkedHashSet<T> storage;
     protected ZonedDateTime initDateTime;
 
-    public SchemaCollectionManager(LinkedHashSet<T> storage) {
+    protected int nextID = 0;
+
+    public CollectionManager() {
+
+    }
+
+    public CollectionManager(LinkedHashSet<T> storage) {
         this.storage = storage;
+    }
+
+    public int getNextID() {
+        return nextID;
+    }
+
+    public int getNextIDAndIncrement() {
+        return nextID++;
+    }
+
+    // Для случаев, когда загрузили данные из файла и нужно выставить релевантный ID
+    public void setNextID(int newNextID) {
+        nextID = newNextID;
     }
 
     public LinkedHashSet<T> getStorage() {
@@ -33,4 +52,6 @@ public abstract class SchemaCollectionManager<T> {
     public abstract void removeByID(int id) throws NoSuchElementException;
 
     public abstract void add(T object);
+
+    public abstract void addWithoutAutoID(T object);
 }

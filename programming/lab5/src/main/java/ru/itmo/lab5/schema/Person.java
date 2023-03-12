@@ -16,23 +16,8 @@ public class Person implements Comparable<Person> {
 
     public Person() {
         this.creationDate = ZonedDateTime.now();
-        this.id = getNextIDAndIncrement();
         this.coordinates = new Coordinates();
         this.location = new Location();
-    }
-
-    public int getNextID() {
-        return nextID;
-    }
-
-    // TODO: Придумать название получше
-    public int getNextIDAndIncrement() {
-        return nextID++;
-    }
-
-    // Для случаев, когда загрузили данные из файла и нужно выставить релевантный ID
-    public static void setNextID(int newNextID) {
-        nextID = newNextID;
     }
 
     public Integer getID() {

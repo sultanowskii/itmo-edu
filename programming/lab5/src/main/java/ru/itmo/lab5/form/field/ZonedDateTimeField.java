@@ -59,6 +59,19 @@ public class ZonedDateTimeField extends Field<ZonedDateTime> {
         this.value = ZonedDateTime.parse(this.rawValue, this.formatter);
     }
 
+    public String getStringifiedValueFromObject(Object object, int offsetSize) throws NoSuchFieldException, IllegalAccessException {
+        java.lang.reflect.Field fieldToGet = null;
+
+        try {
+            fieldToGet = object.getClass().getDeclaredField(this.name);
+        } catch (NoSuchFieldException e) {
+            throw new NoSuchFieldException("Field `" + this.name +"` not found.");
+        }
+        fieldToGet.setAccessible(true);
+
+        return getOffset(offsetSize) + this.name + ": " + fieldToGet.get(object) + "\n";
+    }
+
     @Override
     public void validateRawValue() throws ValidationException {
         super.validateRawValue();

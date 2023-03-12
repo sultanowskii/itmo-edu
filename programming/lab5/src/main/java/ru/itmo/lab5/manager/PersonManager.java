@@ -5,7 +5,10 @@ import ru.itmo.lab5.schema.Person;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 
-public class PersonManager extends SchemaCollectionManager<Person> {
+public class PersonManager extends CollectionManager<Person> {
+    public PersonManager() {
+
+    }
     public PersonManager(LinkedHashSet<Person> storage) {
         super(storage);
     }
@@ -23,6 +26,12 @@ public class PersonManager extends SchemaCollectionManager<Person> {
 
     @Override
     public void add(Person person) {
+        person.setID(getNextIDAndIncrement());
+        this.storage.add(person);
+    }
+
+    @Override
+    public void addWithoutAutoID(Person person) {
         this.storage.add(person);
     }
 }

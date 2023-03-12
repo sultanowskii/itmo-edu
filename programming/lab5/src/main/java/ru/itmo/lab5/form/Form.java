@@ -26,6 +26,10 @@ public class Form {
         this.fields.add(newField);
     }
 
+    public List<Field<?>> getFields() {
+        return this.fields;
+    }
+
     public void fillObjectWithValidatedUserInput(Object object) {
         for (Field<?> field : this.fields) {
             field.getParsedAndValidatedValueFromUserInput(0);
