@@ -2,6 +2,10 @@ package ru.itmo.lab5.form;
 
 import ru.itmo.lab5.date.DateTimeFormatterBuilder;
 import ru.itmo.lab5.form.field.*;
+import ru.itmo.lab5.form.validation.ExclusiveBoundsValidator;
+import ru.itmo.lab5.form.validation.NonEmptyStringValidator;
+import ru.itmo.lab5.form.validation.NonNullValidator;
+import ru.itmo.lab5.form.validation.StringLengthValidator;
 import ru.itmo.lab5.schema.Color;
 import ru.itmo.lab5.schema.Coordinates;
 import ru.itmo.lab5.schema.Country;
@@ -10,6 +14,7 @@ import ru.itmo.lab5.schema.Location;
 import java.io.PrintWriter;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,26 +42,33 @@ public class PersonRetrieveFormCreator {
         return new ObjectField<>("location", locationFields, scanner, printWriter);
     }
 
-    public static EnumField<Country> getNationalityField(Scanner scanner, PrintWriter printWriter) {
-        return new EnumField<>("nationality", Country.class, scanner, printWriter);
+    public static Field<Country> getNationalityField(Scanner scanner, PrintWriter printWriter) {
+        return new EnumField<>("nationality", Country.class, scanner, printWriter)
+                .addRawValueValidator(new NonNullValidator<>());
     }
 
-    public static EnumField<Color> getEyeColorField(Scanner scanner, PrintWriter printWriter) {
-        return new EnumField<>("eyeColor", Color.class, scanner, printWriter);
+    public static Field<Color> getEyeColorField(Scanner scanner, PrintWriter printWriter) {
+        return new EnumField<>("eyeColor", Color.class, scanner, printWriter)
+            .addRawValueValidator(new NonNullValidator<>());
     }
 
-    public static StringField getPassportIDField(Scanner scanner, PrintWriter printWriter) {
-        return new StringField("passportID", scanner, printWriter);
+    public static Field<String> getPassportIDField(Scanner scanner, PrintWriter printWriter) {
+        return new StringField("passportID", scanner, printWriter)
+                .addValueValidator(new StringLengthValidator(0, 25))
+                .addValueValidator(new NonEmptyStringValidator());
     }
 
-    public static LongField getHeightField(Scanner scanner, PrintWriter printWriter) {
-        return new LongField("height", scanner, printWriter);
+    public static Field<Long> getHeightField(Scanner scanner, PrintWriter printWriter) {
+        return new LongField("height", scanner, printWriter)
+                .addValueValidator(ExclusiveBoundsValidator.newExclusiveLowerBoundValidator(0L))
+                .addRawValueValidator(new NonNullValidator<>());
     }
 
-    public static ZonedDateTimeField getCreationDateField(Scanner scanner, PrintWriter printWriter) {
+    public static Field<ZonedDateTime> getCreationDateField(Scanner scanner, PrintWriter printWriter) {
         DateTimeFormatter formatter = DateTimeFormatterBuilder.getDateTimeFormatter();
         String pattern = DateTimeFormatterBuilder.getDateTimePattern();
-        return new ZonedDateTimeField("creationDate", formatter, pattern, scanner, printWriter);
+        return new ZonedDateTimeField("creationDate", formatter, pattern, scanner, printWriter)
+                .addRawValueValidator(new NonNullValidator<>());
     }
 
     public static ObjectField<Coordinates> getCoordinatesField(Scanner scanner, PrintWriter printWriter) {

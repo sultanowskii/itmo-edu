@@ -52,7 +52,7 @@ public class EnumField<E extends Enum<E>> extends Field<E> {
             throw new ValidationException("This field cannot be null.");
         }
         try {
-            Enum.valueOf(this.enumClass, this.rawValue);
+            Enum.valueOf(this.enumClass, this.rawValue.trim());
         } catch(IllegalArgumentException e){
             throw new ValidationException("Please enter valid value (choices: " + getBeautifiedChoices() + "): ");
         }

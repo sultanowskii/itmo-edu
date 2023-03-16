@@ -20,7 +20,7 @@ public class SaveCommand extends Command {
         try {
             outputStream = new BufferedOutputStream(new FileOutputStream(context.getCollectionFilename()));
         } catch (FileNotFoundException e) {
-            throw new InvalidCommandArgumentException("File `" + context.getCollectionFilename() + "` is inaccessible (is a directory or is unwriable due to permissions).");
+            throw new InvalidCommandArgumentException("File `" + context.getCollectionFilename() + "` is inaccessible (is a directory or is unwritable due to permissions).");
         }
         PersonCollectionXMLWriter personCollectionXMLWriter = new PersonCollectionXMLWriter(scanner, printWriter, outputStream);
 

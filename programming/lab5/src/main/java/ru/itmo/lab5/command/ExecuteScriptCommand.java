@@ -7,11 +7,9 @@ import ru.itmo.lab5.form.validation.ValidationException;
 import ru.itmo.lab5.runtime.Context;
 import ru.itmo.lab5.runtime.RuntimeContants;
 import ru.itmo.lab5.runtime.exception.MaxCallDepthException;
+import ru.itmo.lab5.runtime.exception.RecursiveCallException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,26 +30,23 @@ public class ExecuteScriptCommand extends Command {
             throw new InvalidCommandArgumentException("Command syntax:\n " + this.getName() + " <script_file_name>");
         }
 
-        int nextCallDepth = context.getDepth() + 1;
-
-        if (nextCallDepth >= RuntimeContants.MAX_CALL_DEPTH) {
-            throw new MaxCallDepthException("Max call depth is reached. Getting back.");
-        }
-
         Iterable<Command> commands = context.getCommandManager().getCommands();
         CommandManager nestedCommandManager = new CommandManager(commands);
 
-        Context nestedContext = new Context();
-        nestedContext.setDepth(nextCallDepth);
-        nestedContext.setCommandManager(context.getCommandManager());
-        nestedContext.setPersonManager(context.getPersonManager());
-
         for (String scriptFilename : args) {
             Scanner scriptFileScanner;
+            File scriptFile;
             try {
-                scriptFileScanner = new Scanner(new FileReader(scriptFilename));
+                scriptFile = new File(scriptFilename);
+                scriptFileScanner = new Scanner(scriptFile);
             } catch (FileNotFoundException e) {
                 throw new InvalidCommandArgumentException("File `" + scriptFilename + "` is inaccessible (doesn't exist, is a directory or is unreadable due to permissions).");
+            }
+            try {
+                context.pushNestedScriptName(scriptFile.getAbsolutePath());
+            } catch (RecursiveCallException e) {
+                printWriter.println(e.getMessage());
+                continue;
             }
 
             while (scriptFileScanner.hasNextLine()) {
@@ -59,7 +54,7 @@ public class ExecuteScriptCommand extends Command {
                 String line = scriptFileScanner.nextLine();
                 CommandInputInfo commandInputInfo = CommandParser.parseString(line);
                 try {
-                    nestedCommandManager.execCommandByCommandInputInfo(scriptFileScanner, printWriter, commandInputInfo, nestedContext);
+                    nestedCommandManager.execCommandByCommandInputInfo(scriptFileScanner, printWriter, commandInputInfo, context);
                 } catch (InvalidCommandArgumentException e) {
                     printWriter.println("Invalid arguments: " + e.getMessage());
                 } catch (ValidationException e) {
@@ -69,6 +64,7 @@ public class ExecuteScriptCommand extends Command {
                 }
             }
             scriptFileScanner.close();
+            context.popNestedScriptName();
         }
     }
 

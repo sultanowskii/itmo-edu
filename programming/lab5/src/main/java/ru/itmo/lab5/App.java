@@ -120,6 +120,6 @@ public class App
                     printWriter.println(e.getMessage());
                 }
             }
-        }
+        } catch (java.util.NoSuchElementException ignored) {}
     }
 }

@@ -108,7 +108,7 @@ public class ObjectField<T> extends Field<T> {
 
         java.lang.reflect.Field fieldToGet = null;
         try {
-            fieldToGet = object.getClass().getDeclaredField(this.name);
+            fieldToGet = object.getClass().getDeclaredField(this.name.trim());
         } catch (NoSuchFieldException e) {
             throw new NoSuchFieldException("Field `" + this.name + "` not found.");
         }

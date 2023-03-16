@@ -32,7 +32,7 @@ public class FloatField extends Field<Float> {
     public void validateRawValue() throws ValidationException {
         super.validateRawValue();
         try {
-            Float.parseFloat(this.rawValue);
+            Float.parseFloat(this.rawValue.trim());
         } catch(NumberFormatException e){
             throw new ValidationException("Please enter floating point number.");
         }

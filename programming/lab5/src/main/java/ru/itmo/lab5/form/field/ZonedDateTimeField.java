@@ -76,7 +76,7 @@ public class ZonedDateTimeField extends Field<ZonedDateTime> {
     public void validateRawValue() throws ValidationException {
         super.validateRawValue();
         try {
-            ZonedDateTime.parse(this.rawValue, formatter);
+            ZonedDateTime.parse(this.rawValue.trim(), formatter);
         } catch (DateTimeParseException e) {
             throw new ValidationException("Please enter datetime in the following format: " + this.pattern + ".");
         }

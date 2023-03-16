@@ -32,7 +32,7 @@ public class DoubleField extends Field<Double> {
     public void validateRawValue() throws ValidationException {
         super.validateRawValue();
         try {
-            Double.parseDouble(this.rawValue);
+            Double.parseDouble(this.rawValue.trim());
         } catch(NumberFormatException e){
             throw new ValidationException("Please enter floating point number.");
         }

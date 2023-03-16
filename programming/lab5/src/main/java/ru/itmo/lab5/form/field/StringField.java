@@ -29,6 +29,6 @@ public class StringField extends Field<String> {
 
     @Override
     public void parseRawValue() {
-        this.value = this.rawValue;
+        this.value = this.rawValue.trim();
     }
 }

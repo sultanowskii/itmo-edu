@@ -241,7 +241,7 @@ public abstract class Field<T> {
      */
     public T parseAndGetValue(String rawValue) {
         try {
-            this.setRawValue(rawValue);
+            this.setRawValue(rawValue.trim());
             this.validateRawValue();
             this.parseRawValue();
             this.validateParsedValue();

@@ -2,6 +2,10 @@ package ru.itmo.lab5.runtime;
 
 import ru.itmo.lab5.command.CommandManager;
 import ru.itmo.lab5.manager.PersonManager;
+import ru.itmo.lab5.runtime.exception.RecursiveCallException;
+
+import java.util.EmptyStackException;
+import java.util.Stack;
 
 /**
  * Context
@@ -9,7 +13,8 @@ import ru.itmo.lab5.manager.PersonManager;
 public class Context {
     private PersonManager personManager;
     private CommandManager commandManager;
-    private int depth = 0;
+
+    private Stack<String> scriptNestedStack = new Stack<>();
     private String collectionFilename;
 
     public PersonManager getPersonManager() {
@@ -20,8 +25,11 @@ public class Context {
         return this.commandManager;
     }
 
-    public int getDepth() {
-        return this.depth;
+    public void pushNestedScriptName(String scriptName) throws RecursiveCallException {
+        if (this.scriptNestedStack.contains(scriptName)) {
+            throw new RecursiveCallException("Recursion call detected.");
+        }
+        this.scriptNestedStack.push(scriptName);
     }
 
     public String getCollectionFilename() {
@@ -36,8 +44,8 @@ public class Context {
         this.commandManager = commandManager;
     }
 
-    public void setDepth(int depth) {
-        this.depth = depth;
+    public String popNestedScriptName() throws EmptyStackException {
+        return this.scriptNestedStack.pop();
     }
 
     public void setCollectionFilename(String collectionFilename) {

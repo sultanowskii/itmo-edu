@@ -32,7 +32,7 @@ public class IntegerField extends Field<Integer> {
     public void validateRawValue() throws ValidationException {
         super.validateRawValue();
         try {
-            Integer.parseInt(this.rawValue);
+            Integer.parseInt(this.rawValue.trim());
         } catch(NumberFormatException e){
             throw new ValidationException("Please enter integer number.");
         }

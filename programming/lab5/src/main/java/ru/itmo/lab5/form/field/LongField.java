@@ -31,7 +31,7 @@ public class LongField extends Field<Long> {
     public void validateRawValue() throws ValidationException {
         super.validateRawValue();
         try {
-            Long.parseLong(this.rawValue);
+            Long.parseLong(this.rawValue.trim());
         } catch(NumberFormatException e){
             throw new ValidationException("Please enter long integer number.");
         }
