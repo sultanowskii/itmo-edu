@@ -2,12 +2,11 @@ package ru.itmo.lab5.command;
 
 import ru.itmo.lab5.form.Form;
 import ru.itmo.lab5.form.PersonCreationFormCreator;
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 import ru.itmo.lab5.manager.PersonManager;
 import ru.itmo.lab5.schema.Person;
 
 import java.io.PrintWriter;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -38,7 +37,12 @@ public class RemoveGreaterCommand extends Command {
     }
 
     @Override
-    public String getHelp() {
-        return "Remove all elements that are greater than the specified one. Syntax: " + this.getName() + " {element}";
+    public String getDescription() {
+        return "Remove all elements that are greater than the specified one.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName() + " {element}";
     }
 }

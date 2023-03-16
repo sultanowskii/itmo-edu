@@ -2,7 +2,7 @@ package ru.itmo.lab5.command;
 
 import ru.itmo.lab5.form.Form;
 import ru.itmo.lab5.form.PersonCreationFormCreator;
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 import ru.itmo.lab5.manager.PersonManager;
 import ru.itmo.lab5.schema.Location;
 import ru.itmo.lab5.schema.Person;
@@ -44,7 +44,12 @@ public class CountGreaterThanLocationCommand extends Command {
     }
 
     @Override
-    public String getHelp() {
-        return "Count elements which location is greater than the specified. Syntax: " + this.getName() + " {location}";
+    public String getDescription() {
+        return "Count elements which location is greater than the specified.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName() + " {location}";
     }
 }

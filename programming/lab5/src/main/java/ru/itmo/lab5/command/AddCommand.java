@@ -2,7 +2,7 @@ package ru.itmo.lab5.command;
 
 import ru.itmo.lab5.form.Form;
 import ru.itmo.lab5.form.PersonCreationFormCreator;
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 import ru.itmo.lab5.manager.PersonManager;
 import ru.itmo.lab5.schema.*;
 
@@ -31,7 +31,12 @@ public class AddCommand extends Command {
     }
 
     @Override
-    public String getHelp() {
-        return "Add new element to the collection. Syntax: " + this.getName() + " {element}";
+    public String getDescription() {
+        return "Add new element to the collection.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName() + " {element}";
     }
 }

@@ -2,15 +2,11 @@ package ru.itmo.lab5.command;
 
 import ru.itmo.lab5.form.Form;
 import ru.itmo.lab5.form.PersonRetrieveFormCreator;
-import ru.itmo.lab5.form.field.*;
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 import ru.itmo.lab5.manager.PersonManager;
 import ru.itmo.lab5.schema.*;
 
 import java.io.PrintWriter;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -34,7 +30,12 @@ public class ShowCommand extends Command {
     }
 
     @Override
-    public String getHelp() {
-        return "Show all elements of collection. Syntax: " + this.getName();
+    public String getDescription() {
+        return "Show all elements of collection.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName();
     }
 }

@@ -3,10 +3,14 @@ package ru.itmo.lab5.command;
 import ru.itmo.lab5.command.exception.InvalidCommandArgumentException;
 import ru.itmo.lab5.command.parse.CommandInputInfo;
 import ru.itmo.lab5.command.parse.CommandParser;
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.form.validation.ValidationException;
+import ru.itmo.lab5.runtime.Context;
+import ru.itmo.lab5.runtime.RuntimeContants;
+import ru.itmo.lab5.runtime.exception.MaxCallDepthException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
@@ -18,38 +22,63 @@ public class ExecuteScriptCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) throws InvalidCommandArgumentException {
+    public void exec(
+            Scanner scanner,
+            PrintWriter printWriter,
+            List<String> args,
+            Context context
+    ) throws InvalidCommandArgumentException, MaxCallDepthException {
         if (args.size() != 1) {
-           throw new InvalidCommandArgumentException("Command syntax:\n " + this.getName() + " <script_file_name>");
+            throw new InvalidCommandArgumentException("Command syntax:\n " + this.getName() + " <script_file_name>");
+        }
+
+        int nextCallDepth = context.getDepth() + 1;
+
+        if (nextCallDepth >= RuntimeContants.MAX_CALL_DEPTH) {
+            throw new MaxCallDepthException("Max call depth is reached. Getting back.");
         }
 
         Iterable<Command> commands = context.getCommandManager().getCommands();
-        CommandManager commandManager = new CommandManager(commands);
+        CommandManager nestedCommandManager = new CommandManager(commands);
+
+        Context nestedContext = new Context();
+        nestedContext.setDepth(nextCallDepth);
+        nestedContext.setCommandManager(context.getCommandManager());
+        nestedContext.setPersonManager(context.getPersonManager());
 
         for (String scriptFilename : args) {
             Scanner scriptFileScanner;
             try {
                 scriptFileScanner = new Scanner(new FileReader(scriptFilename));
             } catch (FileNotFoundException e) {
-                throw new InvalidCommandArgumentException("File `" + scriptFilename + "` is inaccessible (doesn't exist, is a directory or is unreadable due to permissions.");
+                throw new InvalidCommandArgumentException("File `" + scriptFilename + "` is inaccessible (doesn't exist, is a directory or is unreadable due to permissions).");
             }
 
             while (scriptFileScanner.hasNextLine()) {
+                printWriter.println();
                 String line = scriptFileScanner.nextLine();
                 CommandInputInfo commandInputInfo = CommandParser.parseString(line);
-                if (commandInputInfo.getCommandName().equals(this.getName()) && commandInputInfo.getArgs().get(0).equals(scriptFilename)) {
-                    printWriter.println("Direct recursion call is detected. Ignoring.");
-                    continue;
+                try {
+                    nestedCommandManager.execCommandByCommandInputInfo(scriptFileScanner, printWriter, commandInputInfo, nestedContext);
+                } catch (InvalidCommandArgumentException e) {
+                    printWriter.println("Invalid arguments: " + e.getMessage());
+                } catch (ValidationException e) {
+                    printWriter.println("Validation error: " + e.getMessage());
+                } catch (IOException | RuntimeException e) {
+                    printWriter.println(e.getMessage());
                 }
-                commandManager.execCommandByCommandInputInfo(scriptFileScanner, printWriter, commandInputInfo, context);
-                printWriter.println();
             }
             scriptFileScanner.close();
         }
     }
 
     @Override
-    public String getHelp() {
-        return "Execute `file_name` script (command-by-command). Syntax: " + this.getName() + " file_name";
+    public String getDescription() {
+        return "Execute `file_name` script (command-by-command).";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName() + " file_name";
     }
 }

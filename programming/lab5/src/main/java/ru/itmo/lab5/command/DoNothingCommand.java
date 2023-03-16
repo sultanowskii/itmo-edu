@@ -1,6 +1,6 @@
 package ru.itmo.lab5.command;
 
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -17,7 +17,12 @@ public class DoNothingCommand extends Command {
     }
 
     @Override
-    public String getHelp() {
-        return "Do nothing. Syntax: Just hit the Enter.";
+    public String getDescription() {
+        return "Do nothing.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return "Just hit the Enter.";
     }
 }

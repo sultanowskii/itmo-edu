@@ -5,12 +5,11 @@ import ru.itmo.lab5.form.Form;
 import ru.itmo.lab5.form.PersonCreationFormCreator;
 import ru.itmo.lab5.form.field.*;
 import ru.itmo.lab5.form.validation.*;
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 import ru.itmo.lab5.manager.PersonManager;
 import ru.itmo.lab5.schema.*;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,7 +21,6 @@ public class UpdateCommand extends Command {
 
     @Override
     public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
-        // TODO: Вынести обработку аргументов
         if (args.size() != 1) {
             throw new InvalidCommandArgumentException("Syntax:\n" + this.getName() + " <id>");
         }
@@ -51,7 +49,12 @@ public class UpdateCommand extends Command {
     }
 
     @Override
-    public String getHelp() {
-        return "Update an element with id=`id`. Syntax: " + this.getName() + " id {element}";
+    public String getDescription() {
+        return "Update an element with id=`id`.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName() + " id {element}";
     }
 }

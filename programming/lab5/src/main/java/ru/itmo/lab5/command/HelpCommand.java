@@ -1,6 +1,6 @@
 package ru.itmo.lab5.command;
 
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 
 import java.io.PrintWriter;
 import java.util.*;
@@ -26,7 +26,12 @@ public class HelpCommand extends Command {
     }
 
     @Override
-    public String getHelp() {
-        return "Get help message (this one). Syntax: " + this.getName();
+    public String getDescription() {
+        return "Get help message (this one).";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName();
     }
 }

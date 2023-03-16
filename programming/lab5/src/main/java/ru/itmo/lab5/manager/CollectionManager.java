@@ -4,17 +4,29 @@ import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 
+/**
+ * Collection elements manager.
+ * @param <T> Type of element
+ */
 public abstract class CollectionManager<T> {
     protected LinkedHashSet<T> storage;
     protected ZonedDateTime initDateTime;
 
-    protected int nextID = 0;
+    protected int nextID = 1;
 
+    /**
+     * Default constructor
+     */
     public CollectionManager() {
-
+        this.initDateTime = ZonedDateTime.now();
     }
 
+    /**
+     * Constructor with storage of elements.
+     * @param storage Storage, containing elements
+     */
     public CollectionManager(LinkedHashSet<T> storage) {
+        this.initDateTime = ZonedDateTime.now();
         this.storage = storage;
     }
 
@@ -22,11 +34,14 @@ public abstract class CollectionManager<T> {
         return nextID;
     }
 
+    /**
+     * Get next ID and increment it.
+     * @return Next ID
+     */
     public int getNextIDAndIncrement() {
         return nextID++;
     }
 
-    // Для случаев, когда загрузили данные из файла и нужно выставить релевантный ID
     public void setNextID(int newNextID) {
         nextID = newNextID;
     }

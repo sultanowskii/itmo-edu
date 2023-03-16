@@ -1,11 +1,7 @@
 package ru.itmo.lab5.command;
 
-import ru.itmo.lab5.form.Form;
-import ru.itmo.lab5.form.PersonCreationFormCreator;
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 import ru.itmo.lab5.manager.PersonManager;
-import ru.itmo.lab5.schema.Coordinates;
-import ru.itmo.lab5.schema.Location;
 import ru.itmo.lab5.schema.Person;
 
 import java.io.PrintWriter;
@@ -32,7 +28,12 @@ public class PrintFieldDescendingNationalityCommand extends Command {
     }
 
     @Override
-    public String getHelp() {
-        return "Print `nationality` field value of all elements in descending order. Syntax: " + this.getName();
+    public String getDescription() {
+        return "Print `nationality` field value of all elements in descending order.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName();
     }
 }

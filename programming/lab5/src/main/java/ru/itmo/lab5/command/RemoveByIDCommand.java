@@ -3,9 +3,8 @@ package ru.itmo.lab5.command;
 import ru.itmo.lab5.command.exception.InvalidCommandArgumentException;
 import ru.itmo.lab5.form.field.IntegerField;
 import ru.itmo.lab5.form.validation.ValidationException;
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 import ru.itmo.lab5.manager.PersonManager;
-import ru.itmo.lab5.schema.Person;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -20,7 +19,6 @@ public class RemoveByIDCommand extends Command {
 
     @Override
     public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) throws InvalidCommandArgumentException, ValidationException {
-        // TODO: Вынести обработку аргументов
         if (args.size() != 1) {
             throw new InvalidCommandArgumentException("Syntax:\n" + this.getName() + " <id>");
         }
@@ -48,7 +46,12 @@ public class RemoveByIDCommand extends Command {
     }
 
     @Override
-    public String getHelp() {
-        return "Remove element by its ID. Syntax: " + this.getName() + " id";
+    public String getDescription() {
+        return "Remove element by its ID.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName() + " id";
     }
 }

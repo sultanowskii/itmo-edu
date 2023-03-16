@@ -1,6 +1,6 @@
 package ru.itmo.lab5.command;
 
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 import ru.itmo.lab5.manager.ProgramStateManager;
 
 import java.io.PrintWriter;
@@ -21,7 +21,12 @@ public class ExitCommand extends Command {
     }
 
     @Override
-    public String getHelp() {
-        return "Exit the CLI. Syntax: " + this.getName();
+    public String getDescription() {
+        return "Exit the CLI.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName();
     }
 }

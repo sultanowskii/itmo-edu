@@ -13,8 +13,19 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
+/**
+ * Jdom document creator (used for reading)
+ */
 public class JdomDocumentCreator {
-    public static org.jdom2.Document createJDOMwithDOMParser(Scanner xmlScanner) throws IOException, SAXException, ParserConfigurationException {
+    /**
+     * Create Jdom document with DOM parser.
+     * @param xmlScanner Scanner used to read the raw data
+     * @return Jdom document
+     * @throws IOException If something bad happens during file reading
+     * @throws SAXException On internal Jdom exception
+     * @throws ParserConfigurationException On internal Jdom exception
+     */
+    public static org.jdom2.Document createJDOMDocumentwithDOMParser(Scanner xmlScanner) throws IOException, SAXException, ParserConfigurationException {
         StringBuilder xmlString = new StringBuilder();
         while (xmlScanner.hasNextLine()) {
             xmlString.append(xmlScanner.nextLine());

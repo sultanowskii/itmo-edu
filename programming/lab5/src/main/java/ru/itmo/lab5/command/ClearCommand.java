@@ -1,6 +1,6 @@
 package ru.itmo.lab5.command;
 
-import ru.itmo.lab5.manager.Context;
+import ru.itmo.lab5.runtime.Context;
 import ru.itmo.lab5.schema.Person;
 
 import java.io.PrintWriter;
@@ -26,7 +26,12 @@ public class ClearCommand extends Command {
 
 
     @Override
-    public String getHelp() {
-        return "Clear the collection. Syntax: " + this.getName();
+    public String getDescription() {
+        return "Clear the collection.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return this.getName();
     }
 }

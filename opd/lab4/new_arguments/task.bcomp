@@ -1,0 +1,46 @@
+                org  0x4E2
+START:          CLA
+                ST   R
+                LD   Y
+                DEC
+                PUSH
+                CALL $F
+                POP
+                ADD  R
+                ST   R
+                LD   Z
+                PUSH
+                CALL $F
+                POP
+                DEC
+                SUB  R
+                ST   R
+                LD   X
+                PUSH
+                CALL $F
+                POP
+                DEC
+                ADD  R
+                ST   R
+                HLT
+Z:              WORD 0x01F4
+Y:              WORD 0xFFF7
+X:              WORD 0xDCD8
+R:              WORD 0x8D
+
+                org  0x673
+F:              LD   &1            ; arg
+                BEQ  F_ZERO_OR_NEG ; IF Z==1
+                BPL  F_RET_A       ; IF N==0
+F_ZERO_OR_NEG:  CMP  A
+                BLT  F_RET_A       ; IF N^V==1
+                BEQ  F_RET_A       ; IF Z==1
+                ASL
+                ADD  &1            ; arg
+                ADD  B
+                JUMP F_RET_RESULT
+F_RET_A:        LD   A
+F_RET_RESULT:   ST   &1            ; arg
+                RET
+A:              WORD 0xFF11
+B:              WORD 0x008C

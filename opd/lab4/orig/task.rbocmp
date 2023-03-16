@@ -1,0 +1,46 @@
+            org  0x4E2
+START:      CLA
+            ST   IP+0x19
+            LD   IP+0x16
+            DEC
+            PUSH
+            CALL 0x673
+            POP
+            ADD  IP+0x13
+            ST   IP+0x12
+            LD   IP+0xE
+            PUSH
+            CALL 0x673
+            POP
+            DEC
+            SUB  IP+0xC
+            ST   IP+0xB
+            LD   IP+0x9
+            PUSH
+            CALL 0x673
+            POP
+            DEC
+            ADD  IP+0x5
+            ST   IP+0x4
+            HLT
+Z:          WORD ?
+Y:          WORD ?
+X:          WORD ?
+A:          WORD 0x8D
+
+            org 0x673
+FUNC:       LD   SP+0x1
+            BEQ  IP+0x1   ; IF Z==1
+            BPL  IP+0x7   ; IF N==0
+            CMP  IP+0x9
+            BLT  IP+0x5   ; IF N^V==1
+            BEQ  IP+0x4   ; IF Z==1
+            ASL
+            ADD  SP+0x1
+            ADD  IP+0x5
+            JUMP IP+0x1
+            LD   IP+0x2
+            ST   SP+0x1
+            RET
+            WORD 0xFF11
+            WORD 0x008C

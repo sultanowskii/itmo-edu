@@ -7,24 +7,30 @@ import ru.itmo.lab5.file.util.JdomChildValueGetterWithDefaultValue;
 import ru.itmo.lab5.file.util.JdomDocumentCreator;
 import ru.itmo.lab5.form.PersonRetrieveFormCreator;
 import ru.itmo.lab5.form.field.*;
-import ru.itmo.lab5.form.validation.ValidationException;
 import ru.itmo.lab5.manager.PersonManager;
 import ru.itmo.lab5.schema.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Scanner;
 
-public class PersonCollectionXMLReader implements CollectionManagerReader<Person> {
+/**
+ * Person collection XML reader
+ */
+public class PersonCollectionXMLReader implements CollectionManagerReader<PersonManager> {
     protected Scanner scanner;
     protected PrintWriter printWriter;
     protected Scanner xmlScanner;
 
+    /**
+     * Deafult constructor
+     * @param scanner Global input (to get user input)
+     * @param printWriter Global output (to print something to user)
+     * @param xmlScanner XML scanner to read data from
+     */
     public PersonCollectionXMLReader(Scanner scanner, PrintWriter printWriter, Scanner xmlScanner) {
         this.scanner = scanner;
         this.printWriter = printWriter;
@@ -35,7 +41,7 @@ public class PersonCollectionXMLReader implements CollectionManagerReader<Person
     public PersonManager readCollectionManager() throws NoSuchFieldException, IllegalAccessException {
         org.jdom2.Document document;
         try {
-            document = JdomDocumentCreator.createJDOMwithDOMParser(this.xmlScanner);
+            document = JdomDocumentCreator.createJDOMDocumentwithDOMParser(this.xmlScanner);
         } catch (IOException e) {
             throw new RuntimeException("Unexpected error occurred during collection file parse. Details: " + e.getMessage());
         } catch (SAXException e) {
