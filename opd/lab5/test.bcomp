@@ -1,0 +1,16 @@
+        org 0x10
+        CLA
+WAIT1:  IN 0x19
+        AND #0x40
+        BEQ WAIT1
+        IN 0x18
+        ST DATA
+
+WAIT2:  IN 0x3
+        AND #0x40
+        BEQ WAIT2
+        LD DATA
+        OUT 0x2
+        HLT
+
+DATA:   WORD ?

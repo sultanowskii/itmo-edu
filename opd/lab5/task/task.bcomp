@@ -1,0 +1,48 @@
+                    org  0x420
+START:              CLA
+                    ST   IS_EVEN
+                    LD   STR_BEGIN          ; initialization
+                    ST   STR_PTR
+
+READ_LOOP:          NOP
+DEV_WAIT:           IN   0x5
+                    AND  #0x40               ; spin loop
+                    BEQ  DEV_WAIT
+
+                    IN   0x4                ; read `c` from dev
+                    ST   C
+
+                    LD   IS_EVEN
+                    AND  #1                 ; determine the way to write `c` on this iteration
+                    BEQ  PREPARE_ODD_VALUE
+                    JUMP PREPARE_EVEN_VALUE
+
+PREPARE_ODD_VALUE:  LD   C                  ; if (is_even == 0) -> `c`
+                    JUMP WRITE_VALUE
+
+PREPARE_EVEN_VALUE: LD   C
+                    SWAB                    ; if (is_even == 0) -> `c << 8`
+
+WRITE_VALUE:        OR   (STR_PTR)          ; ptr |= val
+                    ST   (STR_PTR)
+
+                    LD   STR_PTR
+                    ADD  IS_EVEN            ; +1 each 2nd iteration
+                    ST   STR_PTR
+
+                    LD   #1
+                    SUB  IS_EVEN            ; is_even = 1 - is_even;
+                    ST   IS_EVEN
+
+                    LD   C
+                    CMP  #0x10               ; if (c == '\n') goto READ_LOOP
+                    BNE  READ_LOOP
+                    HLT
+
+C:                  WORD ?
+IS_EVEN:            WORD 0                  ; is it even iteration?
+STR_BEGIN:          WORD 0x5C7
+STR_PTR:            WORD ?
+
+                    org  0x5C7
+STR:                WORD ?
