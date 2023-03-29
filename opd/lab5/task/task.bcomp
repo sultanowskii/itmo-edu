@@ -35,7 +35,7 @@ WRITE_VALUE:        OR   (STR_PTR)          ; ptr |= val
                     ST   IS_EVEN
 
                     LD   C
-                    CMP  #0x10               ; if (c == '\n') goto READ_LOOP
+                    CMP  #0xA               ; if (c == '\n') goto READ_LOOP
                     BNE  READ_LOOP
                     HLT
 

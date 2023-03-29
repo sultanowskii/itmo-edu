@@ -1,0 +1,20 @@
+            org 0x100
+START:      CLA
+
+            LD #0x23
+            PUSH
+
+            ; call
+            LD RET_ADDR0
+            PUSH
+            JUMP F
+RET_ADDR0:  WORD $AFTER    ; $+1, 0x0107
+
+AFTER:      POP
+            HLT
+
+            ; silly f: x+1;
+F:          LD &1
+            INC
+            ST &1
+            RET

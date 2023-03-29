@@ -1,0 +1,99 @@
+                    org  0x420
+; READ
+START:              CLA
+                    ST   IS_EVEN
+                    LD   STR_BEGIN          ; initialization
+                    ST   STR_PTR
+
+READ_LOOP:          NOP
+DEV2_WAIT:          IN   0x5
+                    AND  #0x40               ; spin loop
+                    BEQ  DEV2_WAIT
+
+                    IN   0x4                ; read `c` from dev
+                    ST   C
+
+                    LD   IS_EVEN
+                    AND  #1                 ; determine the way to write `c` on this iteration
+                    BEQ  PREPARE_ODD_VAL0
+                    JUMP PREPARE_EVEN_VAL0
+
+PREPARE_ODD_VAL0:   LD   C                  ; if (is_even == 0) -> `c`
+                    JUMP SAVE_VAL
+
+PREPARE_EVEN_VAL0:  LD   C
+                    SWAB                    ; if (is_even == 0) -> `c << 8`
+
+SAVE_VAL:           OR   (STR_PTR)          ; ptr |= val
+                    ST   (STR_PTR)
+
+                    LD   STR_PTR
+                    ADD  IS_EVEN            ; +1 each 2nd iteration
+                    ST   STR_PTR
+
+                    LD   #1
+                    SUB  IS_EVEN            ; is_even = 1 - is_even;
+                    ST   IS_EVEN
+
+                    LD   C
+                    CMP  #0xA               ; if (c == '\n') goto READ_LOOP
+                    BNE  READ_LOOP
+
+; WRITE
+                    CLA
+                    ST   IS_EVEN
+                    LD   STR_BEGIN          ; str_ptr = str_begin
+                    ST   STR_PTR
+
+WRITE_LOOP:         NOP
+
+                    LD   IS_EVEN
+                    AND  #1                 ; determine the way to write `str[i]` on this iteration
+                    BEQ  PREPARE_ODD_VAL1
+                    JUMP PREPARE_EVEN_VAL1
+
+PREPARE_ODD_VAL1:   LD   (STR_PTR)          ; if (is_even == 0) -> `str[i]`
+                    JUMP EXTRACT_VAL
+
+PREPARE_EVEN_VAL1:  LD   (STR_PTR)
+                    SWAB                    ; if (is_even == 0) -> `str[i] << 8`
+
+EXTRACT_VAL:        AND  MAX_BYTE           ; c = str[i] & 0xff;
+                    ST   C
+
+                    CMP  MIN_RU_SYMBOL
+                    BGE  DEV5_WAIT        ; 0xC0 <= arg <= 0xff
+                    JUMP NEXT_ITER_PREP1
+
+DEV5_WAIT:          IN   0xD
+                    AND  #0x40              ; spin loop
+                    BEQ  DEV5_WAIT
+
+                    LD   C
+                    OUT  0xC
+
+NEXT_ITER_PREP1:    LD   STR_PTR
+                    ADD  IS_EVEN            ; +1 each 2nd iteration
+                    ST   STR_PTR
+
+                    LD   #1
+                    SUB  IS_EVEN            ; is_even = 1 - is_even;
+                    ST   IS_EVEN
+
+                    LD   C
+                    CMP  #0xA               ; if (c == '\n') goto WRITE_LOOP
+                    BNE  WRITE_LOOP
+
+                    HLT
+
+; DATA
+
+C:                  WORD ?
+IS_EVEN:            WORD 0                  ; is it an even iteration?
+STR_BEGIN:          WORD 0x5C7
+STR_PTR:            WORD ?
+MAX_BYTE:           WORD 0x00FF
+MIN_RU_SYMBOL:      WORD 0x00C0
+
+                    org  0x5C7
+STR:                WORD ?
