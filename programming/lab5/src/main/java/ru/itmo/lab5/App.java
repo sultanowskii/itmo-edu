@@ -10,10 +10,7 @@ import ru.itmo.lab5.manager.PersonManager;
 import ru.itmo.lab5.manager.ProgramStateManager;
 import ru.itmo.lab5.runtime.Context;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
 import java.util.Scanner;
@@ -40,8 +37,7 @@ public class App
         cmdManager.addCommand(new DoNothingCommand());
     }
 
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) {
         try (
             Scanner scanner = new Scanner(System.in);
             PrintWriter printWriter = new PrintWriter(System.out);

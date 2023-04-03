@@ -1,0 +1,84 @@
+                org  0x0
+V0:             WORD $INT_DEFAULT, 0x0180
+V1:             WORD $INT1, 0x0180
+V2:             WORD $INT_DEFAULT, 0x0180
+V3:             WORD $INT3, 0x0180
+V4:             WORD $INT_DEFAULT, 0x0180
+V5:             WORD $INT_DEFAULT, 0x0180
+V6:             WORD $INT_DEFAULT, 0x0180
+V7:             WORD $INT_DEFAULT, 0x0180
+INT_DEFAULT:    IRET
+
+                org  0x36
+X:              WORD 0x0000
+X_MIN:          WORD 0xFFBF  ; min X value (-0x41 * 2 + 2 = -0x80)
+X_MAX:          WORD 0x003E  ; max X value (0x3E * 2 + 2 = 0x7E)
+X_MASK:         WORD 0x00FF
+
+                org  0x50
+; main() -> !
+START:          DI         ; disable interrupts before assigning vectors
+
+                CLA
+                LD   #0x9
+                OUT  0x3   ; (1000|0001) -> DEV1
+                LD   #0xB
+                OUT  0x7   ; (1000|0011) -> DEV3
+                EI         ; enable interrupts back
+
+DEC_LOOP:       LD   X
+                DEC
+                CALL NORM_X
+                ST   X
+                JUMP DEC_LOOP
+                HLT
+
+; F(arg) -> num
+F:              LD   &1
+                ASL
+                ADD  #2
+                ST   &1
+                RET
+
+; NORM_X(AC[x]) -> AC[x], if (x in RANGE) {ret x;} else {X=max; ret x}
+NORM_X:         CMP  X_MIN       ; if (x < MIN) goto FIX
+                BLT  NORM_X_FIX
+                CMP  X_MAX       ; if (x <= MAX) goto OK
+                BEQ  NORM_X_RET
+                BLT  NORM_X_RET
+
+NORM_X_FIX:     NOP
+                LD   X_MAX
+                NOP
+NORM_X_RET:     RET
+
+; INT1_HANDLER() -> none
+INT1:           DI
+
+                LD X
+                NOP
+
+                PUSH
+                CALL F
+                POP
+                NOP
+
+                OUT  0x2
+
+                EI
+                IRET
+
+; INT3_HANDLER() -> none
+INT3:           DI
+
+                IN   0x6
+                NOP
+
+                OR   X
+                NOT
+                CALL NORM_X
+                ST   X
+                NOP
+
+                EI
+                IRET
