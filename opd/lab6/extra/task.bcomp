@@ -1,0 +1,270 @@
+                org  0x0
+V0:             WORD $INT_DEFAULT, 0x0180
+V1:             WORD $INT_DEFAULT, 0x0180
+V2:             WORD $INT_DEFAULT, 0x0180
+V3:             WORD $INT3, 0x0180
+V4:             WORD $INT_DEFAULT, 0x0180
+V5:             WORD $INT_DEFAULT, 0x0180
+V6:             WORD $INT_DEFAULT, 0x0180
+V7:             WORD $INT_DEFAULT, 0x0180
+INT_DEFAULT:    IRET
+
+                org  0x36
+X:              WORD 0x10
+X_MIN:          WORD 0x0
+X_MAX:          WORD 0xff
+WORKING:        WORD 1
+ACC:            WORD 0     ; ???
+
+                org  0x50
+; MAIN()
+START:          DI         ; disable interrupts before assigning vectors
+
+                LD   #0x1
+                ST   WORKING
+
+                CLA
+                LD   #0xB
+                OUT  0x7   ; (1000|0011) -> DEV3
+                EI         ; enable interrupts back
+
+DEC_LOOP:       LD   X
+                DEC
+                CALL NORM_X
+                ST   X
+                LD   WORKING
+                BEQ  MAIN_END
+                JUMP DEC_LOOP
+MAIN_END:       HLT
+
+
+; NORM_X()
+NORM_X:         CMP  X_MIN       ; if (x < MIN) goto FIX
+                BLT  NORM_X_FIX
+                JUMP NORM_X_RET
+
+NORM_X_FIX:     NOP
+                LD   X_MAX
+                NOP
+NORM_X_RET:     RET
+
+
+; HLT_FUNC()
+HLT_FUNC:       NOP
+                CLA
+                ST   WORKING
+                RET
+
+
+; CLA_FUNC()
+CLA_FUNC:       NOP
+                CLA
+                ST   ACC
+                RET
+
+
+; LD_FUNC()
+LD_FUNC:        LD   &0
+                PUSH
+                CALL W_N_TO_D5 ; W_N_TO_D5(*SP)
+                POP
+                RET
+
+
+ADDR_MASK:      WORD 0x7FF
+LS_FUNC_CNT:    WORD 0x3
+LS_FUNC_XPTR:   WORD ?
+; LS_FUNC()
+LS_FUNC:        LD   X
+                SXTB
+                AND  ADDR_MASK
+                ST   LS_FUNC_XPTR
+                PUSH
+                CALL W_N_TO_D5 ; W_N_TO_D5(addr(x))
+                POP
+                LD   #3
+                ST   LS_FUNC_CNT
+LS_FUNC_LOOP:   LD   (LS_FUNC_XPTR)+
+                PUSH 
+                CALL W_N_TO_D5 ; W_N_TO_D5(*(xptr++))
+                POP
+                LOOP LS_FUNC_CNT
+                JUMP LS_FUNC_LOOP
+                RET
+
+
+; NULL_FUNC()
+NULL_FUNC:      RET
+
+
+W_S_TO_D5_PTR:  WORD ?
+; W_S_TO_D5(s, newline)
+W_S_TO_D5:      LD   &1
+                ST   W_S_TO_D5_PTR
+                NOP
+
+W_S_TO_D5_LOOP: NOP
+                CLA
+W_S_TO_D5_WAIT: IN   0xD
+                AND  #0x40           ; spin loop
+                BEQ  W_S_TO_D5_WAIT
+                LD   (W_S_TO_D5_PTR)+
+                BEQ  W_S_TO_D5_END
+
+                OUT  0xC
+                JUMP W_S_TO_D5_LOOP
+
+W_S_TO_D5_END:  NOP
+                RET
+
+
+W_N_TO_D5_CNTR: WORD 0x4
+W_N_TO_D5_ARG:  WORD ?
+W_N_TO_D5_MASK: WORD 0xF000
+; W_N_TO_D5(num)
+W_N_TO_D5:      LD   #0x4
+                ST   W_N_TO_D5_CNTR
+                LD   &1
+                NOP
+                ST   W_N_TO_D5_ARG
+
+W_N_TO_D5_LOOP: LD   W_N_TO_D5_ARG
+                AND  W_N_TO_D5_MASK
+                SWAB
+                ASR
+                ASR
+                ASR
+                ASR
+                CMP  #0xA
+                BHIS W_N_TO_D5_HEX
+W_N_TO_D5_DIG:  ADD  #0x30
+                JUMP W_N_TO_D5_PRI
+W_N_TO_D5_HEX:  ADD  #0x37
+W_N_TO_D5_PRI:  PUSH                 ; sym
+                CLA
+W_N_TO_D5_SPI1: IN   0xD
+                AND  #0x40           ; spin loop
+                BEQ  W_N_TO_D5_SPI1
+
+                POP                  ; sym
+                OUT  0xC
+                LD   W_N_TO_D5_ARG
+                ASL
+                ASL
+                ASL
+                ASL
+                ST   W_N_TO_D5_ARG
+
+                LOOP W_N_TO_D5_CNTR
+                JUMP W_N_TO_D5_LOOP
+
+W_N_TO_D5_SPI2: IN   0xD
+                AND  #0x40           ; spin loop
+                BEQ  W_N_TO_D5_SPI2
+
+                LD   #0xA ; \n
+                OUT  0xC
+
+                RET
+
+
+INT3_CMD_PTR:   WORD ?
+INT3_CODE:      WORD ?
+INT3_CMD_EXEC:  WORD ?
+; INT3()
+INT3:           DI
+
+                LD   $PROMPT_ADDR
+                PUSH
+                CALL W_S_TO_D5
+                POP
+
+                CLA
+                IN   0x6
+                NOP
+                ST   INT3_CODE
+
+                LD   $CMDS_PTR
+                ST   INT3_CMD_PTR
+
+INT3_LOOP:      LD   (INT3_CMD_PTR) ; while (cmd.code != 0x00 || cmd.code != cmd_code)
+                BEQ  INT3_PERF
+                CMP  INT3_CODE
+                BEQ  INT3_PERF
+                LD   INT3_CMD_PTR
+                ADD  #3
+                ST   INT3_CMD_PTR
+                JUMP INT3_LOOP
+
+INT3_PERF:      LD   (INT3_CMD_PTR)+  ; skip
+                LD   (INT3_CMD_PTR)+  ; name
+                
+                PUSH
+                CALL W_S_TO_D5
+                POP
+                LD   (INT3_CMD_PTR)
+                ST   INT3_CMD_EXEC
+
+                CALL (INT3_CMD_EXEC)   ; func
+
+                EI
+                IRET
+
+
+CMDS_PTR:       WORD $CMDS
+; CMDS[]
+CMDS:           WORD 0x10
+                WORD $HLT_NAME
+                WORD $HLT_FUNC
+
+                WORD 0x20
+                WORD $CLA_NAME
+                WORD $CLA_FUNC
+
+                WORD 0xA0
+                WORD $LD_NAME
+                WORD $LD_FUNC
+
+                WORD 0xB0
+                WORD $LS_NAME
+                WORD $LS_FUNC
+
+                WORD 0x00
+                WORD $NULL_NAME
+                WORD $NULL_FUNC
+
+
+; CMD_NAMES[]
+HLT_NAME:       WORD 0x48       ; 'HLT\n'
+                WORD 0x4C
+                WORD 0x54
+                WORD 0x0A
+                WORD 0x00
+
+CLA_NAME:       WORD 0x43       ; 'CLA\n'
+                WORD 0x4C
+                WORD 0x41
+                WORD 0x0A
+                WORD 0x00
+
+LD_NAME:        WORD 0x4C       ; 'LD\n'
+                WORD 0x44
+                WORD 0x0A
+                WORD 0x00
+
+LS_NAME:        WORD 0x4C       ; 'LS '
+                WORD 0x53
+                WORD 0x20
+                WORD 0x00
+
+NULL_NAME:      WORD 0x4E       ; 'NULL\n'
+                WORD 0x55
+                WORD 0x4C
+                WORD 0x4C
+                WORD 0x0A
+                WORD 0x00
+
+PROMPT_ADDR:    WORD $PROMPT
+PROMPT:         WORD 0x3E       ; '> '
+                WORD 0x20
+                WORD 0x00
