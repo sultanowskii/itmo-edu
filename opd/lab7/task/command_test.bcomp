@@ -1,0 +1,84 @@
+                org  0x10
+RESULT:         WORD ?    ; 010
+
+TEST1_RESULT:   WORD ?    ; 011
+TEST2_RESULT:   WORD ?    ; 012
+TEST3_RESULT:   WORD ?    ; 013
+
+TEST1_DATA:     WORD ?    ; 014
+TEST2_DATA:     WORD ?    ; 015
+TEST3_DATA:     WORD ?    ; 016
+
+
+                org  0x20
+; main()
+START:          CLA
+
+                CALL TEST1
+                CALL TEST2
+                CALL TEST3
+
+                LD   TEST1_RESULT
+                BEQ  FAIL
+                LD   TEST2_RESULT
+                BEQ  FAIL
+                LD   TEST3_RESULT
+                BEQ  FAIL
+
+SUCCESS:        LD   #1
+                ST   RESULT
+                HLT
+
+FAIL:           CLA
+                ST   RESULT
+                HLT
+
+
+                org  0x50
+TEST1_A:        WORD 0x3333
+TEST1_A_PTR:    WORD $TEST1_A
+; TEST1(): check if load mechanism work
+TEST1:          LD   TEST1_A_PTR  ; MEM(0x50) == 0x3333
+                HLT 
+                WORD 0x0F00       ; LDAC
+                ST   $TEST1_DATA
+                CMP  TEST1_A
+                BNE  TEST1_FAIL
+TEST1_SUCCESS:  LD   #1           ; if AC == 0x3333, then ok
+                ST   $TEST1_RESULT
+                RET
+TEST1_FAIL:     CLA
+                ST   $TEST1_RESULT
+                RET
+
+
+                org  0x70
+TEST2_A:        WORD 0x0123
+TEST2_A_PTR:    WORD $TEST2_A
+; TEST2(): check if N flag is set correctly on positive number
+TEST2:          LD   TEST2_A_PTR  ; MEM(0x70) == 0x0123 -> positve number
+                WORD 0x0F00       ; LDAC
+                ST   $TEST2_DATA
+                BMI  TEST2_FAIL
+TEST2_SUCCESS:  LD   #1           ; if N == 0, success
+                ST   $TEST2_RESULT
+                RET
+TEST2_FAIL:     CLA               ; if N == 1, fail
+                ST   $TEST2_RESULT
+                RET
+
+
+                org  0x90
+TEST3_A:        WORD 0xC123
+TEST3_A_PTR:    WORD $TEST3_A
+; TEST3(): check if N flag is set correctly on negative number
+TEST3:          LD   TEST3_A_PTR  ; MEM(0x90) == 0xC123 -> negative number
+                WORD 0x0F00       ; LDAC
+                ST   $TEST3_DATA
+                BPL  TEST3_FAIL
+TEST3_SUCCESS:  LD   #1           ; if N == 1, success
+                ST   $TEST3_RESULT
+                RET
+TEST3_FAIL:     CLA               ; if N == 0, fail
+                ST   $TEST3_RESULT
+                RET
