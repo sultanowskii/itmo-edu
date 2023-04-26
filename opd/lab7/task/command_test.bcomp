@@ -39,7 +39,6 @@ TEST1_A:        WORD 0x3333
 TEST1_A_PTR:    WORD $TEST1_A
 ; TEST1(): check if load mechanism work
 TEST1:          LD   TEST1_A_PTR  ; MEM(0x50) == 0x3333
-                HLT 
                 WORD 0x0F00       ; LDAC
                 ST   $TEST1_DATA
                 CMP  TEST1_A
