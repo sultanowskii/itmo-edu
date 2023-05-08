@@ -9,12 +9,12 @@ import java.util.Scanner;
 
 public class FloatField extends Field<Float> {
 
-    public FloatField(String name, Scanner scanner, PrintWriter printWriter) {
-        super(name, scanner, printWriter);
+    public FloatField(String name, PrintWriter printWriter) {
+        super(name, printWriter);
     }
 
-    public FloatField(String name, List<Validator<String>> rawValueValidators, List<Validator<Float>> valueValidators, Scanner scanner, PrintWriter printWriter) {
-        super(name, rawValueValidators, valueValidators, scanner, printWriter);
+    public FloatField(String name, List<Validator<String>> rawValueValidators, List<Validator<Float>> valueValidators, PrintWriter printWriter) {
+        super(name, rawValueValidators, valueValidators, printWriter);
     }
 
     @Override

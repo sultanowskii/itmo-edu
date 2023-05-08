@@ -23,18 +23,15 @@ import java.util.Scanner;
  * Person collection XML reader
  */
 public class PersonCollectionXMLReader implements CollectionManagerReader<PersonManager> {
-    protected Scanner scanner;
     protected PrintWriter printWriter;
     protected Scanner xmlScanner;
 
     /**
      * Deafult constructor
-     * @param scanner Global input (to get user input)
      * @param printWriter Global output (to print something to user)
      * @param xmlScanner XML scanner to read data from
      */
-    public PersonCollectionXMLReader(Scanner scanner, PrintWriter printWriter, Scanner xmlScanner) {
-        this.scanner = scanner;
+    public PersonCollectionXMLReader(PrintWriter printWriter, Scanner xmlScanner) {
         this.printWriter = printWriter;
         this.xmlScanner = xmlScanner;
     }
@@ -60,7 +57,6 @@ public class PersonCollectionXMLReader implements CollectionManagerReader<Person
       "initDateTime",
             DateTimeFormatterBuilder.getDateTimeFormatter(),
             DateTimeFormatterBuilder.getDateTimePattern(),
-            this.scanner,
             this.printWriter
         );
         personManager.setInitDateTime(initDateTimeField.parseAndGetValue(root.getChild("initDateTime").getValue()));
@@ -75,45 +71,45 @@ public class PersonCollectionXMLReader implements CollectionManagerReader<Person
             person.setCoordinates(new Coordinates());
             person.setLocation(new Location());
 
-            IntegerField idField = PersonRetrieveFormCreator.getIDField(this.scanner, this.printWriter);
+            IntegerField idField = PersonRetrieveFormCreator.getIDField(this.printWriter);
             idField.parseAndSetValue(person, childValueGetter.getChildValueOrDefault(personElement, "id"));
 
-            Field<String> nameField = PersonCreationFormCreator.getNameField(this.scanner, this.printWriter);
+            Field<String> nameField = PersonCreationFormCreator.getNameField(this.printWriter);
             nameField.parseAndSetValue(person, childValueGetter.getChildValueOrDefault(personElement, "name"));
 
             {
                 Element coordinatesElement = personElement.getChild("coordinates");
-                Field<Float> coordinatesXField = PersonCreationFormCreator.getCoordinatesXField(this.scanner, this.printWriter);
+                Field<Float> coordinatesXField = PersonCreationFormCreator.getCoordinatesXField(this.printWriter);
                 coordinatesXField.parseAndSetValue(person.getCoordinates(), childValueGetter.getChildValueOrDefault(coordinatesElement, "x"));
 
-                Field<Integer> coordinatesYField = PersonCreationFormCreator.getCoordinatesYField(this.scanner, this.printWriter);
+                Field<Integer> coordinatesYField = PersonCreationFormCreator.getCoordinatesYField(this.printWriter);
                 coordinatesYField.parseAndSetValue(person.getCoordinates(), childValueGetter.getChildValueOrDefault(coordinatesElement, "y"));
             }
 
-            Field<ZonedDateTime> creationDateField = PersonRetrieveFormCreator.getCreationDateField(this.scanner, this.printWriter);
+            Field<ZonedDateTime> creationDateField = PersonRetrieveFormCreator.getCreationDateField(this.printWriter);
             creationDateField.parseAndSetValue(person, childValueGetter.getChildValueOrDefault(personElement, "creationDate"));
 
-            Field<Long> heightField = PersonCreationFormCreator.getHeightField(this.scanner, this.printWriter);
+            Field<Long> heightField = PersonCreationFormCreator.getHeightField(this.printWriter);
             heightField.parseAndSetValue(person, childValueGetter.getChildValueOrDefault(personElement, "height"));
 
-            Field<String> passportIDField = PersonCreationFormCreator.getPassportIDField(this.scanner, this.printWriter);
+            Field<String> passportIDField = PersonCreationFormCreator.getPassportIDField(this.printWriter);
             passportIDField.parseAndSetValue(person, childValueGetter.getChildValueOrDefault(personElement, "passportID"));
 
-            Field<Color> eyeColor = PersonCreationFormCreator.getEyeColorField(this.scanner, this.printWriter);
+            Field<Color> eyeColor = PersonCreationFormCreator.getEyeColorField(this.printWriter);
             eyeColor.parseAndSetValue(person, childValueGetter.getChildValueOrDefault(personElement, "eyeColor"));
 
-            Field<Country> nationalityColor = PersonCreationFormCreator.getNationalityField(this.scanner, this.printWriter);
+            Field<Country> nationalityColor = PersonCreationFormCreator.getNationalityField(this.printWriter);
             nationalityColor.parseAndSetValue(person, childValueGetter.getChildValueOrDefault(personElement, "nationality"));
 
             {
                 Element locationElement = personElement.getChild("location");
-                Field<Double> locationXField = PersonCreationFormCreator.getLocationXField(this.scanner, this.printWriter);
+                Field<Double> locationXField = PersonCreationFormCreator.getLocationXField(this.printWriter);
                 locationXField.parseAndSetValue(person.getLocation(), childValueGetter.getChildValueOrDefault(locationElement, "x"));
 
-                Field<Integer> locationYField = PersonCreationFormCreator.getLocationYField(this.scanner, this.printWriter);
+                Field<Integer> locationYField = PersonCreationFormCreator.getLocationYField(this.printWriter);
                 locationYField.parseAndSetValue(person.getLocation(), childValueGetter.getChildValueOrDefault(locationElement, "y"));
 
-                Field<String> locationNameField = PersonCreationFormCreator.getLocationNameField(this.scanner, this.printWriter);
+                Field<String> locationNameField = PersonCreationFormCreator.getLocationNameField(this.printWriter);
                 locationNameField.parseAndSetValue(person.getLocation(), childValueGetter.getChildValueOrDefault(locationElement, "name"));
             }
 

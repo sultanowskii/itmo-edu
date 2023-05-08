@@ -13,15 +13,12 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
 public class PersonCollectionXMLWriter implements CollectionManagerWriter<PersonManager> {
-    protected Scanner scanner;
     protected PrintWriter printWriter;
     protected OutputStream xmlOutputStream;
 
-    public PersonCollectionXMLWriter(Scanner scanner, PrintWriter printWriter, OutputStream xmlOutputStream) {
-        this.scanner = scanner;
+    public PersonCollectionXMLWriter(PrintWriter printWriter, OutputStream xmlOutputStream) {
         this.printWriter = printWriter;
         this.xmlOutputStream = xmlOutputStream;
     }

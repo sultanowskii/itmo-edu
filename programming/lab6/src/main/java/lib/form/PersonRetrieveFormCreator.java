@@ -19,108 +19,108 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PersonRetrieveFormCreator {
-    public static List<Field<?>> getPersonFields(Scanner scanner, PrintWriter printWriter) {
+    public static List<Field<?>> getPersonFields(PrintWriter printWriter) {
         List<Field<?>> fields = new ArrayList<>();
 
-        fields.add(getIDField(scanner, printWriter));
-        fields.add(getNameField(scanner, printWriter));
-        fields.add(getCoordinatesField(scanner, printWriter));
-        fields.add(getCreationDateField(scanner, printWriter));
-        fields.add(getHeightField(scanner, printWriter));
-        fields.add(getPassportIDField(scanner, printWriter));
-        fields.add(getEyeColorField(scanner, printWriter));
-        fields.add(getNationalityField(scanner, printWriter));
-        fields.add(getLocationField(scanner, printWriter));
+        fields.add(getIDField(printWriter));
+        fields.add(getNameField(printWriter));
+        fields.add(getCoordinatesField(printWriter));
+        fields.add(getCreationDateField(printWriter));
+        fields.add(getHeightField(printWriter));
+        fields.add(getPassportIDField(printWriter));
+        fields.add(getEyeColorField(printWriter));
+        fields.add(getNationalityField(printWriter));
+        fields.add(getLocationField(printWriter));
 
         return fields;
     }
 
-    public static ObjectField<Location> getLocationField(Scanner scanner, PrintWriter printWriter) {
-        List<Field<?>> locationFields = getLocationFields(scanner, printWriter);
-        return new ObjectField<>("location", locationFields, scanner, printWriter);
+    public static ObjectField<Location> getLocationField(PrintWriter printWriter) {
+        List<Field<?>> locationFields = getLocationFields(printWriter);
+        return new ObjectField<>("location", locationFields, printWriter);
     }
 
-    public static Field<Country> getNationalityField(Scanner scanner, PrintWriter printWriter) {
-        return new EnumField<>("nationality", Country.class, scanner, printWriter)
+    public static Field<Country> getNationalityField(PrintWriter printWriter) {
+        return new EnumField<>("nationality", Country.class, printWriter)
                 .addRawValueValidator(new NonNullValidator<>());
     }
 
-    public static Field<Color> getEyeColorField(Scanner scanner, PrintWriter printWriter) {
-        return new EnumField<>("eyeColor", Color.class, scanner, printWriter)
+    public static Field<Color> getEyeColorField(PrintWriter printWriter) {
+        return new EnumField<>("eyeColor", Color.class, printWriter)
             .addRawValueValidator(new NonNullValidator<>());
     }
 
-    public static Field<String> getPassportIDField(Scanner scanner, PrintWriter printWriter) {
-        return new StringField("passportID", scanner, printWriter)
+    public static Field<String> getPassportIDField(PrintWriter printWriter) {
+        return new StringField("passportID", printWriter)
                 .addValueValidator(new StringLengthValidator(0, 25))
                 .addValueValidator(new NonEmptyStringValidator());
     }
 
-    public static Field<Long> getHeightField(Scanner scanner, PrintWriter printWriter) {
-        return new LongField("height", scanner, printWriter)
+    public static Field<Long> getHeightField(PrintWriter printWriter) {
+        return new LongField("height", printWriter)
                 .addValueValidator(ExclusiveBoundsValidator.newExclusiveLowerBoundValidator(0L))
                 .addRawValueValidator(new NonNullValidator<>());
     }
 
-    public static Field<ZonedDateTime> getCreationDateField(Scanner scanner, PrintWriter printWriter) {
+    public static Field<ZonedDateTime> getCreationDateField(PrintWriter printWriter) {
         DateTimeFormatter formatter = DateTimeFormatterBuilder.getDateTimeFormatter();
         String pattern = DateTimeFormatterBuilder.getDateTimePattern();
-        return new ZonedDateTimeField("creationDate", formatter, pattern, scanner, printWriter)
+        return new ZonedDateTimeField("creationDate", formatter, pattern, printWriter)
                 .addRawValueValidator(new NonNullValidator<>());
     }
 
-    public static ObjectField<Coordinates> getCoordinatesField(Scanner scanner, PrintWriter printWriter) {
-        List<Field<?>> coordinatesFields = getCoordinatesFields(scanner, printWriter);
-        return new ObjectField<>("coordinates", coordinatesFields, scanner, printWriter);
+    public static ObjectField<Coordinates> getCoordinatesField(PrintWriter printWriter) {
+        List<Field<?>> coordinatesFields = getCoordinatesFields(printWriter);
+        return new ObjectField<>("coordinates", coordinatesFields, printWriter);
     }
 
-    public static StringField getNameField(Scanner scanner, PrintWriter printWriter) {
-        return new StringField("name", scanner, printWriter);
+    public static StringField getNameField(PrintWriter printWriter) {
+        return new StringField("name", printWriter);
     }
 
-    public static IntegerField getIDField(Scanner scanner, PrintWriter printWriter) {
-        return new IntegerField("id", scanner, printWriter);
+    public static IntegerField getIDField(PrintWriter printWriter) {
+        return new IntegerField("id", printWriter);
     }
 
-    public static List<Field<?>> getLocationFields(Scanner scanner, PrintWriter printWriter) {
+    public static List<Field<?>> getLocationFields(PrintWriter printWriter) {
         List<Field<?>> locationFields = new ArrayList<>();
-        locationFields.add(getLocationXField(scanner, printWriter));
-        locationFields.add(getLocationYField(scanner, printWriter));
-        locationFields.add(getLocationNameField(scanner, printWriter));
+        locationFields.add(getLocationXField(printWriter));
+        locationFields.add(getLocationYField(printWriter));
+        locationFields.add(getLocationNameField(printWriter));
 
         return locationFields;
     }
 
-    public static StringField getLocationNameField(Scanner scanner, PrintWriter printWriter) {
-        return new StringField("name", scanner, printWriter);
+    public static StringField getLocationNameField(PrintWriter printWriter) {
+        return new StringField("name", printWriter);
     }
 
-    public static IntegerField getLocationYField(Scanner scanner, PrintWriter printWriter) {
-        return new IntegerField("y", scanner, printWriter);
+    public static IntegerField getLocationYField(PrintWriter printWriter) {
+        return new IntegerField("y", printWriter);
     }
 
-    public static DoubleField getLocationXField(Scanner scanner, PrintWriter printWriter) {
-        return new DoubleField("x", scanner, printWriter);
+    public static DoubleField getLocationXField(PrintWriter printWriter) {
+        return new DoubleField("x", printWriter);
     }
 
-    public static List<Field<?>> getCoordinatesFields(Scanner scanner, PrintWriter printWriter) {
+    public static List<Field<?>> getCoordinatesFields(PrintWriter printWriter) {
         List<Field<?>> coordinatesFields = new ArrayList<>();
-        coordinatesFields.add(getCoordinatesXField(scanner, printWriter));
-        coordinatesFields.add(getCoordinatesYField(scanner, printWriter));
+        coordinatesFields.add(getCoordinatesXField(printWriter));
+        coordinatesFields.add(getCoordinatesYField(printWriter));
 
         return coordinatesFields;
     }
 
-    public static IntegerField getCoordinatesYField(Scanner scanner, PrintWriter printWriter) {
-        return new IntegerField("y", scanner, printWriter);
+    public static IntegerField getCoordinatesYField(PrintWriter printWriter) {
+        return new IntegerField("y", printWriter);
     }
 
-    public static FloatField getCoordinatesXField(Scanner scanner, PrintWriter printWriter) {
-        return new FloatField("x", scanner, printWriter);
+    public static FloatField getCoordinatesXField(PrintWriter printWriter) {
+        return new FloatField("x", printWriter);
     }
 
-    public static Form getForm(Scanner scanner, PrintWriter printWriter) {
-        List<Field<?>> fields = getPersonFields(scanner, printWriter);
+    public static Form getForm(PrintWriter printWriter) {
+        List<Field<?>> fields = getPersonFields(printWriter);
 
         return new Form(fields, printWriter);
     }

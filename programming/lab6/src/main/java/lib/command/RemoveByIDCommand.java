@@ -7,6 +7,7 @@ import server.runtime.Context;
 import server.manager.PersonManager;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -18,18 +19,18 @@ public class RemoveByIDCommand extends Command {
     }
 
     @Override
-    public void validateArguments(List<String> args) throws InvalidCommandArgumentException {
-        if (args.size() != 1) {
+    public void validateArguments(String[] args) throws InvalidCommandArgumentException {
+        if (args.length != 1) {
             throw new InvalidCommandArgumentException("Syntax:\n" + this.getName() + " <id>");
         }
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) throws InvalidCommandArgumentException, ValidationException {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) throws InvalidCommandArgumentException, ValidationException {
         this.validateArguments(args);
 
-        IntegerField idSerializer = new IntegerField("id", scanner, printWriter);
-        idSerializer.setRawValue(args.get(0));
+        IntegerField idSerializer = new IntegerField("id", printWriter);
+        idSerializer.setRawValue(args[0]);
 
         try {
             idSerializer.validateRawValue();

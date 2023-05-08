@@ -4,6 +4,7 @@ import lib.command.manager.CommandManager;
 import server.runtime.Context;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.*;
 
 public class HelpCommand extends Command {
@@ -13,7 +14,7 @@ public class HelpCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
         CommandManager commandManager = context.getCommandManager();
         List<Command> commands = commandManager.getCommands();
 

@@ -10,7 +10,9 @@ import server.manager.PersonManager;
 import lib.schema.*;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class UpdateCommand extends Command {
@@ -20,18 +22,29 @@ public class UpdateCommand extends Command {
     }
 
     @Override
-    public void validateArguments(List<String> args) throws InvalidCommandArgumentException {
-        if (args.size() != 1) {
+    public void validateArguments(String[] args) throws InvalidCommandArgumentException {
+        if (args.length != 1) {
             throw new InvalidCommandArgumentException("Syntax:\n" + this.getName() + " <id>");
         }
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
+    public Serializable getAdditionalObjectFromUser(PrintWriter printWriter, Scanner scanner) {
+        Form personForm = PersonCreationFormCreator.getForm(printWriter);
+        Person specifiedPerson = new Person();
+
+        personForm.fillObjectWithValidatedUserInput(scanner, specifiedPerson);
+
+        return specifiedPerson;
+    }
+
+    // TODO: ДОБАВИТЬ ФУНКЦИОНАЛ СЧИТЫВАНИЯ ОБЪЕКТА НА КЛИЕНТЕ (ОТДЕЛЬНО)
+    @Override
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
         this.validateArguments(args);
 
-        IntegerField idSerializer = new IntegerField("id", scanner, printWriter);
-        idSerializer.setRawValue(args.get(0));
+        IntegerField idSerializer = new IntegerField("id", printWriter);
+        idSerializer.setRawValue(args[0]);
 
         try {
             idSerializer.validateRawValue();
@@ -44,11 +57,18 @@ public class UpdateCommand extends Command {
         int idToUpdate = idSerializer.getValue();
 
         PersonManager personManager = context.getPersonManager();
-        Person personToUpdate = personManager.getByID(idToUpdate);
 
-        Form personForm = PersonCreationFormCreator.getForm(scanner, printWriter);
+        // remove old one with the specified id
+        try {
+            personManager.removeByID(idToUpdate);
+        } catch (NoSuchElementException e) {
+            printWriter.println("Element with id=" + idToUpdate + " not found.");
+        }
 
-        personForm.fillObjectWithValidatedUserInput(personToUpdate);
+        // and add a new one with the same id
+        Person updatedPerson = (Person) objectArgument;
+        updatedPerson.setID(idToUpdate);
+        personManager.add(updatedPerson);
 
         printWriter.println("Element updated.");
     }

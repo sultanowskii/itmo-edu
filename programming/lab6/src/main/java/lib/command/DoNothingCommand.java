@@ -3,6 +3,7 @@ package lib.command;
 import server.runtime.Context;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,7 +14,8 @@ public class DoNothingCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+
     }
 
     @Override

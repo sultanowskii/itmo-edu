@@ -7,6 +7,7 @@ import server.manager.PersonManager;
 import lib.schema.*;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.*;
 
 public class AddIfMinCommand extends Command {
@@ -16,14 +17,21 @@ public class AddIfMinCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
-        PersonManager personManager = context.getPersonManager();
-
-        Form personForm = PersonCreationFormCreator.getForm(scanner, printWriter);
-
+    public Serializable getAdditionalObjectFromUser(PrintWriter printWriter, Scanner scanner) {
+        Form personForm = PersonCreationFormCreator.getForm(printWriter);
         Person newPerson = new Person();
 
-        personForm.fillObjectWithValidatedUserInput(newPerson);
+        personForm.fillObjectWithValidatedUserInput(scanner, newPerson);
+
+        return newPerson;
+    }
+
+    // TODO: ДОБАВИТЬ ФУНКЦИОНАЛ СЧИТЫВАНИЯ ОБЪЕКТА НА КЛИЕНТЕ (ОТДЕЛЬНО)
+    @Override
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+        PersonManager personManager = context.getPersonManager();
+        Person newPerson = (Person) objectArgument;
+
         LinkedHashSet<Person> persons = personManager.getStorage();
 
         Person minPerson;

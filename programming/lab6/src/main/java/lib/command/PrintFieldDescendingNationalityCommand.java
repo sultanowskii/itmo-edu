@@ -5,6 +5,7 @@ import server.manager.PersonManager;
 import lib.schema.Person;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.*;
 
 public class PrintFieldDescendingNationalityCommand extends Command {
@@ -14,17 +15,18 @@ public class PrintFieldDescendingNationalityCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
         PersonManager personManager = context.getPersonManager();
 
         LinkedHashSet<Person> persons = personManager.getStorage();
         List<Person> descendingPersons = new ArrayList<>(persons);
         descendingPersons.sort(Collections.reverseOrder());
-
-        for (Person person : descendingPersons) {
-            printWriter.println(person.getID());
-            printWriter.println(person.getNationality());
-        }
+        descendingPersons.forEach(
+            p -> {
+                printWriter.println(p.getID());
+                printWriter.println(p.getNationality());
+            }
+        );
     }
 
     @Override

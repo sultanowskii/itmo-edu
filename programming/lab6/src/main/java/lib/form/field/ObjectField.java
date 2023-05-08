@@ -10,13 +10,13 @@ import java.util.Scanner;
 public class ObjectField<T> extends Field<T> {
     List<Field<?>> fields;
 
-    public ObjectField(String name, List<Field<?>> fields, Scanner scanner, PrintWriter printWriter) {
-        super(name, scanner, printWriter);
+    public ObjectField(String name, List<Field<?>> fields, PrintWriter printWriter) {
+        super(name, printWriter);
         this.fields = fields;
     }
 
-    public ObjectField(String name, List<Field<?>> fields, List<Validator<String>> rawValueValidators, List<Validator<T>> valueValidators, Scanner scanner, PrintWriter printWriter) {
-        super(name, rawValueValidators, valueValidators, scanner, printWriter);
+    public ObjectField(String name, List<Field<?>> fields, List<Validator<String>> rawValueValidators, List<Validator<T>> valueValidators, PrintWriter printWriter) {
+        super(name, rawValueValidators, valueValidators, printWriter);
         this.fields = fields;
     }
 
@@ -30,10 +30,10 @@ public class ObjectField<T> extends Field<T> {
     }
 
     @Override
-    public void getRawValueFromUser(int offsetSize) {
+    public void getRawValueFromUser(Scanner scanner, int offsetSize) {
         this.printInfoMessage();
         for (Field<?> field : this.fields) {
-            field.getRawValueFromUser(offsetSize);
+            field.getRawValueFromUser(scanner, offsetSize);
         }
     }
 
@@ -61,11 +61,11 @@ public class ObjectField<T> extends Field<T> {
     }
 
     @Override
-    protected void getValidatedRawValueFromUserInput(int offsetSize) {
+    protected void getValidatedRawValueFromUserInput(Scanner scanner, int offsetSize) {
         this.printInfoMessage();
         for (Field<?> field : this.fields) {
             do {
-                field.getRawValueFromUser(offsetSize);
+                field.getRawValueFromUser(scanner, offsetSize);
                 try {
                     field.validateRawValue();
                     break;
@@ -77,10 +77,10 @@ public class ObjectField<T> extends Field<T> {
     }
 
     @Override
-    public void getParsedAndValidatedValueFromUserInput(int offsetSize) {
+    public void getParsedAndValidatedValueFromUserInput(Scanner scanner, int offsetSize) {
         this.printInfoMessage();
         for (Field<?> field : this.fields) {
-            field.getParsedAndValidatedValueFromUserInput(offsetSize + 1);
+            field.getParsedAndValidatedValueFromUserInput(scanner, offsetSize + 1);
         }
         this.isParsed = true;
     }

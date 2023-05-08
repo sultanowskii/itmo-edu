@@ -18,10 +18,9 @@ public class ZonedDateTimeField extends Field<ZonedDateTime> {
             String name,
             DateTimeFormatter formatter,
             String formatPattern,
-            Scanner scanner,
             PrintWriter printWriter
     ) {
-        super(name, scanner, printWriter);
+        super(name, printWriter);
         this.formatter = formatter;
         this.pattern = formatPattern;
     }
@@ -32,10 +31,9 @@ public class ZonedDateTimeField extends Field<ZonedDateTime> {
             String formatPattern,
             List<Validator<String>> rawValueValidators,
             List<Validator<ZonedDateTime>> valueValidators,
-            Scanner scanner,
             PrintWriter printWriter
     ) {
-        super(name, rawValueValidators, valueValidators, scanner, printWriter);
+        super(name, rawValueValidators, valueValidators, printWriter);
         this.formatter = formatter;
         this.pattern = formatPattern;
     }

@@ -9,12 +9,12 @@ import java.util.Scanner;
 
 public class DoubleField extends Field<Double> {
 
-    public DoubleField(String name, Scanner scanner, PrintWriter printWriter) {
-        super(name, scanner, printWriter);
+    public DoubleField(String name, PrintWriter printWriter) {
+        super(name, printWriter);
     }
 
-    public DoubleField(String name, List<Validator<String>> rawValueValidators, List<Validator<Double>> valueValidators, Scanner scanner, PrintWriter printWriter) {
-        super(name, rawValueValidators, valueValidators, scanner, printWriter);
+    public DoubleField(String name, List<Validator<String>> rawValueValidators, List<Validator<Double>> valueValidators, PrintWriter printWriter) {
+        super(name, rawValueValidators, valueValidators, printWriter);
     }
 
     @Override

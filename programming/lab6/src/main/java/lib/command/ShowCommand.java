@@ -7,6 +7,7 @@ import server.manager.PersonManager;
 import lib.schema.*;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -18,11 +19,11 @@ public class ShowCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
         PersonManager personStorage = context.getPersonManager();
         HashSet<Person> persons = personStorage.getStorage();
 
-        Form personForm = PersonRetrieveFormCreator.getForm(scanner, printWriter);
+        Form personForm = PersonRetrieveFormCreator.getForm(printWriter);
 
         for (Person person : persons) {
             printWriter.println(personForm.getStringifiedValueFromObject(person, 0));

@@ -8,6 +8,7 @@ import lib.schema.Location;
 import lib.schema.Person;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -19,27 +20,33 @@ public class CountGreaterThanLocationCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
-        PersonManager personManager = context.getPersonManager();
-
-        Form locationForm = PersonCreationFormCreator.getLocationForm(scanner, printWriter);
+    public Serializable getAdditionalObjectFromUser(PrintWriter printWriter, Scanner scanner) {
+        Form locationForm = PersonCreationFormCreator.getLocationForm(printWriter);
 
         Location specifiedLocation = new Location();
 
-        locationForm.fillObjectWithValidatedUserInput(specifiedLocation);
+        locationForm.fillObjectWithValidatedUserInput(scanner, specifiedLocation);
+
+        return specifiedLocation;
+    }
+
+    @Override
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+        PersonManager personManager = context.getPersonManager();
+
+        Location specifiedLocation = (Location) objectArgument;
+
         LinkedHashSet<Person> persons = personManager.getStorage();
 
-        int elementWithGreaterLocationCounter = 0;
+        long elementWithGreaterLocationCounter = (
+            persons
+            .stream()
+            .filter(
+                p -> (p.getLocation().compareTo(specifiedLocation) > 0)
+            )
+            .count()
+        );
 
-        for (Person person : persons) {
-            Location locationToCheck = person.getLocation();
-            if (locationToCheck == null) {
-                continue;
-            }
-            if (locationToCheck.compareTo(specifiedLocation) > 0) {
-                elementWithGreaterLocationCounter++;
-            }
-        }
         printWriter.println(elementWithGreaterLocationCounter);
     }
 

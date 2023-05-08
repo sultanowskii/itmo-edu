@@ -8,12 +8,12 @@ import java.util.Scanner;
 
 public class StringField extends Field<String> {
 
-    public StringField(String name, Scanner scanner, PrintWriter printWriter) {
-        super(name, scanner, printWriter);
+    public StringField(String name, PrintWriter printWriter) {
+        super(name, printWriter);
     }
 
-    public StringField(String name, List<Validator<String>> rawValueValidators, List<Validator<String>> valueValidators, Scanner scanner, PrintWriter printWriter) {
-        super(name, rawValueValidators, valueValidators, scanner, printWriter);
+    public StringField(String name, List<Validator<String>> rawValueValidators, List<Validator<String>> valueValidators, PrintWriter printWriter) {
+        super(name, rawValueValidators, valueValidators, printWriter);
     }
 
     public String getRawValue(String rawString) {

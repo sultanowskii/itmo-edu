@@ -1,6 +1,8 @@
 package lib.schema;
 
-public class Location implements Comparable<Location> {
+import java.io.Serializable;
+
+public class Location implements Comparable<Location>, Serializable {
     private Double x; //Поле не может быть null
     private int y;
     private String name; //Поле не может быть null

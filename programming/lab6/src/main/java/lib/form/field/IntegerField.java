@@ -9,12 +9,12 @@ import java.util.Scanner;
 
 public class IntegerField extends Field<Integer> {
 
-    public IntegerField(String name, Scanner scanner, PrintWriter printWriter) {
-        super(name, scanner, printWriter);
+    public IntegerField(String name, PrintWriter printWriter) {
+        super(name, printWriter);
     }
 
-    public IntegerField(String name, List<Validator<String>> rawValueValidators, List<Validator<Integer>> valueValidators, Scanner scanner, PrintWriter printWriter) {
-        super(name, rawValueValidators, valueValidators, scanner, printWriter);
+    public IntegerField(String name, List<Validator<String>> rawValueValidators, List<Validator<Integer>> valueValidators, PrintWriter printWriter) {
+        super(name, rawValueValidators, valueValidators, printWriter);
     }
 
     @Override

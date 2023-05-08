@@ -4,6 +4,7 @@ import server.runtime.Context;
 import server.manager.PersonManager;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,8 +15,9 @@ public class InfoCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
         PersonManager personStorage = context.getPersonManager();
+
         printWriter.println("Person storage.");
         printWriter.println("Init date: " + personStorage.getInitDateTime());
         printWriter.println("Number of objects in collection: " + personStorage.getStorage().size());

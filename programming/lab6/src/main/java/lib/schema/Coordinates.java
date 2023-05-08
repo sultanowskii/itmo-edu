@@ -1,6 +1,8 @@
 package lib.schema;
 
-public class Coordinates implements Comparable<Coordinates> {
+import java.io.Serializable;
+
+public class Coordinates implements Comparable<Coordinates>, Serializable {
     private Float x; //Значение поля должно быть больше -527, Поле не может быть null
     private int y; //Максимальное значение поля: 897
 

@@ -12,7 +12,6 @@ import java.util.Scanner;
  */
 public class Form {
     protected List<Field<?>> fields;
-    protected Scanner scanner;
     protected PrintWriter printWriter;
 
     /**
@@ -54,9 +53,9 @@ public class Form {
      * Fill object's specified fields with validated user input. All inner objects has to be pre-created.
      * @param object Object to be filled.
      */
-    public void fillObjectWithValidatedUserInput(Object object) {
+    public void fillObjectWithValidatedUserInput(Scanner scanner, Object object) {
         for (Field<?> field : this.fields) {
-            field.getParsedAndValidatedValueFromUserInput(0);
+            field.getParsedAndValidatedValueFromUserInput(scanner, 0);
             try {
                 field.setValueToObject(object);
             } catch (NoSuchFieldException | IllegalAccessException e) {

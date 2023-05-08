@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class LongField extends Field<Long> {
-    public LongField(String name, Scanner scanner, PrintWriter printWriter) {
-        super(name, scanner, printWriter);
+    public LongField(String name, PrintWriter printWriter) {
+        super(name, printWriter);
     }
 
-    public LongField(String name, List<Validator<String>> rawValueValidators, List<Validator<Long>> valueValidators, Scanner scanner, PrintWriter printWriter) {
-        super(name, rawValueValidators, valueValidators, scanner, printWriter);
+    public LongField(String name, List<Validator<String>> rawValueValidators, List<Validator<Long>> valueValidators, PrintWriter printWriter) {
+        super(name, rawValueValidators, valueValidators, printWriter);
     }
 
     @Override

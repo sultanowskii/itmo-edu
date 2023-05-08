@@ -7,14 +7,14 @@ import java.util.List;
  */
 public class CommandInputInfo {
     private final String commandName;
-    private final List<String> args;
+    private final String[] args;
 
     /**
      * Default constructor
      * @param name Name of the target command
      * @param args Command argument list
      */
-    public CommandInputInfo(String name, List<String> args) {
+    public CommandInputInfo(String name, String[] args) {
         this.commandName = name;
         this.args = args;
     }
@@ -23,7 +23,7 @@ public class CommandInputInfo {
         return this.commandName;
     }
 
-    public List<String> getArgs() {
+    public String[] getArgs() {
         return this.args;
     }
 }

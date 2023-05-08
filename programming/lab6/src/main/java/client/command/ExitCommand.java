@@ -15,7 +15,7 @@ public class ExitCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
+    public void exec(Scanner scanner, PrintWriter printWriter, String[] args, Context context) {
         ProgramStateManager programStateManager = ProgramStateManager.getInstance();
         printWriter.println("Exiting...");
         programStateManager.setIsRunning(false);

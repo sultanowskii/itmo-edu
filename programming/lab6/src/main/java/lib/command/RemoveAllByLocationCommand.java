@@ -8,6 +8,7 @@ import lib.schema.Location;
 import lib.schema.Person;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -19,28 +20,37 @@ public class RemoveAllByLocationCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
-        PersonManager personManager = context.getPersonManager();
-
-        Form locationForm = PersonCreationFormCreator.getLocationForm(scanner, printWriter);
+    public Serializable getAdditionalObjectFromUser(PrintWriter printWriter, Scanner scanner) {
+        Form locationForm = PersonCreationFormCreator.getLocationForm(printWriter);
 
         Location specifiedLocation = new Location();
 
-        locationForm.fillObjectWithValidatedUserInput(specifiedLocation);
+        locationForm.fillObjectWithValidatedUserInput(scanner, specifiedLocation);
+
+        return specifiedLocation;
+    }
+
+    // TODO: ДОБАВИТЬ ФУНКЦИОНАЛ СЧИТЫВАНИЯ ОБЪЕКТА НА КЛИЕНТЕ (ОТДЕЛЬНО)
+    @Override
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+        PersonManager personManager = context.getPersonManager();
+
+        Location specifiedLocation = (Location) objectArgument;
+
         LinkedHashSet<Person> persons = personManager.getStorage();
 
         int removedCounter = 0;
 
-        for (Person person : persons) {
-            Location locationToCheck = person.getLocation();
-            if (locationToCheck == null) {
-                continue;
+        persons.removeIf(
+            p -> {
+                Location l = p.getLocation();
+                if (l == null) {
+                    return false;
+                }
+                return l.equals(specifiedLocation);
             }
-            if (locationToCheck.equals(specifiedLocation)) {
-                persons.remove(person);
-                removedCounter++;
-            }
-        }
+        );
+
         printWriter.println("Removed " + removedCounter + " element(s).");
     }
 

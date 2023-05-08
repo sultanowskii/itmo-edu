@@ -11,6 +11,7 @@ import server.runtime.exceptions.RecursiveCallException;
 
 import java.io.*;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ExecuteScriptCommand extends Command {
@@ -20,18 +21,18 @@ public class ExecuteScriptCommand extends Command {
     }
 
     @Override
-    public void validateArguments(List<String> args) throws InvalidCommandArgumentException {
-        if (args.size() != 1) {
+    public void validateArguments(String[] args) throws InvalidCommandArgumentException {
+        if (args.length != 1) {
             throw new InvalidCommandArgumentException("Command syntax:\n " + this.getName() + " <script_file_name>");
         }
     }
 
     @Override
     public void exec(
-            Scanner scanner,
-            PrintWriter printWriter,
-            List<String> args,
-            Context context
+        PrintWriter printWriter,
+        String[] args,
+        Serializable objectArgument,
+        Context context
     ) throws InvalidCommandArgumentException, MaxCallDepthException {
         this.validateArguments(args);
 
@@ -59,13 +60,18 @@ public class ExecuteScriptCommand extends Command {
                 String line = scriptFileScanner.nextLine();
                 CommandInputInfo commandInputInfo = CommandParser.parseString(line);
                 try {
-                    nestedCommandManager.execCommandByCommandInputInfo(scriptFileScanner, printWriter, commandInputInfo, context);
+                    Command command = nestedCommandManager.getCommandByName(commandInputInfo.getCommandName());
+                    command.validateArguments(commandInputInfo.getArgs());
+                    Serializable additionalObject = command.getAdditionalObjectFromUser(printWriter, ...);
+                    nestedCommandManager.execCommandByCommandInputInfo(printWriter, commandInputInfo, additionalObject, context);
                 } catch (InvalidCommandArgumentException e) {
                     printWriter.println("Invalid arguments: " + e.getMessage());
                 } catch (ValidationException e) {
                     printWriter.println("Validation error: " + e.getMessage());
                 } catch (IOException | RuntimeException e) {
                     printWriter.println(e.getMessage());
+                } catch (NoSuchElementException e) {
+                    printWriter.println("Command not found: " + commandInputInfo.getCommandName());
                 }
             }
             scriptFileScanner.close();

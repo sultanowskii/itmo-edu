@@ -12,13 +12,13 @@ import java.util.StringJoiner;
 public class EnumField<E extends Enum<E>> extends Field<E> {
     protected Class<E> enumClass;
 
-    public EnumField(String name, Class<E> enumClass, Scanner scanner, PrintWriter printWriter) {
-        super(name, scanner, printWriter);
+    public EnumField(String name, Class<E> enumClass, PrintWriter printWriter) {
+        super(name, printWriter);
         this.enumClass = enumClass;
     }
 
-    public EnumField(String name, Class<E> enumClass, List<Validator<String>> rawValueValidators, List<Validator<E>> valueValidators, Scanner scanner, PrintWriter printWriter) {
-        super(name, rawValueValidators, valueValidators, scanner, printWriter);
+    public EnumField(String name, Class<E> enumClass, List<Validator<String>> rawValueValidators, List<Validator<E>> valueValidators, PrintWriter printWriter) {
+        super(name, rawValueValidators, valueValidators, printWriter);
         this.enumClass = enumClass;
     }
 

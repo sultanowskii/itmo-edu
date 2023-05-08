@@ -20,18 +20,15 @@ public abstract class Field<T> {
     protected boolean isParsed = false;
     protected List<Validator<String>> rawValueValidators;
     protected List<Validator<T>> valueValidators;
-    protected Scanner scanner;
     protected PrintWriter printWriter;
 
     /**
      * Basic constructor
      * @param name Name of the field
-     * @param scanner Global input (to get user input)
      * @param printWriter Global output (to print something to user)
      */
-    public Field(String name, Scanner scanner, PrintWriter printWriter) {
+    public Field(String name, PrintWriter printWriter) {
         this.name = name;
-        this.scanner = scanner;
         this.rawValueValidators = new ArrayList<>();
         this.valueValidators = new ArrayList<>();
         this.printWriter = printWriter;
@@ -42,14 +39,12 @@ public abstract class Field<T> {
      * @param name Name of the field
      * @param rawValueValidators List of raw value validators
      * @param valueValidators List of value validators
-     * @param scanner Global input (to get user input)
      * @param printWriter Global output (to print something to user)
      */
-    public Field(String name, List<Validator<String>> rawValueValidators, List<Validator<T>> valueValidators, Scanner scanner, PrintWriter printWriter) {
+    public Field(String name, List<Validator<String>> rawValueValidators, List<Validator<T>> valueValidators, PrintWriter printWriter) {
         this.name = name;
         this.rawValueValidators = rawValueValidators;
         this.valueValidators = valueValidators;
-        this.scanner = scanner;
         this.printWriter = printWriter;
     }
 
@@ -103,7 +98,7 @@ public abstract class Field<T> {
      * Get raw value from user input
      * @param offsetSize Indentation depth offset size
      */
-    public void getRawValueFromUser(int offsetSize) {
+    public void getRawValueFromUser(Scanner scanner, int offsetSize) {
         printWriter.print(" ".repeat(offsetSize));
         this.printInfoMessage();
         this.rawValue = getRawValue(scanner.nextLine());
@@ -151,9 +146,9 @@ public abstract class Field<T> {
      * Get validated raw value from user input
      * @param offsetSize Indentation depth offset size
      */
-    protected void getValidatedRawValueFromUserInput(int offsetSize) {
+    protected void getValidatedRawValueFromUserInput(Scanner scanner, int offsetSize) {
         do {
-            this.getRawValueFromUser(offsetSize);
+            this.getRawValueFromUser(scanner, offsetSize);
             try {
                 this.validateRawValue();
                 break;
@@ -167,9 +162,9 @@ public abstract class Field<T> {
      * Get parsed and validated value from user input (default way to get value of field from user)
      * @param offsetSize Indentation depth offset size
      */
-    public void getParsedAndValidatedValueFromUserInput(int offsetSize) {
+    public void getParsedAndValidatedValueFromUserInput(Scanner scanner, int offsetSize) {
         do {
-            this.getValidatedRawValueFromUserInput(offsetSize);
+            this.getValidatedRawValueFromUserInput(scanner, offsetSize);
             this.parseRawValue();
             try {
                 this.validateParsedValue();

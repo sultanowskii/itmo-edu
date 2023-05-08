@@ -7,25 +7,34 @@ import server.manager.PersonManager;
 import lib.schema.Person;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Scanner;
 
 public class RemoveLowerCommand extends Command {
 
+    // TODO: ДОБАВИТЬ ФУНКЦИОНАЛ СЧИТЫВАНИЯ ОБЪЕКТА НА КЛИЕНТЕ (ОТДЕЛЬНО)
     public RemoveLowerCommand() {
         super("remove_lower");
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, List<String> args, Context context) {
-        PersonManager personManager = context.getPersonManager();
-
-        Form personForm = PersonCreationFormCreator.getForm(scanner, printWriter);
-
+    public Serializable getAdditionalObjectFromUser(PrintWriter printWriter, Scanner scanner) {
+        Form personForm = PersonCreationFormCreator.getForm(printWriter);
         Person specifiedPerson = new Person();
 
-        personForm.fillObjectWithValidatedUserInput(specifiedPerson);
+        personForm.fillObjectWithValidatedUserInput(scanner, specifiedPerson);
+
+        return specifiedPerson;
+    }
+
+    @Override
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+        PersonManager personManager = context.getPersonManager();
+
+        Person specifiedPerson = (Person) objectArgument;
+
         LinkedHashSet<Person> persons = personManager.getStorage();
 
         int savedElementCount = persons.size();
