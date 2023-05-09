@@ -1,6 +1,5 @@
 package server;
 
-import client.command.ExitCommand;
 import lib.command.*;
 import lib.command.manager.CommandManager;
 import lib.form.validation.ValidationException;
@@ -27,9 +26,7 @@ public class App {
         cmdManager.addCommand(new UpdateCommand());
         cmdManager.addCommand(new RemoveByIDCommand());
         cmdManager.addCommand(new ClearCommand());
-        cmdManager.addCommand(new SaveCommand());
         cmdManager.addCommand(new ExecuteScriptCommand());
-        cmdManager.addCommand(new ExitCommand());
         cmdManager.addCommand(new AddIfMinCommand());
         cmdManager.addCommand(new RemoveGreaterCommand());
         cmdManager.addCommand(new RemoveLowerCommand());
@@ -99,7 +96,7 @@ public class App {
 
             addCommands(cmdManager);
 
-            Server server = new Server(context);
+            Server server = new Server("127.0.0.1", 9999, context);
             server.loop();
         }
     }

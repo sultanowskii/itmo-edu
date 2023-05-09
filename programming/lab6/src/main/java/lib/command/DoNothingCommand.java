@@ -8,9 +8,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class DoNothingCommand extends Command {
-
     public DoNothingCommand() {
         super("");
+    }
+
+    @Override
+    public boolean isClientSide() {
+        return true;
     }
 
     @Override

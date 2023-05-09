@@ -13,10 +13,10 @@ public class CommandParser {
      * @return Command input information
      */
     public static CommandInputInfo parseString(String rawString) {
-        ArrayString[] tokens = new ArrayList<>(Arrays.asList(rawString.split(" ")));
+        var tokens = new ArrayList<>(Arrays.asList(rawString.split(" ")));
         String cmdName = tokens.get(0).trim();
         tokens.remove(0);
         tokens.replaceAll(String::trim);
-        return new CommandInputInfo(cmdName, tokens);
+        return new CommandInputInfo(cmdName, tokens.toArray(new String[0]));
     }
 }

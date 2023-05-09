@@ -34,6 +34,15 @@ public abstract class Command {
     }
 
     /**
+     * Determine if command executed on client side or on server's one.
+     * Please note that client-side commands have to ignore `context` argument in `exec()` method.
+     * @return Is this command a client-side or not
+     */
+    public boolean isClientSide() {
+        return false;
+    }
+
+    /**
      * Get additional object (multiline argument) from user input
      * @return The resulting object.
      */

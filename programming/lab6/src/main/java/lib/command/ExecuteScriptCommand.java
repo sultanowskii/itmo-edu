@@ -59,20 +59,20 @@ public class ExecuteScriptCommand extends Command {
                 printWriter.println();
                 String line = scriptFileScanner.nextLine();
                 CommandInputInfo commandInputInfo = CommandParser.parseString(line);
-                try {
-                    Command command = nestedCommandManager.getCommandByName(commandInputInfo.getCommandName());
-                    command.validateArguments(commandInputInfo.getArgs());
-                    Serializable additionalObject = command.getAdditionalObjectFromUser(printWriter, ...);
-                    nestedCommandManager.execCommandByCommandInputInfo(printWriter, commandInputInfo, additionalObject, context);
-                } catch (InvalidCommandArgumentException e) {
-                    printWriter.println("Invalid arguments: " + e.getMessage());
-                } catch (ValidationException e) {
-                    printWriter.println("Validation error: " + e.getMessage());
-                } catch (IOException | RuntimeException e) {
-                    printWriter.println(e.getMessage());
-                } catch (NoSuchElementException e) {
-                    printWriter.println("Command not found: " + commandInputInfo.getCommandName());
-                }
+//                try {
+//                    Command command = nestedCommandManager.getCommandByName(commandInputInfo.getCommandName());
+//                    command.validateArguments(commandInputInfo.getArgs());
+//                    Serializable additionalObject = command.getAdditionalObjectFromUser(printWriter, ...);
+//                    nestedCommandManager.execCommandByCommandInputInfo(printWriter, commandInputInfo, additionalObject, context);
+//                } catch (InvalidCommandArgumentException e) {
+//                    printWriter.println("Invalid arguments: " + e.getMessage());
+//                } catch (ValidationException e) {
+//                    printWriter.println("Validation error: " + e.getMessage());
+//                } catch (IOException | RuntimeException e) {
+//                    printWriter.println(e.getMessage());
+//                } catch (NoSuchElementException e) {
+//                    printWriter.println("Command not found: " + commandInputInfo.getCommandName());
+//                }
             }
             scriptFileScanner.close();
             context.popNestedScriptName();

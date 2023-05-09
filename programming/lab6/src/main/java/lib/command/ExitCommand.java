@@ -1,10 +1,11 @@
-package client.command;
+package lib.command;
 
 import lib.command.Command;
 import server.runtime.Context;
 import lib.manager.ProgramStateManager;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,7 +16,17 @@ public class ExitCommand extends Command {
     }
 
     @Override
-    public void exec(Scanner scanner, PrintWriter printWriter, String[] args, Context context) {
+    public boolean isClientSide() {
+        return true;
+    }
+
+    @Override
+    public Serializable getAdditionalObjectFromUser(PrintWriter printWriter, Scanner scanner) {
+        return super.getAdditionalObjectFromUser(printWriter, scanner);
+    }
+
+    @Override
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
         ProgramStateManager programStateManager = ProgramStateManager.getInstance();
         printWriter.println("Exiting...");
         programStateManager.setIsRunning(false);
