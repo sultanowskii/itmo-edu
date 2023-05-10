@@ -5,8 +5,6 @@ import server.file.PersonCollectionXMLWriter;
 import server.runtime.Context;
 
 import java.io.*;
-import java.util.List;
-import java.util.Scanner;
 
 public class SaveCommand extends Command {
 

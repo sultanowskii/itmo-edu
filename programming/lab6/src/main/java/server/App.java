@@ -1,9 +1,14 @@
 package server;
 
 import lib.command.*;
+import lib.command.exception.InvalidCommandArgumentException;
 import lib.command.manager.CommandManager;
+import lib.command.parse.CommandInputInfo;
+import lib.command.parse.CommandParser;
 import lib.form.validation.ValidationException;
 import lib.manager.ProgramStateManager;
+import lib.network.Config;
+import server.command.ExitServerCommand;
 import server.file.PersonCollectionXMLReader;
 import server.manager.PersonManager;
 import server.network.Server;
@@ -13,12 +18,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.SocketException;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class App {
-    public static void addCommands(CommandManager cmdManager) {
+    public static void addClientCommands(CommandManager cmdManager) {
         cmdManager.addCommand(new HelpCommand());
         cmdManager.addCommand(new InfoCommand());
         cmdManager.addCommand(new ShowCommand());
@@ -36,10 +43,27 @@ public class App {
         cmdManager.addCommand(new DoNothingCommand());
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void addServerCommands(CommandManager commandManager) {
+        commandManager.addCommand(new SaveCommand());
+        commandManager.addCommand(new ExitServerCommand());
+    }
+
+    public static void main(String[] args) throws IOException {
         try (
+                Scanner scanner = new Scanner(System.in);
             PrintWriter printWriter = new PrintWriter(System.out);
         ) {
+            String configFilename = System.getenv("LAB6_CONFIG_FILENAME");
+
+            if (configFilename == null) {
+                configFilename = "config.xml";
+            }
+
+            Config config = Config.readFromfile(configFilename, printWriter);
+            if (config == null) {
+                return;
+            }
+
             String collectionFilename = System.getenv("COLLECTION_FILE");
 
             if (collectionFilename == null) {
@@ -75,7 +99,6 @@ public class App {
                     return;
                 } catch (RuntimeException e) {
                     printWriter.println(e.getMessage() + " Exiting...");
-                    return;
                 }
             } catch (FileNotFoundException e) {
                 printWriter.println("File doesn't exist. Ignoring.");
@@ -87,17 +110,65 @@ public class App {
             }
 
             ProgramStateManager programStateManager = ProgramStateManager.getInstance();
-            Context context = new Context();
 
-            CommandManager cmdManager = new CommandManager();
-            context.setCommandManager(cmdManager);
+            CommandManager clientCommandManager = new CommandManager();
+            addClientCommands(clientCommandManager);
+
+            Context context = new Context();
+            context.setCommandManager(clientCommandManager);
             context.setPersonManager(personManager);
             context.setCollectionFilename(collectionFilename);
 
-            addCommands(cmdManager);
+            Server server;
+            try {
+                server = new Server(config.hostname, config.port, context);
+            } catch (SocketException e) {
+                printWriter.println("Can't run server at " + config.hostname + ":" + config.port + ". Details: " + e.getMessage());
+                return;
+            }
 
-            Server server = new Server("127.0.0.1", 9999, context);
-            server.loop();
+            var serverThread = new Thread(server);
+            serverThread.start();
+
+            var serverOnlyCommandManager = new CommandManager();
+            addServerCommands(serverOnlyCommandManager);
+
+            while (programStateManager.getIsRunning()) {
+                printWriter.print("> ");
+                printWriter.flush();
+
+                String line = scanner.nextLine();
+
+                CommandInputInfo commandInputInfo = CommandParser.parseString(line);
+
+                var commandName = commandInputInfo.getCommandName();
+                var arguments = commandInputInfo.getArgs();
+
+                Command command;
+                try {
+                    command = serverOnlyCommandManager.getCommandByName(commandName);
+                } catch (NoSuchElementException e) {
+                    printWriter.println("Command not found: " + commandName);
+                    continue;
+                }
+
+                command.validateArguments(arguments);
+                var additionalObject = command.getAdditionalObjectFromUser(printWriter, scanner);
+
+                try {
+                    command.exec(printWriter, arguments, additionalObject, context);
+                } catch (InvalidCommandArgumentException e) {
+                    printWriter.println("Invalid arguments: " + e.getMessage());
+                } catch (ValidationException e) {
+                    printWriter.println("Validation error: " + e.getMessage());
+                } catch (RuntimeException e) {
+                    printWriter.println("Something unexpected occured: " + e.getMessage());
+                } catch (IOException e) {
+                    printWriter.println("IO error. Details: " + e.getMessage());
+                }
+            }
+
+            serverThread.interrupt();
         }
     }
 }

@@ -1,0 +1,4 @@
+<config>
+    <hostname>localhost</hostname>
+    <port>9999</port>
+</config>

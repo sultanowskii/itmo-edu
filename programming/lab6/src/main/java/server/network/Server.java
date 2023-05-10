@@ -3,6 +3,7 @@ package server.network;
 import lib.command.Command;
 import lib.command.exception.InvalidCommandArgumentException;
 import lib.form.validation.ValidationException;
+import lib.manager.ProgramStateManager;
 import lib.network.ByteBufferHeadacheResolver;
 import lib.network.ClientRequest;
 import lib.serialization.Serializator;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
@@ -20,12 +22,11 @@ import java.nio.channels.Selector;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Server {
+public class Server implements Runnable {
     private static final int BUFFER_SIZE = 64 * 1000;
     private static final int TIMEOUT = 3000; // (milliseconds)
     private final DatagramChannel socketChannel;
     private final Selector selector;
-    private boolean active;
     private final Context context;
 
     public Server(Context context) throws IOException {
@@ -37,7 +38,7 @@ public class Server {
         public ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
     }
 
-    public Server(String hostname, int port, Context context) throws IOException {
+    public Server(String hostname, int port, Context context) throws IOException, SocketException {
         this.context = context;
 
         this.socketChannel = DatagramChannel.open();
@@ -46,13 +47,22 @@ public class Server {
 
         this.selector = Selector.open();
         this.socketChannel.register(selector, SelectionKey.OP_READ, new ClientRecord());
-        this.active = true;
     }
 
-    public void loop() throws IOException, ClassNotFoundException {
-        while (this.active) {
-            if (this.selector.select(TIMEOUT) == 0) {
-                continue;
+    public void run() {
+        this.loop();
+    }
+
+    public void loop() {
+        ProgramStateManager programStateManager = ProgramStateManager.getInstance();
+        while (programStateManager.getIsRunning()) {
+            // TODO: Обработать
+            try {
+                if (this.selector.select(TIMEOUT) == 0) {
+                    continue;
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
             Iterator<SelectionKey> keyIter = selector.selectedKeys().iterator();
@@ -60,12 +70,26 @@ public class Server {
                 SelectionKey key = keyIter.next();
 
                 if (key.isReadable()) {
-                    var request = handleRead(key);
+                    ClientRequest request = null;
+
+                    // TODO: Обработать
+                    try {
+                        request = handleRead(key);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
                     handleRequest(key, request);
                 }
 
+                // TODO: Обработать
                 if (key.isValid() && key.isWritable()) {
-                    handleWrite(key);
+                    try {
+                        handleWrite(key);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
                 keyIter.remove();
@@ -79,14 +103,15 @@ public class Server {
 
         clientRecord.buffer.clear();
 
-        // TODO: Обработка больших пакетов
         clientRecord.address = channel.receive(clientRecord.buffer);
         int requestSize = clientRecord.buffer.getInt(0);
 
         ByteBufferHeadacheResolver.removeBytesFromStart(clientRecord.buffer, Integer.BYTES);
 
         if (requestSize > clientRecord.buffer.capacity()) {
-            clientRecord.buffer = ByteBuffer.allocate(requestSize);
+            var tmp = ByteBuffer.allocate(requestSize);
+            tmp.put(clientRecord.buffer);
+            clientRecord.buffer = tmp;
         }
 
         if (clientRecord.address != null) {
@@ -97,9 +122,7 @@ public class Server {
         clientRecord.buffer.flip();
         clientRecord.buffer.get(bytes);
 
-        ClientRequest request = Serializator.bytesToObject(bytes);
-
-        return request;
+        return Serializator.bytesToObject(bytes);
     }
 
     public void handleRequest(SelectionKey key, ClientRequest request) {

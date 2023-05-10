@@ -42,24 +42,27 @@ public class CLI {
 
             CommandInputInfo commandInputInfo = CommandParser.parseString(line);
 
-            // TODO: ОБРАБОТАТЬ
             try {
                 this.execCommand(commandInputInfo);
             } catch (InvalidCommandArgumentException e) {
                 printWriter.println("Invalid arguments: " + e.getMessage());
             } catch (ValidationException e) {
                 printWriter.println("Validation error: " + e.getMessage());
-            } catch (RuntimeException e) {
-                printWriter.println(e.getMessage());
+            } catch (NoSuchElementException e) {
+                printWriter.println("Command not found: " + commandInputInfo.getCommandName());
             } catch (IOException e) {
-                printWriter.println(e.getMessage());
+                printWriter.println("IO error. Are you connected to the server? Details: " + e.getMessage());
+            } catch (ClassNotFoundException e) {
+                printWriter.println("Unexpected programming error. Details: " + e.getMessage());
+            } catch (RuntimeException e) {
+                printWriter.println("Something unexpected occured: " + e.getMessage());
             }
         }
     }
 
     public void execCommand(
         CommandInputInfo commandInputInfo
-    ) throws NoSuchElementException, InvalidCommandArgumentException, IOException {
+    ) throws NoSuchElementException, InvalidCommandArgumentException, IOException, ClassNotFoundException {
         var commandName = commandInputInfo.getCommandName();
         var arguments = commandInputInfo.getArgs();
 
@@ -74,7 +77,7 @@ public class CLI {
             client.sendRequest(commandName, arguments, additionalObject);
             var result = client.getResponse();
 
-            printWriter.println(result);
+            printWriter.print(result);
         }
     }
 }

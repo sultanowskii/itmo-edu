@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <collection>
-    <initDateTime>12/01/2023 09:45:01 Europe/Moscow</initDateTime>
+    <initDateTime>10/05/2023 23:59:34 Europe/Moscow</initDateTime>
     <storage>
         <person>
             <id>1</id>
@@ -9,33 +9,15 @@
                 <x>1.0</x>
                 <y>2</y>
             </coordinates>
-            <creationDate>12/01/2023 09:46:02 Europe/Moscow</creationDate>
-            <height>178</height>
-            <passportID>kek</passportID>
+            <creationDate>10/05/2023 23:59:41 Europe/Moscow</creationDate>
+            <height>179</height>
+            <passportID>qwerty123</passportID>
             <eyeColor>RED</eyeColor>
             <nationality>THAILAND</nationality>
             <location>
-                <x>2.3</x>
-                <y>3</y>
-                <name>Brazil</name>
-            </location>
-        </person>
-        <person>
-            <id>2</id>
-            <name>Jimmy</name>
-            <coordinates>
                 <x>1.0</x>
                 <y>2</y>
-            </coordinates>
-            <creationDate>12/01/2024 09:46:02 Europe/Moscow</creationDate>
-            <height>178</height>
-            <passportID>kek</passportID>
-            <eyeColor>WHITE</eyeColor>
-            <nationality>THAILAND</nationality>
-            <location>
-                <x>2.3</x>
-                <y>3</y>
-                <name>Brazil</name>
+                <name>Dublin</name>
             </location>
         </person>
     </storage>

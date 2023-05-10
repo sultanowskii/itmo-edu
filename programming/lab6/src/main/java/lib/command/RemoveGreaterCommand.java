@@ -14,7 +14,6 @@ import java.util.Scanner;
 
 public class RemoveGreaterCommand extends Command {
 
-    // TODO: ДОБАВИТЬ ФУНКЦИОНАЛ СЧИТЫВАНИЯ ОБЪЕКТА НА КЛИЕНТЕ (ОТДЕЛЬНО)
     public RemoveGreaterCommand() {
         super("remove_greater");
     }

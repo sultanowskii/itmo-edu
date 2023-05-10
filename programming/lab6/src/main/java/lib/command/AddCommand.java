@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.*;
 
-// TODO: ДОБАВИТЬ ФУНКЦИОНАЛ СЧИТЫВАНИЯ ОБЪЕКТА НА КЛИЕНТЕ (ОТДЕЛЬНО)
 public class AddCommand extends Command {
 
     public AddCommand() {

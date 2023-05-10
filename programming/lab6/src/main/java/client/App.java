@@ -1,14 +1,10 @@
 package client;
 
-import client.runtime.Context;
+import lib.network.Config;
 import lib.command.ExitCommand;
 import client.network.Client;
 import lib.command.*;
-import lib.command.exception.InvalidCommandArgumentException;
 import lib.command.manager.CommandManager;
-import lib.command.parse.CommandInputInfo;
-import lib.command.parse.CommandParser;
-import lib.form.validation.ValidationException;
 import lib.manager.ProgramStateManager;
 
 import java.io.*;
@@ -37,25 +33,31 @@ public class App
         cmdManager.addCommand(new DoNothingCommand());
     }
 
-    public void executeCommand() {
-
-    }
-
     public static void main( String[] args ) {
         try (
             Scanner scanner = new Scanner(System.in);
             PrintWriter printWriter = new PrintWriter(System.out);
         ) {
-            Client client;
-            try {
-                client = new Client("127.0.0.1", 9999);
-            } catch (UnknownHostException e) {
-                // TODO: ОБРАБОТАТЬ
-                System.out.println(e.getMessage());
+            String configFilename = System.getenv("LAB6_CONFIG_FILENAME");
+
+            if (configFilename == null) {
+                configFilename = "config.xml";
+            }
+
+            Config config = Config.readFromfile(configFilename, printWriter);
+
+            if (config == null) {
                 return;
-            } catch (SocketException e) {
-                // TODO: ОБРАБОТАТЬ
-                System.out.println(e.getMessage());
+            }
+
+            Client client;
+
+            System.out.println("Specified address: " + config.hostname + ":" + config.port);
+
+            try {
+                client = new Client(config.hostname, config.port);
+            } catch (UnknownHostException | SocketException e) {
+                System.out.println("Can't connect to the server. Try again later or recheck address is correct. Details: " + e.getMessage());
                 return;
             }
 
@@ -64,7 +66,6 @@ public class App
             CommandManager cmdManager = new CommandManager();
 
             addCommands(cmdManager);
-
 
             CLI cli = new CLI(scanner, printWriter, client, cmdManager, programStateManager);
             cli.loop();

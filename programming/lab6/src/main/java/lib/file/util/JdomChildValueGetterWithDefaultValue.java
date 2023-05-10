@@ -1,4 +1,4 @@
-package server.file.util;
+package lib.file.util;
 
 import org.jdom2.Element;
 

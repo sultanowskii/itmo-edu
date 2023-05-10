@@ -26,15 +26,10 @@ public class Client {
         this.socket.connect(sockaddr);
     }
 
-    public void sendRequest(String commandName, String[] arguments, Serializable additionalObject) {
+    public void sendRequest(String commandName, String[] arguments, Serializable additionalObject) throws IOException {
         ClientRequest request = new ClientRequest(commandName, arguments, additionalObject);
         ByteBuffer requestBuffer;
-        try {
-            requestBuffer = Serializator.objectToBuffer(request);
-        } catch (IOException e) {
-            // TODO: Обработать
-            return;
-        }
+        requestBuffer = Serializator.objectToBuffer(request);
 
         byte[] rawRequest = new byte[requestBuffer.position()];
         requestBuffer.flip();
@@ -42,38 +37,26 @@ public class Client {
 
         DatagramPacket packet = new DatagramPacket(rawRequest, rawRequest.length);
 
-        try {
-            this.socket.send(packet);
-        } catch (IOException e) {
-            // TODO: Обработать
-            return;
-        }
+        this.socket.send(packet);
     }
 
-    public String getResponse() {
+    public String getResponse() throws IOException, ClassNotFoundException {
         var rawResponse = new byte[BUFFER_SIZE];
 
         DatagramPacket responsePacket = new DatagramPacket(rawResponse, BUFFER_SIZE);
+        this.socket.receive(responsePacket);
 
-        try {
-            this.socket.receive(responsePacket);
-        } catch (IOException e) {
-            // TODO: Обработать
-            return "err";
-        }
-
-        // TODO: Обработка больших пакетов
         int responseSize = Converter.intFromByteArray(responsePacket.getData());
 
-        try {
-            return Serializator.bytesToObject(responsePacket.getData(), 4);
-        } catch (IOException e) {
-            // TODO: Обработать
-            return "err";
-        } catch (ClassNotFoundException e) {
-            // TODO: Обработать!!
-            return "err";
+        if (responseSize > BUFFER_SIZE) {
+            var extendedRawResponse = new byte[responseSize];
+            var tmp = new DatagramPacket(extendedRawResponse, responseSize - responsePacket.getLength());
+            tmp.setData(responsePacket.getData());
+            responsePacket = tmp;
+            this.socket.receive(responsePacket);
         }
+
+        return Serializator.bytesToObject(responsePacket.getData(), 4);
     }
 }
 

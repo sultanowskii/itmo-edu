@@ -1,4 +1,4 @@
-package server.file.util;
+package lib.file.util;
 
 import org.jdom2.input.DOMBuilder;
 import org.w3c.dom.Document;

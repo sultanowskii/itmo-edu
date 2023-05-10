@@ -30,7 +30,6 @@ public class RemoveAllByLocationCommand extends Command {
         return specifiedLocation;
     }
 
-    // TODO: ДОБАВИТЬ ФУНКЦИОНАЛ СЧИТЫВАНИЯ ОБЪЕКТА НА КЛИЕНТЕ (ОТДЕЛЬНО)
     @Override
     public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
         PersonManager personManager = context.getPersonManager();

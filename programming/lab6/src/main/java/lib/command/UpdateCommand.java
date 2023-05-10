@@ -11,7 +11,6 @@ import lib.schema.*;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -38,7 +37,6 @@ public class UpdateCommand extends Command {
         return specifiedPerson;
     }
 
-    // TODO: ДОБАВИТЬ ФУНКЦИОНАЛ СЧИТЫВАНИЯ ОБЪЕКТА НА КЛИЕНТЕ (ОТДЕЛЬНО)
     @Override
     public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
         this.validateArguments(args);

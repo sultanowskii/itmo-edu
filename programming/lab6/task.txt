@@ -65,4 +65,3 @@
     Интерфейс Serializable. Объектный граф, сериализация и десериализация полей и методов.
     Java Stream API. Создание конвейеров. Промежуточные и терминальные операции.
     Шаблоны проектирования: Decorator, Iterator, Factory method, Command, Flyweight, Interpreter, Singleton, Strategy, Adapter, Facade, Proxy.
-

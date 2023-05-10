@@ -26,7 +26,6 @@ public class AddIfMinCommand extends Command {
         return newPerson;
     }
 
-    // TODO: ДОБАВИТЬ ФУНКЦИОНАЛ СЧИТЫВАНИЯ ОБЪЕКТА НА КЛИЕНТЕ (ОТДЕЛЬНО)
     @Override
     public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
         PersonManager personManager = context.getPersonManager();

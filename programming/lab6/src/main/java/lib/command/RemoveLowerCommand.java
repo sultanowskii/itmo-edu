@@ -14,7 +14,6 @@ import java.util.Scanner;
 
 public class RemoveLowerCommand extends Command {
 
-    // TODO: ДОБАВИТЬ ФУНКЦИОНАЛ СЧИТЫВАНИЯ ОБЪЕКТА НА КЛИЕНТЕ (ОТДЕЛЬНО)
     public RemoveLowerCommand() {
         super("remove_lower");
     }
