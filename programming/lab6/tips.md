@@ -83,5 +83,5 @@ Please note that I'm using `maven`, so, well, all project structure related tips
    mvn package -Ptanki
    ```
    
-### Pro tip
-Fuck java
+### Pro tip for true java fanboys
+jump out of the window
