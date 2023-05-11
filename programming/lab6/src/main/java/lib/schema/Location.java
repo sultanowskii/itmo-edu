@@ -3,6 +3,7 @@ package lib.schema;
 import java.io.Serializable;
 
 public class Location implements Comparable<Location>, Serializable {
+    static final long serialVersionUID = 1;
     private Double x; //Поле не может быть null
     private int y;
     private String name; //Поле не может быть null

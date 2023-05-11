@@ -51,7 +51,7 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         try (
-                Scanner scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in);
             PrintWriter printWriter = new PrintWriter(System.out);
         ) {
             String configFilename = System.getenv("LAB6_CONFIG_FILENAME");
@@ -122,7 +122,7 @@ public class App {
 
             Server server;
             try {
-                server = new Server(config.hostname, config.port, context);
+                server = new Server(config.hostname, config.port, printWriter, context);
             } catch (SocketException e) {
                 printWriter.println("Can't run server at " + config.hostname + ":" + config.port + ". Details: " + e.getMessage());
                 return;

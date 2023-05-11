@@ -3,6 +3,7 @@ package lib.schema;
 import java.io.Serializable;
 
 public class Coordinates implements Comparable<Coordinates>, Serializable {
+    static final long serialVersionUID = 1;
     private Float x; //Значение поля должно быть больше -527, Поле не может быть null
     private int y; //Максимальное значение поля: 897
 

@@ -27,10 +27,11 @@ public class Server implements Runnable {
     private static final int TIMEOUT = 3000; // (milliseconds)
     private final DatagramChannel socketChannel;
     private final Selector selector;
+    private final PrintWriter printWriter;
     private final Context context;
 
-    public Server(Context context) throws IOException {
-        this("127.0.0.1", 9999, context);
+    public Server(Context context, PrintWriter printWriter) throws IOException {
+        this("127.0.0.1", 9999, printWriter, context);
     }
 
     static class ClientRecord {
@@ -38,8 +39,9 @@ public class Server implements Runnable {
         public ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
     }
 
-    public Server(String hostname, int port, Context context) throws IOException, SocketException {
+    public Server(String hostname, int port, PrintWriter printWriter, Context context) throws IOException, SocketException {
         this.context = context;
+        this.printWriter = printWriter;
 
         this.socketChannel = DatagramChannel.open();
         this.socketChannel.configureBlocking(false);
@@ -70,25 +72,26 @@ public class Server implements Runnable {
                 SelectionKey key = keyIter.next();
 
                 if (key.isReadable()) {
-                    ClientRequest request = null;
+                    ClientRequest request;
 
-                    // TODO: Обработать
                     try {
                         request = handleRead(key);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        printWriter.println("IO error: " + e.getMessage());
+                        continue;
                     } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
+                        printWriter.println("Unexpected serialization error: " + e.getMessage());
+                        continue;
                     }
                     handleRequest(key, request);
                 }
 
-                // TODO: Обработать
                 if (key.isValid() && key.isWritable()) {
                     try {
                         handleWrite(key);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        printWriter.println("IO error: " + e.getMessage());
+                        continue;
                     }
                 }
 
