@@ -22,7 +22,6 @@ public class App
         cmdManager.addCommand(new UpdateCommand());
         cmdManager.addCommand(new RemoveByIDCommand());
         cmdManager.addCommand(new ClearCommand());
-        cmdManager.addCommand(new ExecuteScriptCommand());
         cmdManager.addCommand(new ExitCommand());
         cmdManager.addCommand(new AddIfMinCommand());
         cmdManager.addCommand(new RemoveGreaterCommand());

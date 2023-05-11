@@ -1,5 +1,6 @@
 package server;
 
+import client.command.ExecuteScriptCommand;
 import lib.command.*;
 import lib.command.exception.InvalidCommandArgumentException;
 import lib.command.manager.CommandManager;

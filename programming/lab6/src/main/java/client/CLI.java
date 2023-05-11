@@ -55,7 +55,7 @@ public class CLI {
             } catch (ClassNotFoundException e) {
                 printWriter.println("Unexpected programming error. Details: " + e.getMessage());
             } catch (RuntimeException e) {
-                printWriter.println("Something unexpected occured: " + e.getMessage());
+                printWriter.println("Something unexpected occurred: " + e.getMessage());
             }
         }
     }

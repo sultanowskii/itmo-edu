@@ -1,17 +1,16 @@
-package lib.command;
+package client.command;
 
+import lib.command.Command;
+import lib.command.Script;
 import lib.command.exception.InvalidCommandArgumentException;
-import lib.command.manager.CommandManager;
 import lib.command.parse.CommandInputInfo;
 import lib.command.parse.CommandParser;
-import lib.form.validation.ValidationException;
 import server.runtime.Context;
+import server.runtime.RuntimeContants;
 import server.runtime.exceptions.MaxCallDepthException;
 import server.runtime.exceptions.RecursiveCallException;
 
 import java.io.*;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ExecuteScriptCommand extends Command {
@@ -36,8 +35,9 @@ public class ExecuteScriptCommand extends Command {
     ) throws InvalidCommandArgumentException, MaxCallDepthException {
         this.validateArguments(args);
 
-        Iterable<Command> commands = context.getCommandManager().getCommands();
-        CommandManager nestedCommandManager = new CommandManager(commands);
+//        if (context.getNestedScriptCount() >= RuntimeContants.MAX_CALL_DEPTH) {
+//            throw new MaxCallDepthException("Call depth excceded. Ignoring.");
+//        }
 
         for (String scriptFilename : args) {
             Scanner scriptFileScanner;
@@ -48,34 +48,22 @@ public class ExecuteScriptCommand extends Command {
             } catch (FileNotFoundException e) {
                 throw new InvalidCommandArgumentException("File `" + scriptFilename + "` is inaccessible (doesn't exist, is a directory or is unreadable due to permissions).");
             }
-            try {
-                context.pushNestedScriptName(scriptFile.getAbsolutePath());
-            } catch (RecursiveCallException e) {
-                printWriter.println(e.getMessage());
-                continue;
-            }
+
+            Script script = new Script(scriptFile.getAbsolutePath());
 
             while (scriptFileScanner.hasNextLine()) {
-                printWriter.println();
                 String line = scriptFileScanner.nextLine();
                 CommandInputInfo commandInputInfo = CommandParser.parseString(line);
-//                try {
-//                    Command command = nestedCommandManager.getCommandByName(commandInputInfo.getCommandName());
-//                    command.validateArguments(commandInputInfo.getArgs());
-//                    Serializable additionalObject = command.getAdditionalObjectFromUser(printWriter, ...);
-//                    nestedCommandManager.execCommandByCommandInputInfo(printWriter, commandInputInfo, additionalObject, context);
-//                } catch (InvalidCommandArgumentException e) {
-//                    printWriter.println("Invalid arguments: " + e.getMessage());
-//                } catch (ValidationException e) {
-//                    printWriter.println("Validation error: " + e.getMessage());
-//                } catch (IOException | RuntimeException e) {
-//                    printWriter.println(e.getMessage());
-//                } catch (NoSuchElementException e) {
-//                    printWriter.println("Command not found: " + commandInputInfo.getCommandName());
-//                }
+                script.pushCommandInputInfo(commandInputInfo);
             }
+
             scriptFileScanner.close();
-            context.popNestedScriptName();
+
+//            try {
+//                context.pushNestedScript(script);
+//            } catch (RecursiveCallException e) {
+//                printWriter.println(e.getMessage());
+//            }
         }
     }
 
