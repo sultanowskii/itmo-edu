@@ -1,5 +1,6 @@
 package client;
 
+import client.command.ExecuteScriptCommand;
 import lib.network.Config;
 import lib.command.ExitCommand;
 import client.network.Client;
@@ -21,6 +22,7 @@ public class App
         cmdManager.addCommand(new AddCommand());
         cmdManager.addCommand(new UpdateCommand());
         cmdManager.addCommand(new RemoveByIDCommand());
+        cmdManager.addCommand(new ExecuteScriptCommand());
         cmdManager.addCommand(new ClearCommand());
         cmdManager.addCommand(new ExitCommand());
         cmdManager.addCommand(new AddIfMinCommand());

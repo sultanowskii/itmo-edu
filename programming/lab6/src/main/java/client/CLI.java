@@ -9,10 +9,12 @@ import lib.manager.ProgramStateManager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Scanner;
 
-public class CLI {
+public class CLI implements Serializable {
     Scanner scanner;
     PrintWriter printWriter;
     Client client;
@@ -33,17 +35,24 @@ public class CLI {
         this.programStateManager = programStateManager;
     }
 
+    public CommandManager getCmdManager() {
+        return this.cmdManager;
+    }
+
     public void loop() {
+
         while (programStateManager.getIsRunning()) {
+            CommandInputInfo commandInputInfo;
+
             printWriter.print("> ");
             printWriter.flush();
 
             String line = scanner.nextLine();
 
-            CommandInputInfo commandInputInfo = CommandParser.parseString(line);
+            commandInputInfo = CommandParser.parseString(line);
 
             try {
-                this.execCommand(commandInputInfo);
+                this.execCommand(commandInputInfo, this.scanner);
             } catch (InvalidCommandArgumentException e) {
                 printWriter.println("Invalid arguments: " + e.getMessage());
             } catch (ValidationException e) {
@@ -61,7 +70,8 @@ public class CLI {
     }
 
     public void execCommand(
-        CommandInputInfo commandInputInfo
+        CommandInputInfo commandInputInfo,
+        Scanner scanner
     ) throws NoSuchElementException, InvalidCommandArgumentException, IOException, ClassNotFoundException {
         var commandName = commandInputInfo.getCommandName();
         var arguments = commandInputInfo.getArgs();
@@ -69,7 +79,14 @@ public class CLI {
         var command = cmdManager.getCommandByName(commandName);
 
         command.validateArguments(arguments);
-        var additionalObject = command.getAdditionalObjectFromUser(printWriter, scanner);
+
+        Serializable additionalObject;
+
+        if (commandName.equals("execute_script")) {
+            additionalObject = this;
+        } else {
+            additionalObject = command.getAdditionalObjectFromUser(printWriter, scanner);
+        }
 
         if (command.isClientSide()) {
             command.exec(this.printWriter, arguments, additionalObject, null);

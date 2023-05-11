@@ -1,14 +1,14 @@
 package client.command;
 
+import client.CLI;
 import lib.command.Command;
-import lib.command.Script;
 import lib.command.exception.InvalidCommandArgumentException;
+import lib.command.manager.CommandManager;
 import lib.command.parse.CommandInputInfo;
 import lib.command.parse.CommandParser;
+import lib.form.validation.ValidationException;
 import server.runtime.Context;
-import server.runtime.RuntimeContants;
 import server.runtime.exceptions.MaxCallDepthException;
-import server.runtime.exceptions.RecursiveCallException;
 
 import java.io.*;
 import java.util.Scanner;
@@ -20,24 +20,22 @@ public class ExecuteScriptCommand extends Command {
     }
 
     @Override
-    public void validateArguments(String[] args) throws InvalidCommandArgumentException {
-        if (args.length != 1) {
-            throw new InvalidCommandArgumentException("Command syntax:\n " + this.getName() + " <script_file_name>");
-        }
+    public boolean isClientSide() {
+        return true;
     }
 
     @Override
     public void exec(
         PrintWriter printWriter,
         String[] args,
-        Serializable objectArgument,
+        Serializable additionalObject,
         Context context
     ) throws InvalidCommandArgumentException, MaxCallDepthException {
-        this.validateArguments(args);
+        if (args.length != 1) {
+            throw new InvalidCommandArgumentException("Command syntax:\n " + this.getName() + " <script_file_name>");
+        }
 
-//        if (context.getNestedScriptCount() >= RuntimeContants.MAX_CALL_DEPTH) {
-//            throw new MaxCallDepthException("Call depth excceded. Ignoring.");
-//        }
+        CLI cli = (CLI) additionalObject;
 
         for (String scriptFilename : args) {
             Scanner scriptFileScanner;
@@ -48,22 +46,32 @@ public class ExecuteScriptCommand extends Command {
             } catch (FileNotFoundException e) {
                 throw new InvalidCommandArgumentException("File `" + scriptFilename + "` is inaccessible (doesn't exist, is a directory or is unreadable due to permissions).");
             }
-
-            Script script = new Script(scriptFile.getAbsolutePath());
-
-            while (scriptFileScanner.hasNextLine()) {
-                String line = scriptFileScanner.nextLine();
-                CommandInputInfo commandInputInfo = CommandParser.parseString(line);
-                script.pushCommandInputInfo(commandInputInfo);
-            }
-
-            scriptFileScanner.close();
-
 //            try {
-//                context.pushNestedScript(script);
+//                context.pushNestedScriptName(scriptFile.getAbsolutePath());
 //            } catch (RecursiveCallException e) {
 //                printWriter.println(e.getMessage());
+//                continue;
 //            }
+
+            while (scriptFileScanner.hasNextLine()) {
+                printWriter.println();
+                String line = scriptFileScanner.nextLine();
+                CommandInputInfo commandInputInfo = CommandParser.parseString(line);
+
+                try {
+                    cli.execCommand(commandInputInfo, scriptFileScanner);
+                } catch (InvalidCommandArgumentException e) {
+                    printWriter.println("Invalid arguments: " + e.getMessage());
+                } catch (ValidationException e) {
+                    printWriter.println("Validation error: " + e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    printWriter.println("Unexpected programming error. Details: " + e.getMessage());
+                } catch (IOException | RuntimeException e) {
+                    printWriter.println(e.getMessage());
+                }
+            }
+            scriptFileScanner.close();
+//            context.popNestedScriptName();
         }
     }
 
