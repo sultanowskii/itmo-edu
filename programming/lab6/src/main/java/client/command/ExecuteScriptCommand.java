@@ -35,6 +35,7 @@ public class ExecuteScriptCommand extends Command {
             throw new InvalidCommandArgumentException("Command syntax:\n " + this.getName() + " <script_file_name>");
         }
 
+        // TODO: fix, for now works as temporary workaround
         CLI cli = (CLI) additionalObject;
 
         for (String scriptFilename : args) {
