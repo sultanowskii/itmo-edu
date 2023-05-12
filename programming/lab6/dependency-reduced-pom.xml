@@ -39,23 +39,6 @@
           <plugin>
             <artifactId>maven-jar-plugin</artifactId>
             <version>3.0.2</version>
-            <executions>
-              <execution>
-                <id>default-jar</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-                <configuration>
-                  <finalName>server</finalName>
-                  <archive>
-                    <manifest>
-                      <mainClass>server.App</mainClass>
-                    </manifest>
-                  </archive>
-                </configuration>
-              </execution>
-            </executions>
             <configuration>
               <finalName>server</finalName>
               <archive>
@@ -75,6 +58,23 @@
           <plugin>
             <artifactId>maven-jar-plugin</artifactId>
             <version>3.0.2</version>
+            <executions>
+              <execution>
+                <id>default-jar</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <finalName>client</finalName>
+                  <archive>
+                    <manifest>
+                      <mainClass>client.App</mainClass>
+                    </manifest>
+                  </archive>
+                </configuration>
+              </execution>
+            </executions>
             <configuration>
               <finalName>client</finalName>
               <archive>

@@ -1,19 +1,23 @@
 package client.runtime;
 
+import client.command.CommandExecutor;
 import lib.command.manager.CommandManager;
 import server.runtime.exceptions.RecursiveCallException;
 
 import java.util.EmptyStackException;
 import java.util.Stack;
 
-public class Context {
-    private CommandManager commandManager;
+public class ClientContext {
+    private CommandExecutor commandExecutor;
 
     private Stack<String> scriptNestedStack = new Stack<>();
 
+    public ClientContext(CommandExecutor commandExecutor) {
+        this.commandExecutor = commandExecutor;
+    }
 
-    public CommandManager getCommandManager() {
-        return this.commandManager;
+    public CommandExecutor getCommandExecutor() {
+        return this.commandExecutor;
     }
 
     public void pushNestedScriptName(String scriptName) throws RecursiveCallException {
@@ -23,8 +27,8 @@ public class Context {
         this.scriptNestedStack.push(scriptName);
     }
 
-    public void setCommandManager(CommandManager commandManager) {
-        this.commandManager = commandManager;
+    public void setCommandExecutor(CommandExecutor commandExecutor) {
+        this.commandExecutor = commandExecutor;
     }
 
     public String popNestedScriptName() throws EmptyStackException {

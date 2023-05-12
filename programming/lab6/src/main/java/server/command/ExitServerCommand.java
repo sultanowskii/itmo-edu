@@ -1,8 +1,7 @@
 package server.command;
 
 import lib.command.Command;
-import lib.command.ExitCommand;
-import lib.command.SaveCommand;
+import lib.manager.ProgramStateManager;
 import server.runtime.Context;
 
 import java.io.IOException;
@@ -16,16 +15,10 @@ public class ExitServerCommand extends Command {
     }
 
     @Override
-    public boolean isClientSide() {
-        return true;
-    }
-
-    @Override
     public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) throws IOException {
-        var saveCommand = new SaveCommand();
-        var exitCommand = new ExitCommand();
-        saveCommand.exec(printWriter, args, objectArgument, context);
-        exitCommand.exec(printWriter, args, objectArgument, context);
+        ProgramStateManager programStateManager = ProgramStateManager.getInstance();
+        printWriter.println("Exiting...");
+        programStateManager.setIsRunning(false);
     }
 
     @Override

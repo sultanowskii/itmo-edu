@@ -18,10 +18,7 @@ public class PrintFieldDescendingNationalityCommand extends Command {
     public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
         PersonManager personManager = context.getPersonManager();
 
-        LinkedHashSet<Person> persons = personManager.getStorage();
-        List<Person> descendingPersons = new ArrayList<>(persons);
-        descendingPersons.sort(Collections.reverseOrder());
-        descendingPersons.forEach(
+        personManager.getStorage().stream().sorted(Collections.reverseOrder()).forEach(
             p -> {
                 printWriter.println(p.getID());
                 printWriter.println(p.getNationality());

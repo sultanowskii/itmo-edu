@@ -58,13 +58,13 @@ public class Server implements Runnable {
     public void loop() {
         ProgramStateManager programStateManager = ProgramStateManager.getInstance();
         while (programStateManager.getIsRunning()) {
-            // TODO: Обработать
             try {
                 if (this.selector.select(TIMEOUT) == 0) {
                     continue;
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                printWriter.println("IO error during select: " + e.getMessage());
+                continue;
             }
 
             Iterator<SelectionKey> keyIter = selector.selectedKeys().iterator();

@@ -1,6 +1,5 @@
 package server;
 
-import client.command.ExecuteScriptCommand;
 import lib.command.*;
 import lib.command.exception.InvalidCommandArgumentException;
 import lib.command.manager.CommandManager;
@@ -10,7 +9,9 @@ import lib.form.validation.ValidationException;
 import lib.manager.ProgramStateManager;
 import lib.network.Config;
 import server.command.ExitServerCommand;
+import server.command.SaveCommand;
 import server.file.PersonCollectionXMLReader;
+import server.manager.PersonCollectionSaver;
 import server.manager.PersonManager;
 import server.network.Server;
 import server.runtime.Context;
@@ -34,7 +35,6 @@ public class App {
         cmdManager.addCommand(new UpdateCommand());
         cmdManager.addCommand(new RemoveByIDCommand());
         cmdManager.addCommand(new ClearCommand());
-        cmdManager.addCommand(new ExecuteScriptCommand());
         cmdManager.addCommand(new AddIfMinCommand());
         cmdManager.addCommand(new RemoveGreaterCommand());
         cmdManager.addCommand(new RemoveLowerCommand());
@@ -47,6 +47,22 @@ public class App {
     public static void addServerCommands(CommandManager commandManager) {
         commandManager.addCommand(new SaveCommand());
         commandManager.addCommand(new ExitServerCommand());
+    }
+
+    public static void setupShutdownHook(Context context, PrintWriter printWriter) {
+        Thread printingHook = new Thread(
+            () -> {
+                PersonCollectionSaver personCollectionSaver = new PersonCollectionSaver(
+                    context.getPersonManager(),
+                    context.getCollectionFilename(),
+                    printWriter
+                );
+                try {
+                    personCollectionSaver.saveCollectionToFile();
+                } catch (InvalidCommandArgumentException | IOException ignored) {}
+            }
+        );
+        Runtime.getRuntime().addShutdownHook(printingHook);
     }
 
     public static void main(String[] args) throws IOException {
@@ -119,6 +135,8 @@ public class App {
             context.setCommandManager(clientCommandManager);
             context.setPersonManager(personManager);
             context.setCollectionFilename(collectionFilename);
+
+            setupShutdownHook(context, printWriter);
 
             Server server;
             try {

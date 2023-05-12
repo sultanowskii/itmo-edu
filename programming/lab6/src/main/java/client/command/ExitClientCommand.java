@@ -1,5 +1,6 @@
-package lib.command;
+package client.command;
 
+import lib.command.Command;
 import server.runtime.Context;
 import lib.manager.ProgramStateManager;
 
@@ -7,9 +8,9 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Scanner;
 
-public class ExitCommand extends Command {
+public class ExitClientCommand extends Command {
 
-    public ExitCommand() {
+    public ExitClientCommand() {
         super("exit");
     }
 

@@ -1,22 +1,25 @@
 package client.command;
 
 import client.CLI;
+import client.runtime.ClientContext;
 import lib.command.Command;
 import lib.command.exception.InvalidCommandArgumentException;
-import lib.command.manager.CommandManager;
 import lib.command.parse.CommandInputInfo;
 import lib.command.parse.CommandParser;
 import lib.form.validation.ValidationException;
 import server.runtime.Context;
 import server.runtime.exceptions.MaxCallDepthException;
+import server.runtime.exceptions.RecursiveCallException;
 
 import java.io.*;
 import java.util.Scanner;
 
 public class ExecuteScriptCommand extends Command {
+    private ClientContext clientContext;
 
-    public ExecuteScriptCommand() {
+    public ExecuteScriptCommand(ClientContext clientContext) {
         super("execute_script");
+        this.clientContext = clientContext;
     }
 
     @Override
@@ -35,8 +38,7 @@ public class ExecuteScriptCommand extends Command {
             throw new InvalidCommandArgumentException("Command syntax:\n " + this.getName() + " <script_file_name>");
         }
 
-        // TODO: fix, for now works as temporary workaround
-        CLI cli = (CLI) additionalObject;
+        var commandExecutor = clientContext.getCommandExecutor();
 
         for (String scriptFilename : args) {
             Scanner scriptFileScanner;
@@ -47,12 +49,12 @@ public class ExecuteScriptCommand extends Command {
             } catch (FileNotFoundException e) {
                 throw new InvalidCommandArgumentException("File `" + scriptFilename + "` is inaccessible (doesn't exist, is a directory or is unreadable due to permissions).");
             }
-//            try {
-//                context.pushNestedScriptName(scriptFile.getAbsolutePath());
-//            } catch (RecursiveCallException e) {
-//                printWriter.println(e.getMessage());
-//                continue;
-//            }
+            try {
+                this.clientContext.pushNestedScriptName(scriptFile.getAbsolutePath());
+            } catch (RecursiveCallException e) {
+                printWriter.println(e.getMessage());
+                continue;
+            }
 
             while (scriptFileScanner.hasNextLine()) {
                 printWriter.println();
@@ -60,7 +62,7 @@ public class ExecuteScriptCommand extends Command {
                 CommandInputInfo commandInputInfo = CommandParser.parseString(line);
 
                 try {
-                    cli.execCommand(commandInputInfo, scriptFileScanner);
+                    commandExecutor.execCommand(commandInputInfo, scriptFileScanner);
                 } catch (InvalidCommandArgumentException e) {
                     printWriter.println("Invalid arguments: " + e.getMessage());
                 } catch (ValidationException e) {
@@ -72,7 +74,7 @@ public class ExecuteScriptCommand extends Command {
                 }
             }
             scriptFileScanner.close();
-//            context.popNestedScriptName();
+            this.clientContext.popNestedScriptName();
         }
     }
 
