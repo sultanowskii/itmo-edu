@@ -1,0 +1,236 @@
+package server.network;
+
+import lib.command.Command;
+import lib.command.exception.InvalidCommandArgumentException;
+import lib.form.validation.ValidationException;
+import lib.manager.ProgramStateManager;
+import lib.network.ByteBufferHeadacheResolver;
+import lib.network.ClientRequest;
+import lib.serialization.Serializator;
+import server.runtime.Context;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.SocketException;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Server implements Runnable {
+    private static final int BUFFER_SIZE = 64 * 1000;
+    private static final int TIMEOUT = 300; // (milliseconds)
+    private final DatagramChannel socketChannel;
+    private final Selector selector;
+    private final PrintWriter printWriter;
+    private final Context context;
+
+    public Server(Context context, PrintWriter printWriter) throws IOException {
+        this("127.0.0.1", 9999, printWriter, context);
+    }
+
+    static class ClientRecord {
+        public SocketAddress address;
+        public Action nextAction = Action.TO_RECEIVE;
+        public ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
+        public boolean isOccupied = false;
+    }
+
+    public Server(String hostname, int port, PrintWriter printWriter, Context context) throws IOException, SocketException {
+        this.context = context;
+        this.printWriter = printWriter;
+
+        this.socketChannel = DatagramChannel.open();
+        this.socketChannel.configureBlocking(false);
+        this.socketChannel.socket().bind(new InetSocketAddress(hostname, port));
+
+        this.selector = Selector.open();
+        this.socketChannel.register(selector, SelectionKey.OP_READ, new ClientRecord());
+    }
+
+    public void run() {
+        this.loop();
+    }
+
+    public void loop() {
+        ThreadPoolExecutor receiveExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(20);
+        ThreadPoolExecutor handleExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(20);
+        ThreadPoolExecutor sendExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(20);
+
+        ReentrantLock locker = new ReentrantLock();
+
+        ProgramStateManager programStateManager = ProgramStateManager.getInstance();
+
+        while (programStateManager.getIsRunning()) {
+            try {
+                locker.lock();
+                var keyNumber = this.selector.select(TIMEOUT);
+                locker.unlock();
+
+                if (keyNumber == 0) {
+                    continue;
+                }
+            } catch (IOException e) {
+                printWriter.println("IO error during select: " + e.getMessage());
+                continue;
+            }
+
+            Iterator<SelectionKey> keyIter = selector.selectedKeys().iterator();
+            while (keyIter.hasNext()) {
+                SelectionKey key = keyIter.next();
+
+                ClientRecord clientRecord = (ClientRecord) key.attachment();
+
+                if (!clientRecord.isOccupied) {
+                    if (key.isReadable() && clientRecord.nextAction == Action.TO_RECEIVE) {
+                        clientRecord.isOccupied = true;
+                        if (clientRecord.address != null) {
+                            key.interestOps(SelectionKey.OP_WRITE);
+                        }
+                        receiveExecutor.execute(
+                            () -> {
+                                try {
+                                    handleRead(key);
+                                } catch (IOException e) {
+                                    printWriter.println("IO error: " + e.getMessage());
+                                }
+
+                                if (clientRecord.address != null) {
+                                    locker.lock();
+                                    key.interestOps(SelectionKey.OP_WRITE);
+                                    locker.unlock();
+                                }
+                                clientRecord.nextAction = Action.TO_HANDLE;
+
+                                clientRecord.isOccupied = true;
+
+                                handleExecutor.execute(
+                                    () -> {
+                                        try {
+                                            handleRequest(key);
+                                        } catch (IOException e) {
+                                            printWriter.println("IO error: " + e.getMessage());
+                                        } catch (ClassNotFoundException e) {
+                                            printWriter.println("Unexpected serialization error: " + e.getMessage());
+                                        } finally {
+                                            clientRecord.isOccupied = false;
+                                        }
+                                    }
+                                );
+
+                                if (clientRecord.address != null) {
+                                    locker.lock();
+                                    key.interestOps(SelectionKey.OP_WRITE);
+                                    locker.unlock();
+                                }
+                                clientRecord.nextAction = Action.TO_SEND;
+                            }
+                        );
+                    }
+
+                    if (key.isValid() && key.isWritable() && clientRecord.nextAction == Action.TO_SEND) {
+                        clientRecord.isOccupied = true;
+                        sendExecutor.execute(
+                            () -> {
+                                int bytesSent = 0;
+
+                                try {
+                                    bytesSent = handleWrite(key);
+                                } catch (IOException e) {
+                                    printWriter.println("IO error: " + e.getMessage());
+                                } finally {
+                                    clientRecord.isOccupied = false;
+                                }
+
+                                if (bytesSent != 0) {
+                                    locker.lock();
+                                    clientRecord.nextAction = Action.TO_RECEIVE;
+                                    key.interestOps(SelectionKey.OP_READ);
+                                    locker.unlock();
+                                }
+                            }
+                        );
+                    }
+                }
+
+                keyIter.remove();
+            }
+        }
+    }
+
+    public void handleRead(SelectionKey key) throws IOException {
+        DatagramChannel channel = (DatagramChannel) key.channel();
+        ClientRecord clientRecord = (ClientRecord) key.attachment();
+
+        clientRecord.buffer.clear();
+
+        clientRecord.address = channel.receive(clientRecord.buffer);
+
+        int requestSize = clientRecord.buffer.getInt(0);
+
+        ByteBufferHeadacheResolver.removeBytesFromStart(clientRecord.buffer, Integer.BYTES);
+
+        if (requestSize > clientRecord.buffer.capacity()) {
+            var tmp = ByteBuffer.allocate(requestSize);
+            tmp.put(clientRecord.buffer);
+            clientRecord.buffer = tmp;
+        }
+    }
+
+    public void handleRequest(SelectionKey key) throws IOException, ClassNotFoundException {
+        ClientRecord clientRecord = (ClientRecord) key.attachment();
+
+        byte[] rawRequest = new byte[clientRecord.buffer.position()];
+        clientRecord.buffer.flip();
+        clientRecord.buffer.get(rawRequest);
+
+        ClientRequest request = Serializator.bytesToObject(rawRequest);
+
+        clientRecord.buffer.clear();
+
+        try {
+            Command command = this.context.getCommandManager().getCommandByName(request.getCommandName());
+
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            PrintWriter printWriter = new PrintWriter(byteStream, true);
+
+            command.exec(printWriter, request.getArguments(), request.getObjectArgument(), context);
+
+            var rawResult = Serializator.objectToBuffer(byteStream.toString());
+            rawResult.flip();
+
+            if (rawResult.capacity() > clientRecord.buffer.capacity()) {
+                clientRecord.buffer = rawResult;
+            } else {
+                clientRecord.buffer.put(rawResult);
+            }
+        } catch (IOException | NoSuchElementException e) {
+            var bytes = e.getMessage().getBytes();
+            clientRecord.buffer.put(bytes, 0, bytes.length);
+        } catch (InvalidCommandArgumentException e) {
+            var bytes = ("Invalid arguments: " + e.getMessage()).getBytes();
+            clientRecord.buffer.put(bytes, 0, bytes.length);
+        } catch (ValidationException e) {
+            var bytes = ("Validation error: " + e.getMessage()).getBytes();
+            clientRecord.buffer.put(bytes, 0, bytes.length);
+        }
+    }
+
+    public int  handleWrite(SelectionKey key) throws IOException {
+        DatagramChannel channel = (DatagramChannel) key.channel();
+        ClientRecord clientRecord = (ClientRecord) key.attachment();
+
+        clientRecord.buffer.flip();
+
+        return channel.send(clientRecord.buffer, clientRecord.address);
+    }
+}
+
