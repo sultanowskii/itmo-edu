@@ -46,23 +46,6 @@
           <plugin>
             <artifactId>maven-jar-plugin</artifactId>
             <version>3.0.2</version>
-            <executions>
-              <execution>
-                <id>default-jar</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-                <configuration>
-                  <finalName>server</finalName>
-                  <archive>
-                    <manifest>
-                      <mainClass>server.App</mainClass>
-                    </manifest>
-                  </archive>
-                </configuration>
-              </execution>
-            </executions>
             <configuration>
               <finalName>server</finalName>
               <archive>
@@ -79,7 +62,6 @@
           <groupId>org.postgresql</groupId>
           <artifactId>postgresql</artifactId>
           <version>42.6.0</version>
-          <scope>compile</scope>
         </dependency>
       </dependencies>
     </profile>
@@ -90,6 +72,23 @@
           <plugin>
             <artifactId>maven-jar-plugin</artifactId>
             <version>3.0.2</version>
+            <executions>
+              <execution>
+                <id>default-jar</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <finalName>client</finalName>
+                  <archive>
+                    <manifest>
+                      <mainClass>client.App</mainClass>
+                    </manifest>
+                  </archive>
+                </configuration>
+              </execution>
+            </executions>
             <configuration>
               <finalName>client</finalName>
               <archive>

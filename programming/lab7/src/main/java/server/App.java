@@ -7,7 +7,8 @@ import lib.command.parse.CommandInputInfo;
 import lib.command.parse.CommandParser;
 import lib.form.validation.ValidationException;
 import lib.manager.ProgramStateManager;
-import lib.network.Config;
+import lib.schema.Person;
+import server.runtime.Config;
 import server.command.ExitServerCommand;
 import server.db.Database;
 import server.manager.PersonManager;
@@ -17,6 +18,7 @@ import server.runtime.Context;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.SocketException;
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
@@ -50,7 +52,7 @@ public class App {
             Scanner scanner = new Scanner(System.in);
             PrintWriter printWriter = new PrintWriter(System.out);
         ) {
-            String configFilename = System.getenv("LAB7_CONFIG_FILENAME");
+            String configFilename = System.getenv("SERVER_CONFIG");
 
             if (configFilename == null) {
                 configFilename = "config.xml";
@@ -61,18 +63,18 @@ public class App {
                 return;
             }
 
+            Database db = new Database(config.dbHostname, config.dbPort, config.dbName, config.dbUsername, config.dbPassword);
 
-            Database db = new Database(host, port, dbName, username, password);
-
-            PersonManager personManager = null;
-
-            // T0DO: конфиг
-            // TODO: подсос из БД
-
-            if (personManager == null) {
-                personManager = new PersonManager(new LinkedHashSet<>());
-                personManager.setInitDateTime(ZonedDateTime.now());
+            LinkedHashSet<Person> collection;
+            try {
+                collection = db.getAllPersons();
+            } catch (SQLException e) {
+                printWriter.println("DB error: " + e.getMessage());
+                return;
             }
+
+            PersonManager personManager = personManager = new PersonManager(collection);
+            personManager.setInitDateTime(ZonedDateTime.now());
 
             ProgramStateManager programStateManager = ProgramStateManager.getInstance();
 

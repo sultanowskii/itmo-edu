@@ -1,0 +1,9 @@
+<config>
+    <hostname>localhost</hostname>
+    <port>9999</port>
+    <dbHostname>localhost</dbHostname>
+    <dbPort>5432</dbPort>
+    <dbName>studs</dbName>
+    <dbUsername>a</dbUsername>
+    <dbPassword>a</dbPassword>
+</config>

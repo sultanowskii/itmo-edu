@@ -1,11 +1,11 @@
-package lib.file;
+package server.file;
 
-import lib.form.validation.InclusiveBoundsValidator;
-import lib.network.Config;
 import lib.file.util.JdomDocumentCreator;
 import lib.form.field.Field;
 import lib.form.field.IntegerField;
 import lib.form.field.StringField;
+import lib.form.validation.InclusiveBoundsValidator;
+import server.runtime.Config;
 import org.jdom2.Element;
 import org.xml.sax.SAXException;
 
@@ -51,6 +51,22 @@ public class ConfigReader {
         Field<Integer> portField = new IntegerField("port", printWriter);
         portField.addValueValidator(new InclusiveBoundsValidator<>(0, 0xFFFF));
         portField.parseAndSetValue(config, root.getChild("port").getValue());
+
+        Field<String> dbHostnameField = new StringField("dbHostname", printWriter);
+        dbHostnameField.parseAndSetValue(config, root.getChild("dbHostname").getValue());
+
+        Field<Integer> dbPortField = new IntegerField("dbPort", printWriter);
+        dbPortField.addValueValidator(new InclusiveBoundsValidator<>(0, 0xFFFF));
+        dbPortField.parseAndSetValue(config, root.getChild("dbPort").getValue());
+
+        Field<String> dbNameField = new StringField("dbName", printWriter);
+        dbNameField.parseAndSetValue(config, root.getChild("dbName").getValue());
+
+        Field<String> dbUsernameField = new StringField("dbUsername", printWriter);
+        dbUsernameField.parseAndSetValue(config, root.getChild("dbUsername").getValue());
+
+        Field<String> dbPasswordField = new StringField("dbPassword", printWriter);
+        dbPasswordField.parseAndSetValue(config, root.getChild("dbPassword").getValue());
 
         return config;
     }

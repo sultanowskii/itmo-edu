@@ -1,6 +1,6 @@
-package lib.network;
+package client.runtime;
 
-import lib.file.ConfigReader;
+import client.file.ConfigReader;
 import lib.form.validation.ValidationException;
 
 import java.io.File;
@@ -31,10 +31,10 @@ public class Config {
                 printWriter.println("Programming error. Details: " + e.getMessage() + " Exiting...");
                 return null;
             } catch (NullPointerException e) {
-                printWriter.println("Collection file seems to be invalid. Exiting...");
+                printWriter.println("Config file seems to be invalid. Exiting...");
                 return null;
             } catch (ValidationException e) {
-                printWriter.println("Collection file seems to be invalid. Reason: " + e.getMessage());
+                printWriter.println("Config file seems to be invalid. Reason: " + e.getMessage());
                 printWriter.println("Exiting...");
                 return null;
             } catch (RuntimeException e) {

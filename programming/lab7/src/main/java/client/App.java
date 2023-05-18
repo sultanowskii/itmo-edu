@@ -4,20 +4,17 @@ import client.command.CommandExecutor;
 import client.command.ExecuteScriptCommand;
 import client.command.SigninCommand;
 import client.runtime.ClientContext;
-import lib.network.Config;
+import client.runtime.Config;
 import client.command.ExitClientCommand;
 import client.network.Client;
 import lib.command.*;
 import lib.command.manager.CommandManager;
 import lib.manager.ProgramStateManager;
-import lib.schema.Person;
 
 import java.io.*;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class App
 {
@@ -45,7 +42,7 @@ public class App
             Scanner scanner = new Scanner(System.in);
             PrintWriter printWriter = new PrintWriter(System.out);
         ) {
-            String configFilename = System.getenv("LAB7_CONFIG_FILENAME");
+            String configFilename = System.getenv("CLIENT_CONFIG");
 
             if (configFilename == null) {
                 configFilename = "config.xml";

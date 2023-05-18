@@ -146,6 +146,8 @@ public class Database {
                 throw new SQLException("Can't add location. Try again later.");
             }
 
+            location.setOwnerID(user.getID());
+
             return resultSet.getInt("id");
         } catch (SQLException e) {
             throw new SQLException("Can't add location. Reason: " + e.getMessage());
@@ -176,6 +178,8 @@ public class Database {
             if (!resultSet.next()) {
                 throw new SQLException("Can't add coordinates. Try again later.");
             }
+
+            coordinates.setOwnerID(user.getID());
 
             return resultSet.getInt("id");
         } catch (SQLException e) {
@@ -217,6 +221,8 @@ public class Database {
             if (!resultSet.next()) {
                 throw new SQLException("Can't add person. Try again later.");
             }
+
+            person.setOwnerID(user.getID());
 
             return resultSet.getInt("id");
         } catch (SQLException e) {
@@ -297,17 +303,16 @@ public class Database {
             this.updateLocation(user, locationID, person.getLocation());
 
             var statement = connection.prepareStatement(
-                "UPDATE person SET name = ?, height = ? passport_id = ? eye_color = ?, nationality = ?, owner_id) WHERE id = ? AND owner_id = ?"
+                "UPDATE person SET name = ?, height = ?, passport_id = ?, eye_color = ?::color, nationality = ?::country WHERE id = ? AND owner_id = ?"
             );
 
             statement.setString(1, person.getName());
-            statement.setTimestamp(2, ZonedDateTimeConverter.toDBTimestamp(person.getCreationDate()));
-            statement.setLong(3, person.getHeight());
-            statement.setString(4, person.getPassportID());
-            statement.setString(5, person.getEyeColor().name());
-            statement.setString(6, person.getNationality().name());
-            statement.setInt(7, personID);
-            statement.setInt(8, user.getID());
+            statement.setLong(2, person.getHeight());
+            statement.setString(3, person.getPassportID());
+            statement.setString(4, person.getEyeColor().name());
+            statement.setString(5, person.getNationality().name());
+            statement.setInt(6, personID);
+            statement.setInt(7, user.getID());
 
             return statement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -344,26 +349,28 @@ public class Database {
                 "INNER JOIN coordinates ON person.coordinates_id = coordinates.id "
             );
 
+            statement.execute();
+
             LinkedHashSet<Person> persons = new LinkedHashSet<>();
 
             var resultSet = statement.getResultSet();
 
             while (resultSet.next()) {
                 var coordinates = new Coordinates();
-                coordinates.setX(resultSet.getFloat("x"));
-                coordinates.setY(resultSet.getInt("y"));
+                coordinates.setX(resultSet.getFloat("coordinates_x"));
+                coordinates.setY(resultSet.getInt("coordinates_y"));
                 coordinates.setID(resultSet.getInt("coordinates_id"));
 
                 var location = new Location();
-                location.setX(resultSet.getDouble("x"));
-                location.setY(resultSet.getInt("y"));
-                location.setName(resultSet.getString("name"));
+                location.setX(resultSet.getDouble("location_x"));
+                location.setY(resultSet.getInt("location_y"));
+                location.setName(resultSet.getString("location_name"));
                 location.setID(resultSet.getInt("location_id"));
 
                 Person person = new Person();
                 person.setID(resultSet.getInt("id"));
                 person.setName(resultSet.getString("name"));
-                person.setCreationDate(ZonedDateTimeConverter.fromDBTimestamp(resultSet.getTimestamp("name")));
+                person.setCreationDate(ZonedDateTimeConverter.fromDBTimestamp(resultSet.getTimestamp("creation_date")));
                 person.setHeight(resultSet.getLong("height"));
                 person.setPassportID(resultSet.getString("passport_id"));
                 person.setEyeColor(Color.valueOf(resultSet.getString("eye_color")));
@@ -382,7 +389,6 @@ public class Database {
         }
     }
 
-    // TODO: мб откатить все в случае 1 неуспешного
     public int deleteAllPersons(User user) throws SQLException {
         lock.lock();
         Connection connection;
@@ -429,13 +435,14 @@ public class Database {
             );
             statement.setInt(1, user.getID());
             statement.setInt(2, personID);
-
-            int deletedCount = statement.executeUpdate();
+            statement.execute();
 
             var resultSet = statement.getResultSet();
 
             if (!resultSet.next()) {
-                throw new SQLException("Can't fetch location and coordinates of person. Is it still presented?");
+                throw new SQLException(
+                    "Can't fetch location and coordinates of person. Probably there is no person with such id that belongs to you."
+                );
             }
 
             int coordinatesID = resultSet.getInt("coordinates_id");
@@ -457,7 +464,7 @@ public class Database {
             statementDeleteLocation.execute();
             statement.getResultSet();
 
-            return deletedCount == 1;
+            return true;
         } catch (SQLException e) {
             throw new SQLException("Can't delete person with id=" + personID + ". Reason: " + e.getMessage());
         } finally {

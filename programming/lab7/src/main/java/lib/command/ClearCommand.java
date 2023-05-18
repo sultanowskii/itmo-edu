@@ -24,7 +24,7 @@ public class ClearCommand extends Command {
         try {
             context.getDB().deleteAllPersons(user);
         } catch (SQLException e) {
-            // TODO: обработать
+            printWriter.println("DB error: " + e.getMessage());
         }
 
         int removedElementCounter = persons.size();
@@ -33,7 +33,6 @@ public class ClearCommand extends Command {
 
         printWriter.println("Removed " + removedElementCounter + " element(s).");
     }
-
 
     @Override
     public String getDescription() {

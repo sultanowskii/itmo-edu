@@ -71,6 +71,6 @@ public class SignupCommand extends Command {
 
     @Override
     public String getSyntax() {
-        return this.getName();
+        return this.getName() + " {credentials}";
     }
 }

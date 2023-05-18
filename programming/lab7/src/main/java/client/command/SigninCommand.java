@@ -48,6 +48,6 @@ public class SigninCommand extends Command {
 
     @Override
     public String getSyntax() {
-        return this.getName();
+        return this.getName() + " {credentials}";
     }
 }
