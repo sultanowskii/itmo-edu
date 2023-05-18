@@ -1,6 +1,7 @@
 package client.command;
 
 import client.network.Client;
+import client.runtime.ClientContext;
 import lib.command.exception.InvalidCommandArgumentException;
 import lib.command.manager.CommandManager;
 import lib.command.parse.CommandInputInfo;
@@ -36,7 +37,7 @@ public class CommandExecutor {
         Serializable additionalObject = command.getAdditionalObjectFromUser(printWriter, scanner);
 
         if (command.isClientSide()) {
-            command.exec(this.printWriter, arguments, additionalObject, null);
+            command.exec(this.printWriter, arguments, additionalObject, null, null);
         } else {
             client.sendRequest(commandName, arguments, additionalObject);
             var result = client.getResponse();

@@ -5,6 +5,7 @@ import lib.form.PersonRetrieveFormCreator;
 import server.runtime.Context;
 import server.manager.PersonManager;
 import lib.schema.*;
+import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -19,7 +20,7 @@ public class ShowCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personStorage = context.getPersonManager();
         HashSet<Person> persons = personStorage.getStorage();
 

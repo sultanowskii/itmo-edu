@@ -2,9 +2,11 @@ package lib.command;
 
 import server.runtime.Context;
 import lib.schema.Person;
+import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -16,11 +18,18 @@ public class ClearCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         LinkedHashSet<Person> persons = context.getPersonManager().getStorage();
-        int removedElementCounter = persons.size();
 
-        persons.clear();
+        try {
+            context.getDB().deleteAllPersons(user);
+        } catch (SQLException e) {
+            // TODO: обработать
+        }
+
+        int removedElementCounter = persons.size();
+        persons.removeIf(p -> p.getOwnerID() == user.getID());
+        removedElementCounter = removedElementCounter - persons.size();
 
         printWriter.println("Removed " + removedElementCounter + " element(s).");
     }

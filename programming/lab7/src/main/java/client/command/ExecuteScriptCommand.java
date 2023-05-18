@@ -1,6 +1,5 @@
 package client.command;
 
-import client.CLI;
 import client.runtime.ClientContext;
 import lib.command.Command;
 import lib.command.exception.InvalidCommandArgumentException;
@@ -10,6 +9,7 @@ import lib.form.validation.ValidationException;
 import server.runtime.Context;
 import server.runtime.exceptions.MaxCallDepthException;
 import server.runtime.exceptions.RecursiveCallException;
+import server.schema.User;
 
 import java.io.*;
 import java.util.Scanner;
@@ -32,7 +32,8 @@ public class ExecuteScriptCommand extends Command {
         PrintWriter printWriter,
         String[] args,
         Serializable additionalObject,
-        Context context
+        Context context,
+        User user
     ) throws InvalidCommandArgumentException, MaxCallDepthException {
         if (args.length != 1) {
             throw new InvalidCommandArgumentException("Command syntax:\n " + this.getName() + " <script_file_name>");

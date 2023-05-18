@@ -3,6 +3,7 @@ package lib.command;
 import server.runtime.Context;
 import server.manager.PersonManager;
 import lib.schema.Person;
+import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -15,7 +16,7 @@ public class PrintFieldDescendingNationalityCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personManager = context.getPersonManager();
 
         personManager.getStorage().stream().sorted(Collections.reverseOrder()).forEach(

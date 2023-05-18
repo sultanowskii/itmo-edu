@@ -8,9 +8,11 @@ import lib.form.validation.*;
 import server.runtime.Context;
 import server.manager.PersonManager;
 import lib.schema.*;
+import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -38,7 +40,7 @@ public class UpdateCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         this.validateArguments(args);
 
         IntegerField idSerializer = new IntegerField("id", printWriter);
@@ -52,7 +54,20 @@ public class UpdateCommand extends Command {
             throw new ValidationException("id: " + e.getMessage());
         }
 
+        Person updatedPerson = (Person) objectArgument;
         int idToUpdate = idSerializer.getValue();
+
+        boolean updated;
+        try {
+            updated = context.getDB().updatePerson(user, idToUpdate, updatedPerson);
+        } catch (SQLException e) {
+            printWriter.println("DB error: " + e.getMessage());
+            return;
+        }
+
+        if (!updated) {
+            printWriter.println("Didn't update person for unknown reason. Try again later.");
+        }
 
         PersonManager personManager = context.getPersonManager();
 
@@ -64,7 +79,6 @@ public class UpdateCommand extends Command {
         }
 
         // and add a new one with the same id
-        Person updatedPerson = (Person) objectArgument;
         updatedPerson.setID(idToUpdate);
         personManager.add(updatedPerson);
 

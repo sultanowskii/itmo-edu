@@ -6,6 +6,7 @@ import java.time.ZonedDateTime;
 public class Person implements Comparable<Person>, Serializable {
     static final long serialVersionUID = 1;
     private Integer id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private int ownerID;
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
     private ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
@@ -23,6 +24,10 @@ public class Person implements Comparable<Person>, Serializable {
 
     public Integer getID() {
         return this.id;
+    }
+
+    public int getOwnerID() {
+        return ownerID;
     }
 
     public String getName() {
@@ -59,6 +64,10 @@ public class Person implements Comparable<Person>, Serializable {
 
     public void setID(Integer id) {
         this.id = id;
+    }
+
+    public void setOwnerID(int ownerID) {
+        this.ownerID = ownerID;
     }
 
     public void setName(String name) {

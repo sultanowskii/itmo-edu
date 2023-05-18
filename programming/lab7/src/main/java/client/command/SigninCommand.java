@@ -1,18 +1,23 @@
 package client.command;
 
+import client.runtime.ClientContext;
+import lib.auth.Credentials;
 import lib.command.Command;
+import lib.form.CredentialsFormCreator;
+import lib.form.Form;
 import server.runtime.Context;
-import lib.manager.ProgramStateManager;
 import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Scanner;
 
-public class ExitClientCommand extends Command {
+public class SigninCommand extends Command {
+    private final ClientContext clientContext;
 
-    public ExitClientCommand() {
-        super("exit");
+    public SigninCommand(ClientContext clientContext) {
+        super("signin");
+        this.clientContext = clientContext;
     }
 
     @Override
@@ -22,19 +27,23 @@ public class ExitClientCommand extends Command {
 
     @Override
     public Serializable getAdditionalObjectFromUser(PrintWriter printWriter, Scanner scanner) {
-        return super.getAdditionalObjectFromUser(printWriter, scanner);
+        Form locationForm = CredentialsFormCreator.getForm(printWriter);
+
+        var credentials = new Credentials();
+
+        locationForm.fillObjectWithValidatedUserInput(scanner, credentials);
+
+        return credentials;
     }
 
     @Override
     public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
-        ProgramStateManager programStateManager = ProgramStateManager.getInstance();
-        printWriter.println("Exiting...");
-        programStateManager.setIsRunning(false);
+        this.clientContext.setCredentials((Credentials) objectArgument);
     }
 
     @Override
     public String getDescription() {
-        return "Exit the CLI.";
+        return "Sign in";
     }
 
     @Override

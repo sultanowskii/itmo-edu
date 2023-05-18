@@ -2,6 +2,7 @@ package lib.command;
 
 import lib.command.manager.CommandManager;
 import server.runtime.Context;
+import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -14,7 +15,7 @@ public class HelpCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         CommandManager commandManager = context.getCommandManager();
         List<Command> commands = commandManager.getCommands();
 

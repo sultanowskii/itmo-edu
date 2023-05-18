@@ -24,14 +24,16 @@ public class PersonManager extends CollectionManager<Person> {
         this.storage.remove(personToRemove);
     }
 
-    @Override
-    public void add(Person person) {
-        person.setID(getNextIDAndIncrement());
-        this.storage.add(person);
+    public boolean isPassportIDavailable(String passportID) {
+        return this.storage
+            .stream()
+            .noneMatch(
+                p -> p.getPassportID().equals(passportID)
+            );
     }
 
     @Override
-    public void addWithoutAutoID(Person person) {
+    public void add(Person person) {
         this.storage.add(person);
     }
 }

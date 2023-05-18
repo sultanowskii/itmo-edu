@@ -9,16 +9,11 @@ import lib.form.validation.ValidationException;
 import lib.manager.ProgramStateManager;
 import lib.network.Config;
 import server.command.ExitServerCommand;
-import server.command.SaveCommand;
-import server.file.CollectionManagerReader;
-import server.file.PersonCollectionXMLReader;
-import server.manager.PersonCollectionSaver;
+import server.db.Database;
 import server.manager.PersonManager;
 import server.network.Server;
 import server.runtime.Context;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.SocketException;
@@ -43,27 +38,11 @@ public class App {
         cmdManager.addCommand(new CountGreaterThanLocationCommand());
         cmdManager.addCommand(new PrintFieldDescendingNationalityCommand());
         cmdManager.addCommand(new DoNothingCommand());
+        cmdManager.addCommand(new SignupCommand());
     }
 
     public static void addServerCommands(CommandManager commandManager) {
-        commandManager.addCommand(new SaveCommand());
         commandManager.addCommand(new ExitServerCommand());
-    }
-
-    public static void setupShutdownHook(Context context, PrintWriter printWriter) {
-        Thread printingHook = new Thread(
-            () -> {
-                PersonCollectionSaver personCollectionSaver = new PersonCollectionSaver(
-                    context.getPersonManager(),
-                    context.getCollectionFilename(),
-                    printWriter
-                );
-                try {
-                    personCollectionSaver.saveCollectionToFile();
-                } catch (InvalidCommandArgumentException | IOException ignored) {}
-            }
-        );
-        Runtime.getRuntime().addShutdownHook(printingHook);
     }
 
     public static void main(String[] args) throws IOException {
@@ -82,45 +61,13 @@ public class App {
                 return;
             }
 
-            String collectionFilename = System.getenv("COLLECTION_FILE");
 
-            if (collectionFilename == null) {
-                printWriter.println("Can't find `COLLECTION_FILE` env variable. Exiting...");
-                return;
-            }
-
-            CollectionManagerReader<PersonManager> reader;
-
-            File collectionFile = new File(collectionFilename);
-            if (collectionFile.exists() && !collectionFile.canRead()) {
-                printWriter.println("Can't access file: Permission denied. Exiting...");
-                return;
-            }
+            Database db = new Database(host, port, dbName, username, password);
 
             PersonManager personManager = null;
-            try (
-                Scanner fileScanner = new Scanner(collectionFile);
-            ) {
-                reader = new PersonCollectionXMLReader(printWriter, fileScanner);
 
-                try {
-                    personManager = reader.readCollectionManager();
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    printWriter.println("Programming error. Details: " + e.getMessage() + " Exiting...");
-                    return;
-                } catch (NullPointerException e) {
-                    printWriter.println("Collection file seems to be invalid. Exiting...");
-                    return;
-                } catch (ValidationException e) {
-                    printWriter.println("Collection file seems to be invalid. Reason: " + e.getMessage());
-                    printWriter.println("Exiting...");
-                    return;
-                } catch (RuntimeException e) {
-                    printWriter.println(e.getMessage() + " Exiting...");
-                }
-            } catch (FileNotFoundException e) {
-                printWriter.println("File doesn't exist. Ignoring.");
-            }
+            // T0DO: конфиг
+            // TODO: подсос из БД
 
             if (personManager == null) {
                 personManager = new PersonManager(new LinkedHashSet<>());
@@ -133,11 +80,9 @@ public class App {
             addClientCommands(clientCommandManager);
 
             Context context = new Context();
+            context.setDB(db);
             context.setCommandManager(clientCommandManager);
             context.setPersonManager(personManager);
-            context.setCollectionFilename(collectionFilename);
-
-            setupShutdownHook(context, printWriter);
 
             Server server;
             try {
@@ -176,7 +121,7 @@ public class App {
                 var additionalObject = command.getAdditionalObjectFromUser(printWriter, scanner);
 
                 try {
-                    command.exec(printWriter, arguments, additionalObject, context);
+                    command.exec(printWriter, arguments, additionalObject, context, null);
                 } catch (InvalidCommandArgumentException e) {
                     printWriter.println("Invalid arguments: " + e.getMessage());
                 } catch (ValidationException e) {

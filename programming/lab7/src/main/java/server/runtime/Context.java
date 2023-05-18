@@ -1,6 +1,7 @@
 package server.runtime;
 
 import lib.command.manager.CommandManager;
+import server.db.Database;
 import server.manager.PersonManager;
 /**
  * Context
@@ -8,7 +9,7 @@ import server.manager.PersonManager;
 public class Context {
     private PersonManager personManager;
     private CommandManager commandManager;
-    private String collectionFilename;
+    private Database db;
 
     public PersonManager getPersonManager() {
         return this.personManager;
@@ -18,8 +19,8 @@ public class Context {
         return this.commandManager;
     }
 
-    public String getCollectionFilename() {
-        return this.collectionFilename;
+    public Database getDB() {
+        return db;
     }
 
     public void setPersonManager(PersonManager personManager) {
@@ -30,7 +31,7 @@ public class Context {
         this.commandManager = commandManager;
     }
 
-    public void setCollectionFilename(String collectionFilename) {
-        this.collectionFilename = collectionFilename;
+    public void setDB(Database db) {
+        this.db = db;
     }
 }

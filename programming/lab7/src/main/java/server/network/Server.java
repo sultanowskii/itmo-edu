@@ -1,5 +1,7 @@
 package server.network;
 
+import lib.auth.Credentials;
+import lib.auth.Hasher;
 import lib.command.Command;
 import lib.command.exception.InvalidCommandArgumentException;
 import lib.form.validation.ValidationException;
@@ -7,7 +9,9 @@ import lib.manager.ProgramStateManager;
 import lib.network.ByteBufferHeadacheResolver;
 import lib.network.ClientRequest;
 import lib.serialization.Serializator;
+import server.db.Database;
 import server.runtime.Context;
+import server.schema.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,6 +23,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Executors;
@@ -104,9 +109,7 @@ public class Server implements Runnable {
                                 }
 
                                 if (clientRecord.address != null) {
-                                    locker.lock();
                                     key.interestOps(SelectionKey.OP_WRITE);
-                                    locker.unlock();
                                 }
                                 clientRecord.nextAction = Action.TO_HANDLE;
 
@@ -127,9 +130,7 @@ public class Server implements Runnable {
                                 );
 
                                 if (clientRecord.address != null) {
-                                    locker.lock();
                                     key.interestOps(SelectionKey.OP_WRITE);
-                                    locker.unlock();
                                 }
                                 clientRecord.nextAction = Action.TO_SEND;
                             }
@@ -151,10 +152,8 @@ public class Server implements Runnable {
                                 }
 
                                 if (bytesSent != 0) {
-                                    locker.lock();
                                     clientRecord.nextAction = Action.TO_RECEIVE;
                                     key.interestOps(SelectionKey.OP_READ);
-                                    locker.unlock();
                                 }
                             }
                         );
@@ -185,6 +184,28 @@ public class Server implements Runnable {
         }
     }
 
+    private User getUserFromCredentials(Credentials credentials, PrintWriter printWriter) {
+        if (credentials.getLogin().isEmpty() || credentials.getPassword().isEmpty()) {
+            printWriter.println("Permission denied. Please sign in.");
+            return null;
+        }
+
+        var hashedPassword = Hasher.sha512(credentials.getPassword());
+
+        User user;
+        try {
+            user = this.context.getDB().getUser(credentials.getLogin(), hashedPassword);
+        } catch (SQLException e) {
+            printWriter.println("DB error: " + e.getMessage());
+            return null;
+        }
+
+        if (user == null) {
+            printWriter.println("Incorrect login/password.");
+        }
+        return user;
+    }
+
     public void handleRequest(SelectionKey key) throws IOException, ClassNotFoundException {
         ClientRecord clientRecord = (ClientRecord) key.attachment();
 
@@ -200,9 +221,18 @@ public class Server implements Runnable {
             Command command = this.context.getCommandManager().getCommandByName(request.getCommandName());
 
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            PrintWriter printWriter = new PrintWriter(byteStream, true);
+            PrintWriter resultPrintWriter = new PrintWriter(byteStream, true);
 
-            command.exec(printWriter, request.getArguments(), request.getObjectArgument(), context);
+            User user = null;
+            if (command.loginRequired()) {
+                user = getUserFromCredentials(request.getCredentials(), resultPrintWriter);
+            }
+
+            boolean badScenario = (command.loginRequired() && user == null);
+
+            if (!badScenario) {
+                command.exec(resultPrintWriter, request.getArguments(), request.getObjectArgument(), context, user);
+            }
 
             var rawResult = Serializator.objectToBuffer(byteStream.toString());
             rawResult.flip();
@@ -224,7 +254,7 @@ public class Server implements Runnable {
         }
     }
 
-    public int  handleWrite(SelectionKey key) throws IOException {
+    public int handleWrite(SelectionKey key) throws IOException {
         DatagramChannel channel = (DatagramChannel) key.channel();
         ClientRecord clientRecord = (ClientRecord) key.attachment();
 

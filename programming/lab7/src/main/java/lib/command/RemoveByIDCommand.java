@@ -5,9 +5,11 @@ import lib.form.field.IntegerField;
 import lib.form.validation.ValidationException;
 import server.runtime.Context;
 import server.manager.PersonManager;
+import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -26,7 +28,7 @@ public class RemoveByIDCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) throws InvalidCommandArgumentException, ValidationException {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) throws InvalidCommandArgumentException, ValidationException {
         this.validateArguments(args);
 
         IntegerField idSerializer = new IntegerField("id", printWriter);
@@ -44,8 +46,17 @@ public class RemoveByIDCommand extends Command {
 
         PersonManager personManager = context.getPersonManager();
         try {
-            personManager.removeByID(idToRemove);
-            printWriter.println("Removed 1 element");
+            boolean deleted;
+            try {
+                deleted = context.getDB().deletePersonByID(user, idToRemove);
+            } catch (SQLException e) {
+                printWriter.println("DB error: " + e.getMessage());
+                return;
+            }
+            if (deleted) {
+                personManager.removeByID(idToRemove);
+                printWriter.println("Removed 1 element");
+            }
         } catch (NoSuchElementException e) {
             printWriter.println("Element with id=" + idToRemove + " not found.");
         }

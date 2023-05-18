@@ -5,12 +5,15 @@ import lib.form.PersonCreationFormCreator;
 import server.runtime.Context;
 import server.manager.PersonManager;
 import lib.schema.Person;
+import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class RemoveGreaterCommand extends Command {
 
@@ -29,18 +32,35 @@ public class RemoveGreaterCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personManager = context.getPersonManager();
 
         Person specifiedPerson = (Person) objectArgument;
 
         LinkedHashSet<Person> persons = personManager.getStorage();
 
-        int savedElementCount = persons.size();
+        int removedElementCount = 0;
 
-        persons.removeIf(person -> person.compareTo(specifiedPerson) > 0);
+        var idsToRemove = persons
+                .stream()
+                .filter(person -> person.compareTo(specifiedPerson) > 0)
+                .map(Person::getID)
+                .collect(Collectors.toList());
 
-        int removedElementCount = savedElementCount - persons.size();
+        for (int idToRemove : idsToRemove) {
+            boolean deleted;
+            try {
+                deleted = context.getDB().deletePersonByID(user, idToRemove);
+            } catch (SQLException e) {
+                printWriter.println("DB error: " + e.getMessage());
+                return;
+            }
+            if (deleted) {
+                personManager.removeByID(idToRemove);
+                removedElementCount++;
+            }
+        }
+
         printWriter.println("Removed " + removedElementCount + " element(s).");
     }
 

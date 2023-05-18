@@ -1,6 +1,7 @@
 package lib.command;
 
 import server.runtime.Context;
+import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -18,7 +19,7 @@ public class DoNothingCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
 
     }
 

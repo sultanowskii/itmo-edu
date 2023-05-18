@@ -2,6 +2,7 @@ package lib.command;
 
 import server.runtime.Context;
 import server.manager.PersonManager;
+import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -15,7 +16,7 @@ public class InfoCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personStorage = context.getPersonManager();
 
         printWriter.println("Person storage.");

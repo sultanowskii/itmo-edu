@@ -4,8 +4,18 @@ import java.io.Serializable;
 
 public class Coordinates implements Comparable<Coordinates>, Serializable {
     static final long serialVersionUID = 1;
+    private int id;
+    private int ownerID;
     private Float x; //Значение поля должно быть больше -527, Поле не может быть null
     private int y; //Максимальное значение поля: 897
+
+    public int getID() {
+        return id;
+    }
+
+    public int getOwnerID() {
+        return ownerID;
+    }
 
     public Float getX() {
         return this.x;
@@ -13,6 +23,14 @@ public class Coordinates implements Comparable<Coordinates>, Serializable {
 
     public int getY() {
         return this.y;
+    }
+
+    public void setID(int id) {
+        this.id = id;
+    }
+
+    public void setOwnerID(int ownerID) {
+        this.ownerID = ownerID;
     }
 
     public void setX(Float x) {

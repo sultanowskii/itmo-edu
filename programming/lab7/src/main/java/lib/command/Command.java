@@ -3,6 +3,7 @@ package lib.command;
 import lib.command.exception.InvalidCommandArgumentException;
 import lib.form.validation.ValidationException;
 import server.runtime.Context;
+import server.schema.User;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,6 +43,10 @@ public abstract class Command {
         return false;
     }
 
+    public boolean loginRequired() {
+        return true;
+    }
+
     /**
      * Get additional object (multiline argument) from user input
      * @return The resulting object.
@@ -59,7 +64,7 @@ public abstract class Command {
      * @throws ValidationException If user's input is invalid
      * @throws IOException On internal IO errors (usually related to files)
      */
-    public abstract void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) throws InvalidCommandArgumentException, ValidationException, IOException;
+    public abstract void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) throws InvalidCommandArgumentException, ValidationException, IOException;
 
     public String getName() {
         return this.name;

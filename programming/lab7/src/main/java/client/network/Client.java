@@ -1,5 +1,6 @@
 package client.network;
 
+import client.runtime.ClientContext;
 import lib.network.ClientRequest;
 import lib.network.Converter;
 import lib.serialization.Serializator;
@@ -14,6 +15,7 @@ public class Client {
     private final DatagramSocket socket;
     private final String hostname;
     private final int port;
+    private ClientContext clientContext;
 
     public Client(String hostname, int port) throws UnknownHostException, SocketException {
         this.hostname = hostname;
@@ -26,8 +28,12 @@ public class Client {
         this.socket.connect(sockaddr);
     }
 
+    public void setClientContext(ClientContext clientContext) {
+        this.clientContext = clientContext;
+    }
+
     public void sendRequest(String commandName, String[] arguments, Serializable additionalObject) throws IOException {
-        ClientRequest request = new ClientRequest(commandName, arguments, additionalObject);
+        ClientRequest request = new ClientRequest(this.clientContext.getCredentials(), commandName, arguments, additionalObject);
         ByteBuffer requestBuffer;
         requestBuffer = Serializator.objectToBuffer(request);
 

@@ -2,6 +2,7 @@ package client;
 
 import client.command.CommandExecutor;
 import client.command.ExecuteScriptCommand;
+import client.command.SigninCommand;
 import client.runtime.ClientContext;
 import lib.network.Config;
 import client.command.ExitClientCommand;
@@ -35,6 +36,7 @@ public class App
         cmdManager.addCommand(new RemoveAllByLocationCommand());
         cmdManager.addCommand(new CountGreaterThanLocationCommand());
         cmdManager.addCommand(new PrintFieldDescendingNationalityCommand());
+        cmdManager.addCommand(new SignupCommand());
         cmdManager.addCommand(new DoNothingCommand());
     }
 
@@ -75,7 +77,10 @@ public class App
 
             ClientContext clientContext = new ClientContext(commandExecutor);
 
+            client.setClientContext(clientContext);
+
             cmdManager.addCommand(new ExecuteScriptCommand(clientContext));
+            cmdManager.addCommand(new SigninCommand(clientContext));
 
             CLI cli = new CLI(scanner, printWriter, clientContext);
             cli.loop();

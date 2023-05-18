@@ -6,6 +6,7 @@ import server.runtime.Context;
 import server.manager.PersonManager;
 import lib.schema.Location;
 import lib.schema.Person;
+import server.schema.User;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -31,7 +32,7 @@ public class CountGreaterThanLocationCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context) {
+    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personManager = context.getPersonManager();
 
         Location specifiedLocation = (Location) objectArgument;
