@@ -28,21 +28,20 @@
 
 Отчёт по работе должен содержать:
 
-- [ ] Текст задания.
+- [x] Текст задания.
 - [ ] Диаграмма классов разработанной программы.
-- [ ] Исходный код программы.
-- [ ] Выводы по работе.
+- [x] Исходный код программы.
+- [x] Выводы по работе.
 
 Вопросы к защите лабораторной работы:
 
-    Многопоточность. Класс Thread, интерфейс Runnable. Модификатор synchronized.
-    Методы wait(), notify() класса Object, интерфейсы Lock и Condition.
-    Классы-сихронизаторы из пакета java.util.concurrent.
-    Модификатор volatile. Атомарные типы данных и операции.
-    Коллекции из пакета java.util.concurrent.
-    Интерфейсы Executor, ExecutorService, Callable, Future
-    Пулы потоков
-    JDBC. Порядок взаимодействия с базой данных. Класс DriverManager. Интерфейс Connection
-    Интерфейсы Statement, PreparedStatement, ResultSet, RowSet
-    Шаблоны проектирования.
-
+- Многопоточность. Класс Thread, интерфейс Runnable. Модификатор synchronized.
+- Методы wait(), notify() класса Object, интерфейсы Lock и Condition.
+- Классы-сихронизаторы из пакета java.util.concurrent.
+- Модификатор volatile. Атомарные типы данных и операции.
+- Коллекции из пакета java.util.concurrent.
+- Интерфейсы Executor, ExecutorService, Callable, Future
+- Пулы потоков
+- JDBC. Порядок взаимодействия с базой данных. Класс DriverManager. Интерфейс Connection
+- Интерфейсы Statement, PreparedStatement, ResultSet, RowSet
+- Шаблоны проектирования.
