@@ -20,7 +20,7 @@ public class ShowCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personStorage = context.getPersonManager();
         HashSet<Person> persons = personStorage.getStorage();
 
@@ -31,6 +31,8 @@ public class ShowCommand extends Command {
         for (Person person : persons) {
             printWriter.println(personForm.getStringifiedValueFromObject(person, 0, messageBundle));
         }
+
+        return true;
     }
 
     @Override

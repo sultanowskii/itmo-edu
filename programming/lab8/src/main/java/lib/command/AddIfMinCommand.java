@@ -29,7 +29,7 @@ public class AddIfMinCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personManager = context.getPersonManager();
         Person newPerson = (Person) objectArgument;
 
@@ -37,7 +37,7 @@ public class AddIfMinCommand extends Command {
 
         if (!personManager.isPassportIDavailable(newPerson.getPassportID())) {
             printWriter.println("Specified passportID is already occupied.");
-            return;
+            return false;
         }
 
         Person minPerson;
@@ -55,16 +55,18 @@ public class AddIfMinCommand extends Command {
                 addedPersonID = context.getDB().addPerson(user, newPerson);
             } catch (SQLException e) {
                 printWriter.println("DB error: " + e.getMessage());
-                return;
+                return false;
             }
             if (addedPersonID != 0) {
                 newPerson.setID(addedPersonID);
+                newPerson.setOwnerID(user.getID());
                 personManager.add(newPerson);
                 addedElementCounter++;
             }
         }
 
         printWriter.println("Added " + addedElementCounter + " element(s)");
+        return true;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class CountGreaterThanLocationCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personManager = context.getPersonManager();
 
         Location specifiedLocation = (Location) objectArgument;
@@ -50,6 +50,7 @@ public class CountGreaterThanLocationCommand extends Command {
         );
 
         printWriter.println(elementWithGreaterLocationCounter);
+        return true;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package client.network;
 
 import client.runtime.ClientContext;
+import lib.auth.Credentials;
+import lib.command.parse.CommandResult;
 import lib.network.ClientRequest;
 import lib.network.Converter;
 import lib.serialization.Serializator;
@@ -34,7 +36,13 @@ public class Client {
     }
 
     public void sendRequest(String commandName, String[] arguments, Serializable additionalObject) throws IOException {
-        ClientRequest request = new ClientRequest(this.clientContext.getCredentials(), commandName, arguments, additionalObject);
+        ClientRequest request = new ClientRequest(
+            this.clientContext.getCredentialsManager().getLogin(),
+            this.clientContext.getCredentialsManager().getPassword(),
+            commandName,
+            arguments,
+            additionalObject
+        );
         ByteBuffer requestBuffer;
         requestBuffer = Serializator.objectToBuffer(request);
 
@@ -47,7 +55,7 @@ public class Client {
         this.socket.send(packet);
     }
 
-    public String getResponse() throws IOException, ClassNotFoundException {
+    public CommandResult getResponse() throws IOException, ClassNotFoundException {
         var rawResponse = new byte[BUFFER_SIZE];
 
         DatagramPacket responsePacket = new DatagramPacket(rawResponse, BUFFER_SIZE);
@@ -66,10 +74,10 @@ public class Client {
         var object = Serializator.bytesToObject(responsePacket.getData(), 4);
         if (object instanceof PersonManager pm) {
             clientContext.setPersonManager(pm);
-            return "";
+            return new CommandResult("", true);
         }
 
-        return (String)object;
+        return (CommandResult)object;
     }
 }
 

@@ -34,7 +34,7 @@ public class ConfigReader {
     public Config read() throws NoSuchFieldException, IllegalAccessException {
         org.jdom2.Document document;
 
-        var messageBundle = context.getMessageBundle();
+        var messageBundle = context.getLocalizationManager().getMessageBundle();
 
         try {
             document = JdomDocumentCreator.createJDOMDocumentwithDOMParser(this.xmlScanner);

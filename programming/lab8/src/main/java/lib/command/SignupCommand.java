@@ -36,13 +36,13 @@ public class SignupCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         Credentials credentials = (Credentials) objectArgument;
         var messageBundle = context.getMessageBundle();
 
         if (credentials.getLogin().isEmpty() || credentials.getPassword().isEmpty()) {
             printWriter.println(messageBundle.getString("error.signin"));
-            return;
+            return false;
         }
 
         var login = credentials.getLogin();
@@ -53,17 +53,18 @@ public class SignupCommand extends Command {
         try {
             if (!db.loginIsAvailable(login)) {
                 printWriter.println(messageBundle.getString("error.loginOccupied"));
-                return;
+                return false;
             }
             User addedUser = db.addUser(login, hashedPassword);
             if (addedUser == null) {
                 printWriter.println(messageBundle.getString("error.cantRegisterUser"));
-                return;
+                return false;
             }
         } catch (SQLException e) {
             printWriter.println(messageBundle.getString("error.db") + ": " + e.getMessage());
-            return;
+            return false;
         }
+        return true;
     }
 
     @Override

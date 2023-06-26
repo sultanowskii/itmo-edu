@@ -38,6 +38,22 @@ public class Person implements Comparable<Person>, Serializable {
         return this.coordinates;
     }
 
+    public float getCoordinatesX() {
+        var coordinates = this.getCoordinates();
+        if (coordinates == null) {
+            return 0f;
+        }
+        return coordinates.getX();
+    }
+
+    public int getCoordinatesY() {
+        var coordinates = this.getCoordinates();
+        if (coordinates == null) {
+            return 0;
+        }
+        return coordinates.getY();
+    }
+
     public ZonedDateTime getCreationDate() {
         return this.creationDate;
     }
@@ -100,6 +116,30 @@ public class Person implements Comparable<Person>, Serializable {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public String getLocationName() {
+        var location = this.getLocation();
+        if (location == null) {
+            return "";
+        }
+        return location.getName();
+    }
+
+    public double getLocationX() {
+        var location = this.getLocation();
+        if (location == null) {
+            return 0d;
+        }
+        return location.getX();
+    }
+
+    public int getLocationY() {
+        var location = this.getLocation();
+        if (location == null) {
+            return 0;
+        }
+        return location.getY();
     }
 
     @Override

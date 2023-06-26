@@ -28,7 +28,7 @@ public class RemoveByIDCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) throws InvalidCommandArgumentException, ValidationException {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) throws InvalidCommandArgumentException, ValidationException {
         this.validateArguments(args);
 
         IntegerField idSerializer = new IntegerField("id", printWriter);
@@ -53,7 +53,7 @@ public class RemoveByIDCommand extends Command {
                 deleted = context.getDB().deletePersonByID(user, idToRemove);
             } catch (SQLException e) {
                 printWriter.println("DB error: " + e.getMessage());
-                return;
+                return false;
             }
             if (deleted) {
                 personManager.removeByID(idToRemove);
@@ -61,7 +61,9 @@ public class RemoveByIDCommand extends Command {
             }
         } catch (NoSuchElementException e) {
             printWriter.println("Element with id=" + idToRemove + " not found.");
+            return false;
         }
+        return true;
     }
 
     @Override

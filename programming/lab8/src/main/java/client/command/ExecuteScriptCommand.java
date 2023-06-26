@@ -28,7 +28,7 @@ public class ExecuteScriptCommand extends Command {
     }
 
     @Override
-    public void exec(
+    public boolean exec(
         PrintWriter printWriter,
         String[] args,
         Serializable additionalObject,
@@ -40,7 +40,7 @@ public class ExecuteScriptCommand extends Command {
         }
 
         var commandExecutor = clientContext.getCommandExecutor();
-        var messageBundle = context.getMessageBundle();
+        var messageBundle = clientContext.getLocalizationManager().getMessageBundle();
 
         for (String scriptFilename : args) {
             Scanner scriptFileScanner;
@@ -78,6 +78,8 @@ public class ExecuteScriptCommand extends Command {
             scriptFileScanner.close();
             this.clientContext.popNestedScriptName();
         }
+
+        return true;
     }
 
     @Override

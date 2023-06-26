@@ -18,13 +18,14 @@ public class ClearCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         LinkedHashSet<Person> persons = context.getPersonManager().getStorage();
 
         try {
             context.getDB().deleteAllPersons(user);
         } catch (SQLException e) {
             printWriter.println("DB error: " + e.getMessage());
+            return false;
         }
 
         int removedElementCounter = persons.size();
@@ -32,6 +33,7 @@ public class ClearCommand extends Command {
         removedElementCounter = removedElementCounter - persons.size();
 
         printWriter.println("Removed " + removedElementCounter + " element(s).");
+        return true;
     }
 
     @Override

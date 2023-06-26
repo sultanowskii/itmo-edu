@@ -59,6 +59,36 @@ public class Database {
         return null;
     }
 
+    public int getUserIDByLogin(String login) throws SQLException {
+        lock.lock();
+        Connection connection;
+        try {
+            connection = dataSource.getConnection();
+
+            var statement = connection.prepareStatement(
+                    "SELECT id FROM users WHERE login = ?"
+            );
+            statement.setString(1, login);
+
+            if (!statement.execute()) {
+                throw new SQLException("Can't fetch users. Try again later.");
+            }
+
+            ResultSet resultSet = statement.getResultSet();
+
+            if (!resultSet.next()) {
+                throw new SQLException("Can't fetch users. Try again later.");
+            }
+
+            return resultSet.getInt("id");
+        } catch (SQLException e) {
+            throw new SQLException("Can't get user. Reason: " + e.getMessage());
+        } finally {
+            lock.unlock();
+        }
+
+    }
+
     public boolean loginIsAvailable(String login) throws SQLException {
         lock.lock();
         Connection connection;
@@ -331,6 +361,7 @@ public class Database {
             var statement = connection.prepareStatement(
                 "SELECT " +
                 "person.id id, " +
+                "person.owner_id owner_id, " +
                 "person.name name, " +
                 "person.creation_date creation_date, " +
                 "person.height height, " +
@@ -369,6 +400,7 @@ public class Database {
 
                 Person person = new Person();
                 person.setID(resultSet.getInt("id"));
+                person.setOwnerID(resultSet.getInt("owner_id"));
                 person.setName(resultSet.getString("name"));
                 person.setCreationDate(ZonedDateTimeConverter.fromDBTimestamp(resultSet.getTimestamp("creation_date")));
                 person.setHeight(resultSet.getLong("height"));

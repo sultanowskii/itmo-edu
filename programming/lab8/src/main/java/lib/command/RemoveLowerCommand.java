@@ -32,7 +32,7 @@ public class RemoveLowerCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personManager = context.getPersonManager();
 
         Person specifiedPerson = (Person) objectArgument;
@@ -52,7 +52,7 @@ public class RemoveLowerCommand extends Command {
                 deleted = context.getDB().deletePersonByID(user, idToRemove);
             } catch (SQLException e) {
                 printWriter.println("DB error: " + e.getMessage());
-                return;
+                return false;
             }
             if (deleted) {
                 personManager.removeByID(idToRemove);
@@ -61,6 +61,7 @@ public class RemoveLowerCommand extends Command {
         }
 
         printWriter.println("Removed " + removedElementCount + " element(s).");
+        return true;
     }
 
     @Override

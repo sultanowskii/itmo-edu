@@ -14,7 +14,7 @@ public class Config {
 
     public static Config readFromfile(String configFilename, PrintWriter printWriter, ClientContext context) {
         ConfigReader configReader;
-        var messageBundle = context.getMessageBundle();
+        var messageBundle = context.getLocalizationManager().getMessageBundle();
 
         File configFile = new File(configFilename);
         if (configFile.exists() && !configFile.canRead()) {

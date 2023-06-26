@@ -41,7 +41,7 @@ public class UpdateCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         this.validateArguments(args);
 
         var messageBundle = context.getMessageBundle();
@@ -65,11 +65,12 @@ public class UpdateCommand extends Command {
             updated = context.getDB().updatePerson(user, idToUpdate, updatedPerson);
         } catch (SQLException e) {
             printWriter.println("DB error: " + e.getMessage());
-            return;
+            return false;
         }
 
         if (!updated) {
             printWriter.println("Didn't update person for unknown reason. Try again later.");
+            return false;
         }
 
         PersonManager personManager = context.getPersonManager();
@@ -79,6 +80,7 @@ public class UpdateCommand extends Command {
             personManager.removeByID(idToUpdate);
         } catch (NoSuchElementException e) {
             printWriter.println("Element with id=" + idToUpdate + " not found.");
+            return false;
         }
 
         // and add a new one with the same id
@@ -86,6 +88,7 @@ public class UpdateCommand extends Command {
         personManager.add(updatedPerson);
 
         printWriter.println("Element updated.");
+        return true;
     }
 
     @Override

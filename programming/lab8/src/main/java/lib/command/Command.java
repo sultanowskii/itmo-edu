@@ -65,7 +65,7 @@ public abstract class Command {
      * @throws ValidationException If user's input is invalid
      * @throws IOException On internal IO errors (usually related to files)
      */
-    public abstract void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) throws InvalidCommandArgumentException, ValidationException, IOException;
+    public abstract boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) throws InvalidCommandArgumentException, ValidationException, IOException;
 
     public String getName() {
         return this.name;

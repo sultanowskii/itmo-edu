@@ -29,7 +29,7 @@ public class AddCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personManager = context.getPersonManager();
 
         var messageBundle = context.getMessageBundle();
@@ -38,7 +38,7 @@ public class AddCommand extends Command {
 
         if (!personManager.isPassportIDavailable(newPerson.getPassportID())) {
             printWriter.println(messageBundle.getString("error.passportIDOccupied"));
-            return;
+            return false;
         }
 
         int addedPersonID;
@@ -46,13 +46,15 @@ public class AddCommand extends Command {
             addedPersonID = context.getDB().addPerson(user, newPerson);
         } catch (SQLException e) {
             printWriter.println(messageBundle.getString("error.db") + ": " + e.getMessage());
-            return;
+            return false;
         }
 
         if (addedPersonID != 0) {
             newPerson.setID(addedPersonID);
+            newPerson.setOwnerID(user.getID());
             personManager.add(newPerson);
         }
+        return true;
     }
 
     @Override

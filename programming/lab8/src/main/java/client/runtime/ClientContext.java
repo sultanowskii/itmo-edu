@@ -1,35 +1,46 @@
 package client.runtime;
 
 import client.command.CommandExecutor;
+import client.gui.util.GlobalRedrawer;
+import client.gui.worker.CommandQueueExecutor;
 import lib.auth.Credentials;
-import lib.command.manager.CommandManager;
+import lib.auth.CredentialsManager;
+import lib.lang.LocalizationManager;
 import server.manager.PersonManager;
 import server.runtime.exceptions.RecursiveCallException;
 
+import javax.swing.*;
 import java.util.EmptyStackException;
-import java.util.ResourceBundle;
+import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class ClientContext {
-    private CommandExecutor commandExecutor;
+    private List<BiConsumer<PersonManager, PersonManager>> personManagerUpdateListeners;
+    private CommandExecutor commandExecutor; // both
 
-    private Stack<String> scriptNestedStack = new Stack<>();
-    private Credentials credentials;
-    private PersonManager personManager;
-    private ResourceBundle messageBundle;
+    private Stack<String> scriptNestedStack = new Stack<>(); // both
+    private CredentialsManager credentialsManager; // both
+    private PersonManager personManager; // both
+    private LocalizationManager localizationManager; // both
+    private CommandQueueExecutor commandQueueExecutor; // GUI only
+    private GlobalRedrawer globalRedrawer; // GUI only
+    private int userID;
 
-    public ClientContext(CommandExecutor commandExecutor, Credentials credentials) {
+    public ClientContext(CommandExecutor commandExecutor, CredentialsManager credentialsManager) {
         this.commandExecutor = commandExecutor;
-        this.credentials = credentials;
+        this.credentialsManager = credentialsManager;
+        this.personManagerUpdateListeners = new CopyOnWriteArrayList<>();
     }
 
     public ClientContext(CommandExecutor commandExecutor) {
-        this();
-        this.commandExecutor = commandExecutor;
+        this(commandExecutor, new CredentialsManager(new Credentials("", "")));
     }
 
     public ClientContext() {
-        this.credentials = new Credentials("", "");
+        this(null);
     }
 
     public PersonManager getPersonManager() {
@@ -40,12 +51,20 @@ public class ClientContext {
         return this.commandExecutor;
     }
 
-    public Credentials getCredentials() {
-        return this.credentials;
+    public CredentialsManager getCredentialsManager() {
+        return this.credentialsManager;
     }
 
-    public ResourceBundle getMessageBundle() {
-        return this.messageBundle;
+    public LocalizationManager getLocalizationManager() {
+        return this.localizationManager;
+    }
+
+    public CommandQueueExecutor getCommandQueueExecutor() {
+        return this.commandQueueExecutor;
+    }
+
+    public int getUserID() {
+        return this.userID;
     }
 
     public void pushNestedScriptName(String scriptName) throws RecursiveCallException {
@@ -56,6 +75,7 @@ public class ClientContext {
     }
 
     public void setPersonManager(PersonManager personManager) {
+        this.notifyPersonManagerUpdateListeners(this.personManager, personManager);
         this.personManager = personManager;
     }
 
@@ -63,15 +83,41 @@ public class ClientContext {
         this.commandExecutor = commandExecutor;
     }
 
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
+    public void setCredentialsManager(CredentialsManager credentialsManager) {
+        this.credentialsManager = credentialsManager;
     }
 
     public String popNestedScriptName() throws EmptyStackException {
         return this.scriptNestedStack.pop();
     }
 
-    public void setMessageBundle(ResourceBundle messageBundle) {
-        this.messageBundle = messageBundle;
+    public void setLocalizationManager(LocalizationManager localizationManager) {
+        this.localizationManager = localizationManager;
+    }
+
+    public void setCommandQueueExecutor(CommandQueueExecutor commandQueueExecutor) {
+        this.commandQueueExecutor = commandQueueExecutor;
+    }
+
+    public GlobalRedrawer getGlobalRedrawer() {
+        return globalRedrawer;
+    }
+
+    public void setGlobalRedrawer(GlobalRedrawer globalRedrawer) {
+        this.globalRedrawer = globalRedrawer;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public void addPersonManagerUpdateListener(BiConsumer<PersonManager, PersonManager> listener) {
+        this.personManagerUpdateListeners.add(listener);
+    }
+
+    public void notifyPersonManagerUpdateListeners(PersonManager oldPersonManager, PersonManager newPersonManager) {
+        for (var listener : personManagerUpdateListeners) {
+            listener.accept(oldPersonManager, newPersonManager);
+        }
     }
 }

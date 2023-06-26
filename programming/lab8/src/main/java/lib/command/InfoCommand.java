@@ -16,12 +16,14 @@ public class InfoCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personStorage = context.getPersonManager();
 
         printWriter.println("Person storage.");
         printWriter.println("Init date: " + personStorage.getInitDateTime());
         printWriter.println("Number of objects in collection: " + personStorage.getStorage().size());
+
+        return true;
     }
 
     @Override

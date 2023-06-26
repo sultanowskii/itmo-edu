@@ -1,14 +1,18 @@
 package client;
 
+import client.cli.CLI;
 import client.command.CommandExecutor;
 import client.command.ExecuteScriptCommand;
 import client.command.SigninCommand;
+import client.gui.GUI;
+import client.gui.worker.CommandQueueExecutor;
 import client.runtime.ClientContext;
 import client.runtime.Config;
 import client.command.ExitClientCommand;
 import client.network.Client;
 import lib.command.*;
 import lib.command.manager.CommandManager;
+import lib.lang.LocalizationManager;
 import lib.manager.ProgramStateManager;
 import server.manager.PersonManager;
 
@@ -40,6 +44,7 @@ public class App
         cmdManager.addCommand(new SignupCommand());
         cmdManager.addCommand(new DoNothingCommand());
         cmdManager.addCommand(new RawCollectionCommand());
+        cmdManager.addCommand(new GetUserIDCommand());
     }
 
     public static void main( String[] args ) {
@@ -47,13 +52,21 @@ public class App
             Scanner scanner = new Scanner(System.in);
             PrintWriter printWriter = new PrintWriter(System.out);
         ) {
+            boolean guiMode = false;
+
+            for (var arg : args) {
+                if (arg.equals("--gui")) {
+                    guiMode = true;
+                    break;
+                }
+            }
+
             String configFilename = System.getenv("CLIENT_CONFIG");
 
             ClientContext clientContext = new ClientContext();
 
-            var locale = Locale.US;
-            ResourceBundle messageBundle = ResourceBundle.getBundle("MessageBundle", locale);
-            clientContext.setMessageBundle(messageBundle);
+            LocalizationManager localizationManager = new LocalizationManager();
+            clientContext.setLocalizationManager(localizationManager);
 
             if (configFilename == null) {
                 configFilename = "config.xml";
@@ -70,7 +83,7 @@ public class App
             try {
                 client = new Client(config.hostname, config.port);
             } catch (UnknownHostException | SocketException e) {
-                printWriter.println(messageBundle.getString("error.cantReachServer") + ": " + e.getMessage());
+                printWriter.println(localizationManager.getMessageBundle().getString("error.cantReachServer") + ": " + e.getMessage());
                 return;
             }
 
@@ -82,6 +95,9 @@ public class App
             CommandExecutor commandExecutor = new CommandExecutor(client, cmdManager, printWriter);
             clientContext.setCommandExecutor(commandExecutor);
 
+            CommandQueueExecutor commandQueueExecutor = new CommandQueueExecutor(commandExecutor, clientContext);
+            clientContext.setCommandQueueExecutor(commandQueueExecutor);
+
             PersonManager personManager = new PersonManager();
             personManager.setInitDateTime(ZonedDateTime.now());
             clientContext.setPersonManager(personManager);
@@ -91,8 +107,12 @@ public class App
             cmdManager.addCommand(new ExecuteScriptCommand(clientContext));
             cmdManager.addCommand(new SigninCommand(clientContext));
 
-            CLI cli = new CLI(scanner, printWriter, clientContext);
-            cli.loop();
+            if (guiMode) {
+                GUI gui = new GUI(clientContext);
+            } else {
+                CLI cli = new CLI(scanner, printWriter, clientContext);
+                cli.loop();
+            }
         } catch (java.util.NoSuchElementException ignored) {}
     }
 }

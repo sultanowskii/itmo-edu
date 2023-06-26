@@ -17,6 +17,10 @@ public class ClientRequest implements Serializable {
         this.objectArgument = objectArgument;
     }
 
+    public ClientRequest(String login, String password, String commandName, String[] arguments, Serializable objectArgument) {
+        this(new Credentials(login, password), commandName, arguments, objectArgument);
+    }
+
     public Credentials getCredentials() {
         return this.credentials;
     }

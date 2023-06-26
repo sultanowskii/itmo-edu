@@ -16,7 +16,7 @@ public class PrintFieldDescendingNationalityCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personManager = context.getPersonManager();
 
         personManager.getStorage().stream().sorted(Collections.reverseOrder()).forEach(
@@ -25,6 +25,8 @@ public class PrintFieldDescendingNationalityCommand extends Command {
                 printWriter.println(p.getNationality());
             }
         );
+
+        return true;
     }
 
     @Override

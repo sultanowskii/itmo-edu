@@ -4,6 +4,7 @@ import client.network.Client;
 import lib.command.exception.InvalidCommandArgumentException;
 import lib.command.manager.CommandManager;
 import lib.command.parse.CommandInputInfo;
+import lib.command.parse.CommandResult;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,7 +44,28 @@ public class CommandExecutor {
             client.sendRequest(commandName, arguments, additionalObject);
             var result = client.getResponse();
 
-            printWriter.print(result);
+            printWriter.print(result.getMessage());
+        }
+    }
+
+    public CommandResult execCommandWithAllArgumentsProvided(
+        CommandInputInfo commandInputInfo,
+        ResourceBundle messageBundle
+    ) throws NoSuchElementException, InvalidCommandArgumentException, IOException, ClassNotFoundException {
+        var commandName = commandInputInfo.getCommandName();
+        var arguments = commandInputInfo.getArgs();
+        var additionalObject = commandInputInfo.getAdditinalObject();
+
+        var command = cmdManager.getCommandByName(commandName, messageBundle);
+
+        command.validateArguments(arguments);
+
+        if (command.isClientSide()) {
+            var success = command.exec(this.printWriter, arguments, additionalObject, null, null);
+            return new CommandResult(success);
+        } else {
+            client.sendRequest(commandName, arguments, additionalObject);
+            return client.getResponse();
         }
     }
 }

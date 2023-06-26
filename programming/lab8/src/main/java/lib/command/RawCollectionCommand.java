@@ -13,8 +13,13 @@ public class RawCollectionCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean isClientSide() {
+        return false;
+    }
 
+    @Override
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+        return true;
     }
 
     @Override

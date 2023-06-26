@@ -15,7 +15,12 @@ public class HelpCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean loginRequired() {
+        return false;
+    }
+
+    @Override
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         CommandManager commandManager = context.getCommandManager();
         List<Command> commands = commandManager.getCommands();
 
@@ -26,6 +31,7 @@ public class HelpCommand extends Command {
             String paddedCommandName = String.format("%-" + commandNameSpaceSize + "s", command.getName());
             printWriter.println(paddedCommandName + " " + command.getHelp());
         }
+        return true;
     }
 
     @Override

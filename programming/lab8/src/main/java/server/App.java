@@ -40,6 +40,7 @@ public class App {
         cmdManager.addCommand(new DoNothingCommand());
         cmdManager.addCommand(new SignupCommand());
         cmdManager.addCommand(new RawCollectionCommand());
+        cmdManager.addCommand(new GetUserIDCommand());
     }
 
     public static void addServerCommands(CommandManager commandManager) {

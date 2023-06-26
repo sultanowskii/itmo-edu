@@ -5,6 +5,7 @@ import lib.auth.Hasher;
 import lib.command.Command;
 import lib.command.RawCollectionCommand;
 import lib.command.exception.InvalidCommandArgumentException;
+import lib.command.parse.CommandResult;
 import lib.form.validation.ValidationException;
 import lib.manager.ProgramStateManager;
 import lib.network.ByteBufferHeadacheResolver;
@@ -225,6 +226,7 @@ public class Server implements Runnable {
 
         try {
             Command command = this.context.getCommandManager().getCommandByName(request.getCommandName(), messageBundle);
+            System.out.println(command.getName());
 
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
             PrintWriter resultPrintWriter = new PrintWriter(byteStream, true);
@@ -236,15 +238,18 @@ public class Server implements Runnable {
 
             boolean badScenario = (command.loginRequired() && user == null);
 
+            boolean success = false;
+
             if (!badScenario) {
-                command.exec(resultPrintWriter, request.getArguments(), request.getObjectArgument(), context, user);
+                success = command.exec(resultPrintWriter, request.getArguments(), request.getObjectArgument(), context, user);
             }
 
             ByteBuffer rawResult;
             if (command instanceof RawCollectionCommand) {
                 rawResult = Serializator.objectToBuffer(context.getPersonManager());
             } else {
-                rawResult = Serializator.objectToBuffer(byteStream.toString());
+                var commandResult = new CommandResult(byteStream.toString(), success);
+                rawResult = Serializator.objectToBuffer(commandResult);
             }
             rawResult.flip();
 

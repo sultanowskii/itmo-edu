@@ -16,10 +16,11 @@ public class ExitServerCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) throws IOException {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) throws IOException {
         ProgramStateManager programStateManager = ProgramStateManager.getInstance();
         printWriter.println("Exiting...");
         programStateManager.setIsRunning(false);
+        return true;
     }
 
     @Override

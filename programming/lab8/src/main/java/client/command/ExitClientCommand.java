@@ -27,10 +27,11 @@ public class ExitClientCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         ProgramStateManager programStateManager = ProgramStateManager.getInstance();
         printWriter.println("Exiting...");
         programStateManager.setIsRunning(false);
+        return true;
     }
 
     @Override

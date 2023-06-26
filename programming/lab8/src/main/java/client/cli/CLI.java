@@ -1,21 +1,15 @@
-package client;
+package client.cli;
 
 import client.command.CommandExecutor;
-import client.network.Client;
 import client.runtime.ClientContext;
-import lib.command.Command;
 import lib.command.exception.InvalidCommandArgumentException;
-import lib.command.manager.CommandManager;
 import lib.command.parse.*;
 import lib.form.validation.ValidationException;
 import lib.manager.ProgramStateManager;
-import server.runtime.Context;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class CLI {
@@ -38,7 +32,7 @@ public class CLI {
     }
 
     public void loop() {
-        var messageBundle = context.getMessageBundle();
+        var messageBundle = context.getLocalizationManager().getMessageBundle();
         while (programStateManager.getIsRunning()) {
             CommandInputInfo commandInputInfo;
 

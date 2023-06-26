@@ -10,10 +10,7 @@ import server.schema.User;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RemoveGreaterCommand extends Command {
@@ -33,7 +30,7 @@ public class RemoveGreaterCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
         PersonManager personManager = context.getPersonManager();
 
         Person specifiedPerson = (Person) objectArgument;
@@ -45,8 +42,7 @@ public class RemoveGreaterCommand extends Command {
         var idsToRemove = persons
                 .stream()
                 .filter(person -> person.compareTo(specifiedPerson) > 0)
-                .map(Person::getID)
-                .collect(Collectors.toList());
+                .map(Person::getID).toList();
 
         for (int idToRemove : idsToRemove) {
             boolean deleted;
@@ -54,15 +50,18 @@ public class RemoveGreaterCommand extends Command {
                 deleted = context.getDB().deletePersonByID(user, idToRemove);
             } catch (SQLException e) {
                 printWriter.println("DB error: " + e.getMessage());
-                return;
+                return false;
             }
             if (deleted) {
-                personManager.removeByID(idToRemove);
-                removedElementCount++;
+                try {
+                    personManager.removeByID(idToRemove);
+                    removedElementCount++;
+                } catch (NoSuchElementException ignored) {}
             }
         }
 
         printWriter.println("Removed " + removedElementCount + " element(s).");
+        return true;
     }
 
     @Override

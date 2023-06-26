@@ -38,8 +38,9 @@ public class SigninCommand extends Command {
     }
 
     @Override
-    public void exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
-        this.clientContext.setCredentials((Credentials) objectArgument);
+    public boolean exec(PrintWriter printWriter, String[] args, Serializable objectArgument, Context context, User user) {
+        this.clientContext.getCredentialsManager().setCredentials((Credentials) objectArgument);
+        return true;
     }
 
     @Override
