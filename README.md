@@ -6,10 +6,14 @@ sem #1:
 - [informatics](/informatics/)
 - [discrete maths](/discrete-maths/)
 - [FoPA aka OPD](/opd/)
-- [java programming (kys)](/programming/)
+- [programming (java (kys))](/programming/)
 
 sem #2:
 - [discrete maths](/discrete-maths/)
 - [FoPA aka OPD](/opd/)
-- [java programming (kys)](/programming/)
+- [programming (java (kys))](/programming/)
 - [databases](/db/)
+
+sem #3:
+- [web](/web/)
+- [programming-languages](/programming-languages/)

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+    <meta charset="UTF-8">
+    <title>ЛР1</title>
+    <link href="https://fonts.cdnfonts.com/css/luminari" rel="stylesheet">
+    <!-- Требование варианта: стили прямо в файле страницы. -->
+    <style>
+        /*
+            Про селекторы 
+            https://developer.mozilla.org/ru/docs/Web/CSS/CSS_selectors
+        */
+
+        /* Наследование: некототорые свойства (например, свойства шрифта) унаследуются дочерними элементами. */
+        header {
+            font-family: "Luminari", fantasy;
+            color: #030303;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 10px;
+            background-color: #f0f0f0;
+        }
+
+        /* Селектор элемента h1 */
+        h1 {
+            margin: 0px;
+        }
+
+        /* Селектор псевдоэлемента ::first-letter */
+        h1::first-letter {
+            color: green;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        /* Селектор атрибута [type="text"] */
+        input[type="text"], select {
+            padding: 5px;
+            margin: 5px;
+        }
+
+        /* Селектор псевдокласса :hover */
+        input[type="submit"]:hover {
+            color: white;
+            background-color:green;
+            border-color: darkgreen;
+        }
+
+        #results {
+            margin-top: 10px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .horizontal-container {
+            text-align: center;
+            display: flex;
+            flex-direction: row; /* Внутренние элементы будут расположены горизонтально */
+            justify-content: center; /* Центрирование по вертикали */
+            align-items: center; /* Центрирование по горизонтали */
+        }
+
+        .vertical-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column; /* Внутренние элементы будут расположены вертикально */
+            justify-content: center; /* Центрирование по вертикали */
+            align-items: center; /* Центрирование по горизонтали */
+        }
+
+        .form-element {
+            margin: 5px;
+            padding: 5px;
+        }
+
+        .border {
+            border: 1px solid black;
+        }
+
+        /* Селектор потомка: <img> - потомок .form-element */
+        /* https://html5css.ru/css/css_combinators.php */
+        .form-element img {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="info">
+            <div id="info-lab-name">
+                <h1>Лабораторная работа №1 (веб)</h1>
+            </div>
+            <div class="horizontal-container">
+                <div id="info-name" class="form-element">
+                    <span>Султанов Артур Радикович</span>
+                </div>
+                <div id="info-group" class="form-element">
+                    <span>P3213</span>
+                </div>
+                <div id="info-variant" class="form-element">
+                    <span>№2313</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="content">
+        <div id="form-container">
+            <form method="get" onsubmit="return validateAndSend()">
+                <div id="form" class="vertical-container">
+                    <!--
+                        Каскадность: комбинирование стилей из разных источников.
+                        Здесь - .form-element, .border 
+                    -->
+                    <div id="task-image" class="form-element border">
+                        <img src="img/task.png" />
+                    </div>
+
+                    <div class="horizontal-container">
+                        <div id="form-x" class="form-element border">
+                            <label for="x">Выберите координату X:</label>
+                            <select name="x" id="x" required>
+                                <option value="-5">-5</option>
+                                <option value="-4">-4</option>
+                                <option value="-3">-3</option>
+                                <option value="-2">-2</option>
+                                <option value="-1">-1</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+    
+                        <div id="form-y" class="form-element border">
+                            <label for="y">Введите координату Y:</label>
+                            <input type="text" name="y" id="y" required placeholder="[-5; 3]">
+                        </div>
+    
+                        <div id="form-r" class="form-element border">
+                            <label for="r">Выберите радиус R:</label>
+                            <select name="r" id="r" required>
+                                <option value="1">1</option>
+                                <option value="1.5">1.5</option>
+                                <option value="2">2</option>
+                                <option value="2.5">2.5</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="form-button" class="form-element">
+                        <input type="submit" value="Проверить">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div id="results">
+            <!-- Таблица результатов -->
+        </div>    
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
