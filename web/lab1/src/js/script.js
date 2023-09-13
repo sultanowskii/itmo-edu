@@ -1,3 +1,7 @@
+function timestampToLocalDatetime(timestamp) {
+    return new Date(timestamp * 1000).toLocaleString();
+}
+
 function createArrayFromRange(x, z, step = 1) {
     let result = [];
 
@@ -86,6 +90,17 @@ function validateForm() {
     return false;
 }
 
+function setResultTable(data) {
+    document.getElementById('results').innerHTML = data;
+
+    let timestampElements = document.getElementById('results').getElementsByClassName("timestamp");
+    
+    for (let item of timestampElements) {
+        let timestamp = parseInt(item.innerHTML);
+        item.innerHTML = timestampToLocalDatetime(timestamp);
+    }
+}
+
 function validateAndSend() {
     if (!validateForm()) {
         return false;
@@ -101,7 +116,7 @@ function validateAndSend() {
     )
     .then(response => response.text())
     .then(data => {
-        document.getElementById('results').innerHTML = data;
+        setResultTable(data);
     })
     .catch(error => {
         console.error('Ошибка при отправке данных на сервер: ', error);
@@ -110,3 +125,19 @@ function validateAndSend() {
     // Предотвращаем отправку формы через обычный HTTP-запрос
     return false;
 }
+
+window.onload = function() {
+    fetch(
+        'php/results.php',
+        {
+            method: 'GET'
+        },
+    )
+    .then(response => response.text())
+    .then(data => {
+        setResultTable(data);
+    })
+    .catch(error => {
+        console.error('Ошибка при отправке данных на сервер: ', error);
+    });
+};

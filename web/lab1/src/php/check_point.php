@@ -16,7 +16,7 @@ if (
     isset($_GET["r"]) &&
     is_numeric($_GET["x"]) &&
     is_numeric($_GET["y"]) &&
-    is_numeric($_GET["y"])
+    is_numeric($_GET["r"])
 ) {
     $x = $_GET["x"];
     $y = $_GET["y"];
@@ -30,7 +30,7 @@ if (
         "y" => $y,
         "r" => $r,
         "result" => $result_text,
-        "timestamp" => date("Y-m-d H:i:s"),
+        "timestamp" => time(),
         "execution_time" => microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"],
     ];
 } else {

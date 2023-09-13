@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 if (isset($_SESSION["results"]) && is_array($_SESSION["results"])) {
     echo "<table>";
     echo "
@@ -17,7 +19,7 @@ if (isset($_SESSION["results"]) && is_array($_SESSION["results"])) {
         echo "<td>" . $result["y"] . "</td>";
         echo "<td>" . $result["r"] . "</td>";
         echo "<td>" . $result["result"] . "</td>";
-        echo "<td>" . $result["timestamp"] . "</td>";
+        echo "<td class=\"timestamp\">" . $result["timestamp"] . "</td>";
         echo "<td>" . number_format($result["execution_time"], 5) . "</td>";
         echo "</tr>";
     }
