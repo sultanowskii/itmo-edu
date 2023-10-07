@@ -1,20 +1,22 @@
 # itmo-edu
 
-yet another ITMO SE labs/hws repo
+еще один репозиторий дз/лаб ВТ ИТМО (СППО)
 
-sem #1:
-- [informatics](/informatics/)
-- [discrete maths](/discrete-maths/)
-- [FoPA aka OPD](/opd/)
-- [programming (java (kys))](/programming/)
+некоторых предметов нет, так как они слишком индивидуальные от практика к практику, либо мне просто лень
 
-sem #2:
-- [discrete maths](/discrete-maths/)
-- [FoPA aka OPD](/opd/)
-- [programming (java (kys))](/programming/)
-- [databases](/db/)
+сем #1:
+- [дискретная математика](/discrete-maths/)
+- [ОПД](/opd/)
+- [программирование (java (kys))](/programming/)
+- [информатика](/informatics/)
 
-sem #3:
-- [web programming](/web/)
-- [programming languages (C & ASM)](/programming-languages/)
-- [physics (RUN)](/physics/)
+сем #2:
+- [дисрктеная математика](/discrete-maths/)
+- [ОПД](/opd/)
+- [программирование (java (kys))](/programming/)
+- [базы данных](/db/)
+
+сем #3:
+- [веб-программирование](/web/)
+- [языки программирования (C & ASM)](/programming-languages/)
+- [физика ()](/physics/)
