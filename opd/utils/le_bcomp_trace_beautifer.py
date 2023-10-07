@@ -5,7 +5,7 @@ This script is a convenient way to get rid of anal pain while formatting BCOMP t
 
 Simply run it, Ctrl+V BCOMP output, hit Enter, type 'END', and hit Enter again!
 
-Made by @sultanowskii to reduce the amount of sweat while doing 'OPD' labs.
+Made by @sultanowskii to reduce the amount of sweat while doing ОПД labs.
 """
 
 from argparse import ArgumentParser

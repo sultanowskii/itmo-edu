@@ -15,5 +15,6 @@ sem #2:
 - [databases](/db/)
 
 sem #3:
-- [web](/web/)
-- [programming-languages](/programming-languages/)
+- [web programming](/web/)
+- [programming languages (C & ASM)](/programming-languages/)
+- [physics (RUN)](/physics/)
