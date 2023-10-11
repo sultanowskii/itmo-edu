@@ -6,6 +6,7 @@
 .obsidian/
 .vscode/
 .idea/
+target/
 
 classes/
 __pycache__/

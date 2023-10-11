@@ -1,6 +1,0 @@
-util/AreaCheckEntry.class
-util/InputValidator.class
-servlet/ControllerServlet.class
-servlet/AreaCheckServlet.class
-servlet/HelloWorldServlet.class
-util/AreaChecker.class
