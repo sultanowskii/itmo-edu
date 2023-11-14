@@ -1,4 +1,4 @@
-from math import sqrt, log2
+from math import sqrt, log2, ceil
 
 import matplotlib.pyplot as plt
 
@@ -30,6 +30,14 @@ def read_input_data_from_file(filename: str) -> list[float]:
 def get_variational_series(raw_data: list[float]) -> VariationSeries:
     """Получить вариационный ряд."""
     return sorted(raw_data)
+
+
+def print_stat_distribution(data: VariationSeries) -> None:
+    """Вывести статистическое распределение."""
+    n = len(data)
+    print('  xi  | ni')
+    for x in data:
+        print(f'{x}'.ljust(6) + f'| {data.count(x) / n}')
 
 
 def get_min_value(data: VariationSeries) -> float:
@@ -84,14 +92,14 @@ def get_empirical_distibution_function(data: VariationSeries) -> PiecewiseFunc:
     """Получить эмпирическую функцию распределения."""
     result = []
     result.append(((None, data[0]), 0))
+    n = len(data)
 
-    # предполагая, что все значения уникальны
-    delta = 1 / len(data)
-    p = delta
+    p = data.count(data[0]) / n
 
     for i in range(len(data) - 1):
+        prob = data.count(data[i+1]) / n
         result.append(((data[i], data[i + 1]), p))
-        p = rounded(p + delta)
+        p = rounded(p + prob)
     
     result.append(((data[-1], None), 1))
 
@@ -155,10 +163,10 @@ def get_interval_info(data: VariationSeries) -> float:
     max_value = get_max_value(data)
     n = len(data)
 
-    interval_count = int(1 + log2(n))
+    interval_count = ceil(1 + log2(n))
 
     # Формула Стерджеса
-    h = rounded((max_value - min_value) / interval_count)
+    h = rounded((max_value - min_value) / (interval_count - 1))
 
     x_s = rounded(min_value - h / 2)
     
@@ -176,7 +184,7 @@ def get_hist_data(data: VariationSeries) -> PiecewiseFunc:
     interval_count, h, x_s = get_interval_info(data)
     n = len(data)
 
-    for i in range(interval_count + 1):
+    for i in range(interval_count):
         interval_start = rounded(x_s + i * h)
         interval_end = rounded(interval_start + h)
 
@@ -196,7 +204,7 @@ def print_inteval_stat_distribution(data: VariationSeries) -> None:
     interval_count, h, x_s = get_interval_info(data)
     n = len(data)
 
-    for i in range(interval_count + 1):
+    for i in range(interval_count):
         interval_start = rounded(x_s + i * h)
         interval_end = rounded(interval_start + h)
 
@@ -237,7 +245,7 @@ def get_frequency_polygon_data(data: VariationSeries)-> Dots:
     interval_count, h, x_s = get_interval_info(data)
     n = len(data)
 
-    for i in range(interval_count + 1):
+    for i in range(interval_count):
         interval_start = rounded(x_s + i * h)
         interval_end = rounded(interval_start + h)
         mid = (interval_start + interval_end) / 2
@@ -269,6 +277,13 @@ def draw_frequency_polygon(polyogn_data: Dots) -> None:
     print(f'Полигон частот сохранен в {POLYGON_FILENAME}')
 
 
+def get_fixed_dispersion(data):
+    disp = get_dispersion(data)
+    n = len(data)
+
+    return rounded(n / (n - 1) * disp)
+
+
 def main():
     input_filename = input(
         f'Введите имя файла с исходными данными (оставьте пустым для {DEFAULT_INPUT_FILENAME}): '
@@ -283,8 +298,15 @@ def main():
         print(f'Невозможно открыть файл "{input_filename}": {e}')
         return
 
+    print()
+
     data = get_variational_series(input_data)
     print('Вариационный ряд:', data)
+
+    print()
+
+    print('Статистическое распределение:')
+    print_stat_distribution(data)
 
     print()
 
@@ -305,6 +327,9 @@ def main():
     dispersion = get_dispersion(data)
     print('Дисперсия:', dispersion)
 
+    fixed_dispersion = get_fixed_dispersion(data)
+    print('Исправленная выборочная дисперсия:', fixed_dispersion)
+
     standard_deviation = get_standard_deviation(data)
     print('Среднеквадратичное отклонение:', standard_deviation)
 
@@ -314,6 +339,13 @@ def main():
     print('Эмпирическая функция распределения:')
     print_empirical_distibution_function(empirical_distibution_function_data)
     draw_empirical_distibution_function_diagram(empirical_distibution_function_data)
+
+    print()
+
+    interval_count, h, x_s = get_interval_info(data)
+    print('Кол-во интервалов:', interval_count)
+    print('Длина интервала:', h)
+    print('x_нач:', x_s)
 
     print()
 
