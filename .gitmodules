@@ -1,0 +1,3 @@
+[submodule "web/lab3"]
+	path = web/lab3
+	url = https://github.com/amphyxs/web-lab3
