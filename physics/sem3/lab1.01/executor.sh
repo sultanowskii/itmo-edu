@@ -7,7 +7,9 @@ then
 fi
 
 echo "Compiling..."
+
 gcc task.c -o task.elf
+
 echo "Compiled"
 
 N=50
@@ -20,7 +22,9 @@ do
 done
 
 echo "Removing tmp binary..."
+
 rm task.elf
+
 echo "Removed tmp binary"
 
 sed -i 's/\./,/g' result.txt
