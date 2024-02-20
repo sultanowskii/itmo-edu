@@ -1,7 +1,6 @@
 import argparse
-from error import print_error_and_exit
 
-from matrix import Matrix1D, Matrix2D, find_determinant
+from matrix import Matrix1D, Matrix2D
 from input import read_input_from_file, read_input_from_stdin, read_input_from_stdin_and_gen_random_matrix
 from pretty import print_1d_matrix, print_2d_matrix
 from solve import solve
