@@ -57,8 +57,6 @@ def solve(n: int, a: MatrixSquare, b: Matrix1D, accuracy: float, prev_x: Matrix1
         for j in range(n):
             if i != j:
                 c[i][j] = - (a[i][j] / a[i][i])
-
-    print(c)
     
     for i in range(n):
         d[i] = b[i] / a[i][i]
