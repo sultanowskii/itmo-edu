@@ -28,3 +28,14 @@ def gen_a(n: int) -> Matrix2D:
 def gen_b(n: int) -> Matrix1D:
     """Генерирует B."""
     return gen_1D_matrix(n, -10, 10)
+
+
+def gen_valid_a(n: int) -> Matrix1D:
+    """Генерирует валидную A."""
+    m = gen_a(n)
+
+    for i in range(n):
+        tmp = sum([abs(c) for c in m[i]])
+        m[i][i] = tmp 
+
+    return m

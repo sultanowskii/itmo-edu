@@ -2,7 +2,7 @@ import yaml
 from typing import Any
 
 from error import print_error_and_exit
-from gen import gen_a, gen_b
+from gen import gen_a, gen_b, gen_valid_a
 from matrix import MIN_N, MAX_N, Matrix1D, Matrix2D
 from parse import parse_int, parse_float, parse_float_row
 
@@ -130,7 +130,7 @@ def read_input_from_stdin_and_gen_random_matrix() -> tuple[int, Matrix2D, Matrix
     """Читает параметры из stdin и генерирует случайные A и B."""
     n = read_n_from_stdin()
     accuracy = read_accuracy_from_stdin()
-    a = gen_a(n)
+    a = gen_valid_a(n)
     b = gen_b(n)
 
     return n, a, b, accuracy

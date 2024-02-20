@@ -38,7 +38,7 @@ def sort_by_diagonal_element_predominance(a: MatrixSquare, b: Matrix1D) -> tuple
     return list(map(lambda line: line[0], lines)), list(map(lambda line: line[1], lines))
 
 
-def solve(n: int, a: MatrixSquare, b: Matrix1D, accuracy: float, prev_x: Matrix1D = None) -> tuple[Matrix1D, int]:
+def solve(n: int, a: MatrixSquare, b: Matrix1D, accuracy: float) -> tuple[Matrix1D, int]:
     """
     Решает СЛАУ (a, b) с заданной точностю.
     
@@ -46,9 +46,6 @@ def solve(n: int, a: MatrixSquare, b: Matrix1D, accuracy: float, prev_x: Matrix1
     """
     c = create_n_n_matrix(n)
     d = create_1_n_matrix(n)
-    
-    if not prev_x:
-        prev_x = create_1_n_matrix(n)
 
     a, b = sort_by_diagonal_element_predominance(a, b)
 
@@ -61,7 +58,15 @@ def solve(n: int, a: MatrixSquare, b: Matrix1D, accuracy: float, prev_x: Matrix1
     for i in range(n):
         d[i] = b[i] / a[i][i]
 
+    return _solve(n, c, d, accuracy)
+
+
+def _solve(n: int, c: MatrixSquare, d: Matrix1D, accuracy: float, prev_x: Matrix1D = None) -> tuple[Matrix1D, int]:
+    """Итерация решения."""
     x = create_1_n_matrix(n)
+
+    if not prev_x:
+        prev_x = create_1_n_matrix(n)
 
     for i in range(n):
         x[i] = d[i]
@@ -80,5 +85,5 @@ def solve(n: int, a: MatrixSquare, b: Matrix1D, accuracy: float, prev_x: Matrix1
     if criteria < accuracy:
         return x, 1
 
-    solution, iterations = solve(n, a, b, accuracy, x)
+    solution, iterations = _solve(n, c, d, accuracy, x)
     return solution, iterations + 1
