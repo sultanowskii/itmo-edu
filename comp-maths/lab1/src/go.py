@@ -63,11 +63,6 @@ def main() -> None:
     print_1d_matrix(b)
     print()
 
-    determinant = find_determinant(a)
-
-    if determinant == 0:
-        print_error_and_exit('Детерминант - 0.')
-
     print('вектор погрешностей:')
     solution, iterations = solve(n, a, b, accuracy)
     print()
@@ -76,7 +71,8 @@ def main() -> None:
     print()
 
     print('решение:')
-    print_1d_matrix(solution)
+    for i in range(n):
+        print(f'x{i + 1}: {solution[i]}')
 
 
 if __name__ == '__main__':

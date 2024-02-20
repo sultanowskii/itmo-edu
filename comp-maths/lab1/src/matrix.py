@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+from error import print_error_and_exit
+
 MIN_N = 1
 MAX_N = 20
 Matrix1D = list[float]
@@ -22,9 +24,34 @@ def copy_matrix(orig) -> list:
     return deepcopy(orig)
 
 
+def tr(m: MatrixSquare):
+    a = copy_matrix(m)
+    n = len(a)
+    print(a)
+
+    for i in range(n):
+        if a[i][i] == 0:
+            print_error_and_exit('0 на главной диагонали!')
+
+        for j in range(i + 1, n):
+            ratio = a[j][i] / a[i][i]
+            
+            for k in range(n):
+                a[j][k] = a[j][k] - ratio * a[i][k]
+ 
+    print(a)
+    return a
+
+
 def find_determinant(m: MatrixSquare) -> float:
     """Находит определитель квадратной матрицы."""
     n = len(m)
+
+    tmp = tr(m)
+    d = 1
+    for i in range(n):
+        d *= tmp[i][i]
+    print(f'd::: {d}')
 
     if n == 1:
         return m[0][0]
