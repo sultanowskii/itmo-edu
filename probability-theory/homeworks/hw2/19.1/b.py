@@ -211,5 +211,3 @@ for i, v in enumerate(table2):
     print(f'{i+1} {v["x_i"]} {v["x_i+1"]} {v["x_i-x_mid"]:8} {v["x_i+1-x_mid"]:8} {v["z_i"]:5} {v["z_i+1"]:5}')
 
 print()
-
-
