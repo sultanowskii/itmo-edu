@@ -1,6 +1,6 @@
 from math import sqrt, log2, ceil
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # type: ignore
 
 # [((x_min, x_max), y), ...]
 PiecewiseFunc = list[tuple[tuple[float, float], float]]

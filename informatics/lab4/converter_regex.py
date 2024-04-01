@@ -1,5 +1,5 @@
 import re
-import regex
+import regex  # type: ignore
 
 from converter_custom import yaml_out
 

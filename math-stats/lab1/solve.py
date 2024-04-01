@@ -1,6 +1,6 @@
 from math import ceil, sqrt
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # type: ignore
 
 POLYGON_FILENAME = 'poly.png'
 HISTOGRAM_FILENAME = 'hist.png'

@@ -1,4 +1,4 @@
-from xmltodict import parse as xml_to_dict
+from xmltodict import parse as xml_to_dict  # type: ignore
 from yaml import dump as dict_to_yaml
 
 

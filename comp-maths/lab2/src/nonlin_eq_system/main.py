@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # type: ignore
 
 from systems import SYSTEMS
 from methods import METHODS

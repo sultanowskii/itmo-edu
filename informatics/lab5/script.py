@@ -7,8 +7,8 @@
 from csv import DictReader
 from typing import Any
 
-import matplotlib.pyplot as plt
-import pandas as pd
+import matplotlib.pyplot as plt  # type: ignore
+import pandas as pd  # type: ignore
 
 
 def get_open_value(column: list[int]) -> int:
