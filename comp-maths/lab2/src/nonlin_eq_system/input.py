@@ -14,12 +14,12 @@ def read_float_from_stdin(message: str, checker: Callable[[float], bool] = lambd
     while not f:
         print(f'{message}')
         f = parse_float(input())
-        
+
         if f is not None and checker(f):
             break
         else:
             f = None
-    
+
     return f
 
 
@@ -30,10 +30,10 @@ def read_int_from_stdin(message: str, checker: Callable[[int], bool] = lambda x:
     while not f:
         print(f'{message}')
         f = parse_int(input())
-        
+
         if f is not None and checker(f):
             break
         else:
             f = None
-    
+
     return f

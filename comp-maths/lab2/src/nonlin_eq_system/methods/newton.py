@@ -9,7 +9,7 @@ from methods.method import Input, Method
 
 class NewtonMethod(Method):
     name = 'Метод Ньютона'
-    
+
     def read_input(self) -> Input:
         e = read_float_from_stdin(f'Пожалуйста, введите валидную точность (>0)', lambda e: e > 0)
         x0 = read_float_from_stdin(f'Пожалуйста, введите валидный x0')
@@ -44,7 +44,7 @@ class NewtonMethod(Method):
                 system.first.f(x_prev, y_prev),
                 system.second.f(x_prev, y_prev),
             ]
-            
+
             j = a[0][0] * a[1][1] - a[0][1] * a[1][0]
             f = system.first.f(x_prev, y_prev)
             g = system.second.f(x_prev, y_prev)

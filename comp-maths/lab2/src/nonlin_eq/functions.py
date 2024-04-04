@@ -12,7 +12,7 @@ class Function:
 
     def root_count_in_range(self, a: float, b: float) -> int:
         return len(list(filter(lambda x: a <= x <= b, self.roots)))
-    
+
     def get_root_in_range(self, a: float, b: float) -> float:
         return list(filter(lambda x: a <= x <= b, self.roots))[0]
 

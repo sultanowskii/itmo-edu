@@ -24,10 +24,10 @@ def _parse_number(basic_parser: Callable[[str], T], s: str, _min: T = None, _max
 
     if _min and number < _min:
         return None
-    
+
     if _max and number > _max:
         return None
-    
+
     return number
 
 
@@ -57,12 +57,12 @@ def _parse_number_row(basic_parser: Callable[[str], T], s: str, n: int, _min: T 
 
         if not number:
             return None
-        
+
         row.append(number)
-    
+
     if len(row) != n:
         return None
-    
+
     return row
 
 

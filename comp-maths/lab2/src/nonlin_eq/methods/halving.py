@@ -9,7 +9,7 @@ from input import read_float_from_stdin
 
 class HalvingMethod(Method):
     name = 'Метод половинного сечения'
-    
+
     def read_input(self) -> Input:
         e = read_float_from_stdin(f'Пожалуйста, введите валидную точность (>0)', lambda e: e > 0)
         a = read_float_from_stdin(f'Пожалуйста, введите валидный a')

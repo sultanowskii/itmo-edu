@@ -9,7 +9,7 @@ from methods.method import Input, Method
 
 class IterationMethod(Method):
     name = 'Метод простой итерации'
-    
+
     def read_input(self) -> Input:
         e = read_float_from_stdin(f'Пожалуйста, введите валидную точность (>0)', lambda e: e > 0)
         a = read_float_from_stdin(f'Пожалуйста, введите валидный a')
@@ -29,7 +29,7 @@ class IterationMethod(Method):
 
         if func.f_der(x) > 0:
             lbd = -lbd
-        
+
         phi = lambda x: x + lbd * func.f(x)
 
         while True:

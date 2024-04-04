@@ -32,7 +32,7 @@ def main():
             input_valid = True
             break
         print(f'На отрезке [a; b] {root_count} корней. Укажите отрезок, на котором есть 1 корень.')
-    
+
     print()
 
     _, a, b = inp

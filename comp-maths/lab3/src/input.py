@@ -23,7 +23,6 @@ def read_float_from_stdin(message: str, checker: Callable[[float], bool] = lambd
     return f
 
 
-
 def read_int_from_stdin(message: str, checker: Callable[[int], bool] = lambda x: True) -> int:
     """Читает int из stdin."""
     f = None
@@ -37,3 +36,18 @@ def read_int_from_stdin(message: str, checker: Callable[[int], bool] = lambda x:
             f = None
 
     return f
+
+
+def read_choice_from_stdin(message: str, choices: list[Any]) -> int:
+    """Выбор из списка. Возвращает выбранный индекс."""
+    choice_count = len(choices)
+
+    s = f'{message} [1-{choice_count}]:'
+
+    for i, choice in enumerate(choices):
+        s += f'\n{i + 1}. {choice}'
+
+    index = read_int_from_stdin(s, lambda n: 1 <= n <= choice_count)
+    index -= 1
+
+    return index

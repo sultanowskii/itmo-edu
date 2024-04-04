@@ -41,7 +41,7 @@ def sort_by_diagonal_element_predominance(a: MatrixSquare, b: Matrix1D) -> tuple
 def solve(n: int, a: MatrixSquare, b: Matrix1D, accuracy: float) -> tuple[Matrix1D, int]:
     """
     Решает СЛАУ (a, b) с заданной точностю.
-    
+
     Помимо решения, возвращает число итераций.
     """
     c = create_n_n_matrix(n)
@@ -54,7 +54,7 @@ def solve(n: int, a: MatrixSquare, b: Matrix1D, accuracy: float) -> tuple[Matrix
         for j in range(n):
             if i != j:
                 c[i][j] = - (a[i][j] / a[i][i])
-    
+
     for i in range(n):
         d[i] = b[i] / a[i][i]
 
@@ -72,12 +72,12 @@ def _solve(n: int, c: MatrixSquare, d: Matrix1D, accuracy: float, prev_x: Matrix
         x[i] = d[i]
         for j in range(n):
             x[i] += c[i][j] * prev_x[j]
-    
+
     abs_deviations = create_1_n_matrix(n)
 
     for i in range(n):
         abs_deviations[i] = abs(x[i] - prev_x[i])
-    
+
     criteria = max(abs_deviations)
 
     print(criteria)

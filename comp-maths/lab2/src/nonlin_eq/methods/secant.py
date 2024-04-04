@@ -9,7 +9,7 @@ from methods.method import Input, Method
 
 class SecantMethod(Method):
     name = 'Метод секущих'
-    
+
     def read_input(self) -> Input:
         e = read_float_from_stdin(f'Пожалуйста, введите валидную точность (>0)', lambda e: e > 0)
         a = read_float_from_stdin(f'Пожалуйста, введите валидный a')

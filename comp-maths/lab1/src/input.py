@@ -37,7 +37,7 @@ def read_input_from_file(filename: str) -> tuple[int, Matrix2D, Matrix1D, float]
     n = data[N_KEY]
     if not isinstance(n, int):
         print_error_and_exit(f'{N_KEY} должен быть валидным целым положительным числом')
-    
+
     if n > MAX_N or n < MIN_N:
         print_error_and_exit(f'{N_KEY} должен быть в диапазоне [{MIN_N}; {MAX_N}]')
 
@@ -48,10 +48,10 @@ def read_input_from_file(filename: str) -> tuple[int, Matrix2D, Matrix1D, float]
     a = data[A_KEY]
     if not isinstance(a, list):
         print_error_and_exit(f'{A_KEY} должна быть валидной матрицей')
-    
+
     if len(a) != n:
         print_error_and_exit(f'{A_KEY} должна быть валидной матрицей {n}x{n}')
-    
+
     for row in a:
         if len(row) != n:
             print_error_and_exit(f'{A_KEY} должна быть валидной матрицей {n}x{n}')
@@ -62,14 +62,14 @@ def read_input_from_file(filename: str) -> tuple[int, Matrix2D, Matrix1D, float]
     b = data[B_KEY]
     if not isinstance(b, list):
         print_error_and_exit(f'{B_KEY} должен быть валидной матрицей')
-    
+
     if len(b) != n:
         print_error_and_exit(f'{B_KEY} должен быть валидной матрицей 1x{n}')
 
     for elem in b:
         if not _is_float_or_int(elem):
             print_error_and_exit(f'{B_KEY} должен быть валидной матрицей 1x{n} и состоять из чисел')
-    
+
     return n, a, b, accuracy
 
 
@@ -79,7 +79,7 @@ def read_n_from_stdin() -> int:
     while not n:
         print(f'Пожалуйста введите валидный n [{MIN_N}; {MAX_N}]:')
         n = parse_int(input(), MIN_N, MAX_N)
-    
+
     return n
 
 
@@ -89,7 +89,7 @@ def read_accuracy_from_stdin() -> int:
     while not accuracy:
         print(f'Пожалуйста введите валидную точность (>=0):')
         accuracy = parse_float(input(), 0, None)
-    
+
     return accuracy
 
 
@@ -112,7 +112,7 @@ def read_b_from_stdin(n: int) -> Matrix1D:
     while not b:
         print(f'Пожалуйста введите валидную матрицу B ({n} элементов, разделены пробелами):')
         b = parse_float_row(input(), n)
-    
+
     return b
 
 

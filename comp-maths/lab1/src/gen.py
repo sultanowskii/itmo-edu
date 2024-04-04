@@ -36,6 +36,6 @@ def gen_valid_a(n: int) -> Matrix1D:
 
     for i in range(n):
         tmp = sum([abs(c) for c in m[i]])
-        m[i][i] = tmp 
+        m[i][i] = tmp
 
     return m
