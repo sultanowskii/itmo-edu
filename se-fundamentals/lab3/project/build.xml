@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="lab3" default="build">
+    <property file="build.properties"/>
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="lib/ant-contrib.jar"/>
+        </classpath>
+    </taskdef>
+
+    <path id="classpath">
+        <fileset dir="${src.dir}" includes="*.java"/>
+        <fileset dir="${mvn.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+    <path id="classpath.test">
+        <pathelement location="${build.dir}"/>
+        <fileset dir="${mvn.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="compile">
+        <mkdir dir="${build.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false"/>
+    </target>
+
+    <target name="test-compile" depends="compile">
+        <mkdir dir="${test.build.dir}"/>
+        <javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false">
+            <classpath refid="classpath.test"/>
+        </javac>
+    </target>
+
+    <target name="build" depends="compile">
+        <mkdir dir="${build.jar.dir}"/>
+        <jar destfile="${build.jar.dir}/${build.project.name}.jar" basedir="${build.classes.dir}">
+            <fileset dir="${build.classes.dir}"/>
+            <manifest>
+                <attribute name="Main-Class" value="App"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${junit.report.dir}"/>
+        <delete dir="${encoding.dir}"/>
+    </target>
+
+    <target name="test" depends="test-compile">
+        <mkdir dir="${junit.report.dir}"/>
+        <junit printsummary="on" haltonfailure="yes" fork="true">
+            <classpath>
+                <path refid="classpath.test"/>
+                <pathelement location="${test.build.dir}"/>
+            </classpath>
+            <batchtest todir="${junit.report.dir}">
+                <formatter type="xml"/>
+                <fileset dir="${test.src.dir}" includes="**/*Test.java" />
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="xml">
+        <xmlvalidate>
+            <fileset dir="./src" includes="**/*.xml" excludes=".idea/*" />
+            <attribute name="http://xml.org/sax/features/validation" value="true"/>
+            <attribute name="http://xml.org/sax/features/namespaces" value="true"/>
+            <attribute name="http://apache.org/xml/features/validation/schema" value="true"/>
+        </xmlvalidate>
+    </target>
+
+    <target name="native2ascii">
+        <mkdir dir="${encoding.dir}"/>
+        <echo message="Converting property files..."/>
+
+        <native2ascii reverse="true" encoding="${encoding.from}" src="${src.dir}" includes="**/*.properties" dest="${encoding.dir}"/>
+    </target>
+
+    <target name="report" depends="test">
+        <exec executable="git">
+            <arg line="add ${junit.report.dir}"/>
+        </exec>
+        <exec executable="git">
+            <arg line="commit -m 'Tests passed successfully'"/>
+        </exec>
+    </target>
+
+    <target name="history">
+        <trycatch property="exception.message" reference="exception.object">
+            <try>
+                <antcall target="compile"/>
+                <antcall target="create-diff-file"/>
+            </try>
+            <catch>
+                <echo>Compilation failed. Going back...</echo>
+                <exec executable="git" resultproperty="checkout-return-code" failifexecutionfails="false" failonerror="false">
+                    <arg line="checkout HEAD^"/>
+                </exec>
+                <echo message="checkout return value is ${checkout-return-code}"/>
+                <if>
+                    <equals arg1="${checkout-return-code}" arg2="0" />
+                    <then>
+                        <antcall target="history-helper"/>
+                    </then>
+                    <else>
+                        <echo>First commit reached!</echo>
+                    </else>
+                </if>
+            </catch>
+        </trycatch>
+    </target>
+
+    <target name="history-helper">
+        <antcall target="history"/>
+    </target>
+
+    <target name="create-diff-file">
+        <exec executable="git">
+            <arg line="diff HEAD^ HEAD "/>
+            <redirector output="${diff-file}">
+            </redirector>
+        </exec>
+    </target>
+
+    <target name="insert">
+        <antcallback target="get-username" return="username"/>
+        <exec executable="sed">
+            <arg line="-i '3i \ \ \ \ \ \ \ \ System.out.println(&quot;${username}&quot;);' src/main/java/App.java"/>
+        </exec>
+    </target>
+
+    <target name="get-username">
+        <exec executable="whoami" outputproperty="username" />
+    </target>
+</project>
