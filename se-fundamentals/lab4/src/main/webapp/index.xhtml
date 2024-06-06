@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<h:head>
+    <link rel="icon" type="image/png" href="favicon.png"/>
+    <link href="css/indexsss.css" rel="stylesheet" type="text/css"/>
+    <script src="js/index.js" type="application/javascript"></script>
+    <title>Lab 3</title>
+</h:head>
+<h:body>
+    <f:view>
+        <table>
+            <thead>
+            <tr>
+                <td>
+                    <h1>Lab 3</h1>
+                </td>
+                <td id="lab-info">
+                    Сандов Кирилл &amp; Султанов Артур / P3213 / Вариант 2320
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        <div class="datetime-container">
+                            <span id="day" class="datetime-element"></span>
+                            <span class="datetime-separator">.</span>
+                            <span id="month" class="datetime-element"></span>
+                            <span class="datetime-separator">.</span>
+                            <span id="year" class="datetime-element"></span>
+                            <span class="datetime-separator"></span>
+                            <span class="datetime-separator"></span>
+                            <span id="hours" class="datetime-element"></span>
+                            <span class="datetime-separator">:</span>
+                            <span id="minutes" class="datetime-element"></span>
+                            <span class="datetime-separator">:</span>
+                            <span id="seconds" class="datetime-element"></span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                        <div class="big-button">
+                            <h:link value="Начать" outcome="start" />
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </f:view>
+</h:body>
+</html>

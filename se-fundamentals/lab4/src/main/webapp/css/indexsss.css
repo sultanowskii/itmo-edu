@@ -1,0 +1,207 @@
+body {
+    background-color: #2E3440;
+    margin: 0;
+}
+
+table {
+    width: 100%;
+    padding: 0 50px;
+    border-spacing: 1vw;
+}
+
+body > table {
+    height: 100vh;
+}
+
+thead {
+    width: 100%;
+}
+
+thead h1 {
+    color: #88C0D0;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.coords-info {
+    color: #81A1C1;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 17pt;
+}
+
+#lab-info {
+    color: #88C0D0;
+    text-align: right;
+    font-size: 17pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+tbody tr {
+    text-align: center;
+    vertical-align: middle;
+}
+
+tbody tr td {
+    text-align: center;
+    vertical-align: middle;
+    margin: auto;
+}
+
+form {
+    margin: 20px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-label {
+    color: #E5E9F0;
+    font-size: 19pt;
+    font-family: inherit;
+}
+
+form input, form .ui-spinner {
+    width: 70%;
+    height: 30px;
+    font-size: 15pt;
+    font-family: inherit;
+}
+
+form select {  /* Каскадирование - часть 1 */
+    width: 70.8%;
+    height: 34px;
+    font-size: 15pt;
+    font-family: inherit;
+}
+
+form input, form select, form .ui-spinner-input {   /* Каскадирование - часть 2 */
+    border: 1px solid #8FBCBB;
+    border-radius: 5px;
+    background-color: #4C566A;
+    color: #D8DEE9;
+}
+
+form input:disabled {
+    filter: brightness(75%);
+    cursor: default !important;
+}
+
+form label {
+    color: #81A1C1;
+}
+
+.coords-btn {
+    cursor: pointer;
+    height: 34px;
+}
+
+form > table {
+    height: clamp(20vw, 200px, 100vw);
+    border-spacing: 10px;
+}
+
+table img {
+    width: 100%;
+}
+
+tfoot {
+    height: 200px;
+}
+
+.coords-interactive-container {
+    padding: 10px;
+    position: relative;
+}
+
+.results-row {
+    height: 350px;
+}
+
+.results-row table thead th {
+    background-color: #4C566A;
+    color: #81A1C1;
+    font-size: 17pt;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.results-row table tbody td {
+    color: #E5E9F0;
+    text-align: center;
+    font-size: 15pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.results-point {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 100%;
+}
+
+.big-button {
+    display: flex;
+    width: 200px;
+    height: 70px;
+    margin: auto;
+    background-color: #434C5E;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.big-button a {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #81A1C1;
+    text-decoration: none;
+    font-size: 17pt;
+}
+
+.datetime-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.datetime-element {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 200px;
+    background-color: #3B4252;
+    border-radius: 20px;
+    color: #81A1C1;
+    font-size: 23pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.datetime-separator {
+    margin: 0 10px;
+    color: #8FBCBB;
+    font-size: 32pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+.validation-error {
+    color: #BF616A;
+    display: block;
+    width: 70%;
+    margin: auto;
+    text-align: start;
+}
+
+@media (max-width: 900px) {  /* Селектор дочерних элементов */
+    body > table > * > tr > td {
+        display: block;
+        margin-bottom: 10px;
+        text-align: center !important;
+    }
+}

@@ -4,6 +4,8 @@
 .vscode/
 .idea/
 target/
+.mvn/
+.mypy_cache/
 
 classes/
 __pycache__/

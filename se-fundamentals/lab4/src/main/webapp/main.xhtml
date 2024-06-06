@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<h:head>
+    <link rel="icon" type="image/png" href="favicon.png"/>
+    <link href="css/indexsss.css" rel="stylesheet" type="text/css"/>
+    <script src="https://unpkg.com/function-plot/dist/function-plot.js"></script>
+    <script src="js/plotxx.js"></script>
+    <script src="js/mainxxx.js"></script>
+    <title>Lab 3</title>
+</h:head>
+<h:body>
+    <f:view>
+        <table>
+            <thead>
+            <tr>
+                <td>
+                    <h1>Lab 3</h1>
+                </td>
+                <td id="lab-info">
+                    Сандов Кирилл &amp; Султанов Артур / P3213 / Вариант 2320
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="coords-info">
+                        <div class="coords-interactive-container" id="plot"></div>
+                    </td>
+                    <td>
+                        <h:form id="coords-form" method="post" action="${pageContext.request.contextPath}/controller">
+                            <table>
+                                <tr>
+                                    <td class="form-label">X:</td>
+                                    <td>
+                                        <h:selectOneRadio id="x-coord-input" name="x" value="#{pointChecker.current.x}">
+                                            <f:selectItem itemValue="-2" itemLabel="-2" />
+                                            <f:selectItem itemValue="-1.5" itemLabel="-1.5" />
+                                            <f:selectItem itemValue="-1" itemLabel="-1" />
+                                            <f:selectItem itemValue="-0.5" itemLabel="-0.5" />
+                                            <f:selectItem itemValue="0" itemLabel="0" />
+                                            <f:selectItem itemValue="0.5" itemLabel="0.5" />
+                                            <f:selectItem itemValue="1" itemLabel="1" />
+                                            <f:selectItem itemValue="1.5" itemLabel="1.5" />
+                                            <f:validateRequired/>
+                                        </h:selectOneRadio>
+                                        <h:message for="x-coord-input" styleClass="validation-error"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="form-label">Y:</td>
+                                    <td>
+                                        <h:inputText id="y-coord-input" name="y" value="#{pointChecker.current.y}">
+                                            <f:validateRequired/>
+                                            <f:validateDoubleRange minimum="-2.999999999" maximum="2.999999999"/>
+                                        </h:inputText>
+                                        <h:message for="y-coord-input" styleClass="validation-error"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="form-label">R:</td>
+                                    <td>
+                                        <div id="r-coord-input">
+                                            <h:commandButton value="1"/>
+                                            <h:commandButton value="1.5"/>
+                                            <h:commandButton value="2"/>
+                                            <h:commandButton value="2.5"/>
+                                            <h:commandButton value="3"/>
+                                        </div>
+                                        <h:inputText type="hidden" name="r" id="r-coord-input-real" value="#{pointChecker.current.r}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <h:commandButton styleClass="coords-btn" value="Отправить">
+                                            <f:ajax
+                                                execute="@form"
+                                                listener="#{pointChecker.checkPoint()}"
+                                                render="@all"
+                                                onevent="init"
+                                            />
+                                            <f:actionListener binding="#{figureArea.setCoordinates(pointChecker)}"/>
+                                        </h:commandButton>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:form>
+                    </td>
+                </tr>
+                <tr class="results-row">
+                    <td colspan="2">
+                        <h:dataTable id="results-table" var="point" value="#{pointCheckStorageController.getCheckPointList()}">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="X"/>
+                                </f:facet>
+                                <h:outputText styleClass="table-x" value="#{point.x}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Y"/>
+                                </f:facet>
+                                <h:outputText styleClass="table-y" value="#{point.y}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="R"/>
+                                </f:facet>
+                                <h:outputText styleClass="table-r" value="#{point.r}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Попал"/>
+                                </f:facet>
+                                <h:outputText styleClass="table-hit" value="#{point.isHit}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Создано"/>
+                                </f:facet>
+                                <h:outputText styleClass="table-created-at" value="#{point.createdAt.getTime()}"/>
+                            </h:column>
+                        </h:dataTable>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </f:view>
+</h:body>
+</html>

@@ -1,0 +1,72 @@
+body {
+    background-color: #2E3440;
+    padding: 20px;
+    height: 100vh;
+}
+
+table {
+    width: 100%;
+    height: 200px
+}
+
+.spacer {
+    height: calc(100vh - 200px - 7% - 20px * 2);
+}
+
+.back-btn {
+    display: flex;
+    width: 200px;
+    height: 7%;
+    margin: auto;
+    background-color: #434C5E;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn a {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #81A1C1;
+    text-decoration: none;
+    font-size: 17pt;
+}
+
+table thead {
+    background-color: #434C5E;
+}
+
+table thead td {
+    color: #81A1C1;
+    font-size: 17pt;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+table tbody td {
+    color: #E5E9F0;
+    text-align: center;
+    font-size: 15pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#hit-checkbox {
+    display: grid;
+    place-content: center;
+    margin: auto;
+}
+
+#hit-checkbox::before {  /* Селектор псевдоэлемента */
+    background-color: #4C566A !important;
+    content: "";
+    width: 0.95em;
+    height: 0.95em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em #31ff46;
+}
+
+#hit-checkbox:checked::before {
+    transform: scale(0.8);
+}
