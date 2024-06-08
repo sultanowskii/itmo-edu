@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: romashka
+spec:
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+       maxSurge: 2
+       maxUnavailable: 2
+  selector:
+    matchLabels:
+      app: romashka
+  template:
+    metadata:
+      labels:
+        app: romashka
+    spec:
+      containers:
+      - name: romashka
+        image: romashka:1.0
+        imagePullPolicy: Never
+        resources:
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+        ports:
+        - name: http
+          containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
