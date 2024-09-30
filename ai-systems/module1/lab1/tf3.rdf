@@ -1,0 +1,406 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2/"
+     xml:base="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:untitled-ontology-2="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#has_item -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#has_item">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#item"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player_class -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player_class">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player_team -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player_team">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#team"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class_avg_dmg -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class_avg_dmg">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class_max_hp -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class_max_hp">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#health_pack_factor -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#health_pack_factor">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#health_pack"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player_hp -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player_hp">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#health_pack -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#health_pack"/>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#item -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#item"/>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#team -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#team"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#alex -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#alex">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <untitled-ontology-2:player_class rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#soldier"/>
+        <untitled-ontology-2:player_team rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#red"/>
+        <untitled-ontology-2:player_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">174</untitled-ontology-2:player_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#anne -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#anne">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <untitled-ontology-2:player_class rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#heavy"/>
+        <untitled-ontology-2:player_team rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#red"/>
+        <untitled-ontology-2:player_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">299</untitled-ontology-2:player_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#bill -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#bill">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <untitled-ontology-2:player_team rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#blu"/>
+        <untitled-ontology-2:player_team rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#soldier"/>
+        <untitled-ontology-2:player_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">132</untitled-ontology-2:player_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#blu -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#blu">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#team"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#demoman -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#demoman">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <untitled-ontology-2:class_avg_dmg rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">70</untitled-ontology-2:class_avg_dmg>
+        <untitled-ontology-2:class_max_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">175</untitled-ontology-2:class_max_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#dima -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#dima">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <untitled-ontology-2:player_class rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#scout"/>
+        <untitled-ontology-2:player_team rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#red"/>
+        <untitled-ontology-2:player_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">120</untitled-ontology-2:player_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#engineer -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#engineer">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <untitled-ontology-2:class_max_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">125</untitled-ontology-2:class_max_hp>
+        <untitled-ontology-2:class_max_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">40</untitled-ontology-2:class_max_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#garry -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#garry">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <untitled-ontology-2:player_class rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#sniper"/>
+        <untitled-ontology-2:player_team rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#blu"/>
+        <untitled-ontology-2:player_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">54</untitled-ontology-2:player_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#heavy -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#heavy">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <untitled-ontology-2:class_avg_dmg rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">90</untitled-ontology-2:class_avg_dmg>
+        <untitled-ontology-2:class_max_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">300</untitled-ontology-2:class_max_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#large -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#large">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#health_pack"/>
+        <untitled-ontology-2:health_pack_factor rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</untitled-ontology-2:health_pack_factor>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#medic -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#medic">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <untitled-ontology-2:class_avg_dmg rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">15</untitled-ontology-2:class_avg_dmg>
+        <untitled-ontology-2:class_max_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">150</untitled-ontology-2:class_max_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#medium -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#medium">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#health_pack"/>
+        <untitled-ontology-2:health_pack_factor rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.5</untitled-ontology-2:health_pack_factor>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#pablo -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#pablo">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <untitled-ontology-2:player_class rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#engineer"/>
+        <untitled-ontology-2:player_team rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#blu"/>
+        <untitled-ontology-2:player_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">101</untitled-ontology-2:player_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#pyro -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#pyro">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <untitled-ontology-2:class_avg_dmg rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">50</untitled-ontology-2:class_avg_dmg>
+        <untitled-ontology-2:class_max_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">175</untitled-ontology-2:class_max_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#razorback -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#razorback">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#item"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#red -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#red">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#team"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#robin -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#robin">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <untitled-ontology-2:has_item rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#razorback"/>
+        <untitled-ontology-2:player_class rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#red"/>
+        <untitled-ontology-2:player_class rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#sniper"/>
+        <untitled-ontology-2:player_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4</untitled-ontology-2:player_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#scout -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#scout">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <untitled-ontology-2:class_avg_dmg rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">40</untitled-ontology-2:class_avg_dmg>
+        <untitled-ontology-2:class_max_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">125</untitled-ontology-2:class_max_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#screensaver_123 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#screensaver_123">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <untitled-ontology-2:player_class rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#medic"/>
+        <untitled-ontology-2:player_team rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#blu"/>
+        <untitled-ontology-2:player_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">102</untitled-ontology-2:player_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#small -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#small">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#health_pack"/>
+        <untitled-ontology-2:health_pack_factor rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.205</untitled-ontology-2:health_pack_factor>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#sniper -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#sniper">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <untitled-ontology-2:class_avg_dmg rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">50</untitled-ontology-2:class_avg_dmg>
+        <untitled-ontology-2:class_max_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">125</untitled-ontology-2:class_max_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#soldier -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#soldier">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <untitled-ontology-2:class_avg_dmg rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">55</untitled-ontology-2:class_avg_dmg>
+        <untitled-ontology-2:class_max_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">200</untitled-ontology-2:class_max_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#spy -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#spy">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#class"/>
+        <untitled-ontology-2:class_avg_dmg rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">39</untitled-ontology-2:class_avg_dmg>
+        <untitled-ontology-2:class_max_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">125</untitled-ontology-2:class_max_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#terry -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#terry">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <untitled-ontology-2:player_class rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#spy"/>
+        <untitled-ontology-2:player_team rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#blu"/>
+        <untitled-ontology-2:player_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3</untitled-ontology-2:player_hp>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#vasya -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#vasya">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#player"/>
+        <untitled-ontology-2:player_class rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#pyro"/>
+        <untitled-ontology-2:player_team rdf:resource="http://www.semanticweb.org/sultanowskii/ontologies/2024/8/untitled-ontology-2#red"/>
+        <untitled-ontology-2:player_hp rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">98</untitled-ontology-2:player_hp>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+

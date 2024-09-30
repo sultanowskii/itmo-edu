@@ -19,3 +19,6 @@ bcomp.jar
 
 *.o
 *.elf
+*.so
+
+.gdb_history
