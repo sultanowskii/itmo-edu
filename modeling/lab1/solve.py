@@ -60,7 +60,10 @@ def calc_confidence_interval(data: list[float]) -> tuple[float, float]:
     называемой доверительной вероятностью, находится истинное значение
     рассматриваемого параметра.
     """
-    # TODO
+    # TODO: Центральная предельная теорема?
+    # Можно также попробовать bootstrapping
+    # - https://en.wikipedia.org/wiki/Bootstrapping_(statistics)
+    # - https://stackoverflow.com/questions/44392978/compute-a-confidence-interval-from-sample-data-assuming-unknown-distribution
     return 1, 1
 
 
@@ -177,13 +180,16 @@ def draw_value_chart(data: list[float]):
         for i in range(1, length - 1)
     ]
 
+    axs[1, 0].set_ylim([-1, 1])
     axs[1, 0].set_title("Коэффициенты автокорелляции")
     axs[1, 0].plot(range(1, len(autocorrelation_coefficients) + 1), autocorrelation_coefficients)
 
     axs[1, 1].set_title("Гистограмма распределения частот")
-    axs[1, 1].hist(sorted_data, bins=length, edgecolor="black", linewidth=1)
+    axs[1, 1].hist(sorted_data, bins=length, edgecolor="black", linewidth=1, weights=[1 / length for _ in data])
     axs[1, 1].set_xlabel("Значение")
     axs[1, 1].set_ylabel("Частота значения")
+
+    plt.tight_layout()
 
     fig.savefig(f'chart_{length}.png')
     plt.close(fig)
@@ -191,7 +197,6 @@ def draw_value_chart(data: list[float]):
 
 def process(data: list[float]):
     draw_value_chart(data)
-    pass
 
 
 def main():
