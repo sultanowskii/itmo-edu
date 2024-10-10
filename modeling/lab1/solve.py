@@ -2,6 +2,7 @@ from math import sqrt
 from typing import Any
 
 import matplotlib.pyplot as plt
+import scipy # type: ignore
 
 ProcessResult = dict[str, Any]
 
@@ -52,7 +53,7 @@ def calc_variation_coefficient(data: list[float]) -> float:
     return standard_deviation / expectation
 
 
-def calc_confidence_interval(data: list[float]) -> tuple[float, float]:
+def calc_confidence_interval(data: list[float], alpha: float = 0.95) -> tuple[float, float]:
     """
     Рассчитывает доверительный интервал.
 
@@ -60,11 +61,14 @@ def calc_confidence_interval(data: list[float]) -> tuple[float, float]:
     называемой доверительной вероятностью, находится истинное значение
     рассматриваемого параметра.
     """
-    # TODO: Центральная предельная теорема?
-    # Можно также попробовать bootstrapping
-    # - https://en.wikipedia.org/wiki/Bootstrapping_(statistics)
-    # - https://stackoverflow.com/questions/44392978/compute-a-confidence-interval-from-sample-data-assuming-unknown-distribution
-    return 1, 1
+    expectation = calc_expectation(data)
+    standard_deviation = calc_standard_deviation(data)
+
+    standard_error_mean = standard_deviation / sqrt(len(data) - 1) # стандартное отклонение среднего значения
+    h = scipy.stats.t.ppf((1+alpha) / 2., len(data) - 1) # квантиль распределения стьюдента
+    
+    # https://stackoverflow.com/questions/15033511/compute-a-confidence-interval-from-sample-data
+    return expectation - h * standard_error_mean, expectation + h * standard_error_mean
 
 
 def relative_deviation(before: float, after: float) -> float:
