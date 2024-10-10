@@ -75,7 +75,7 @@ def relative_deviation(before: float, after: float) -> float:
     """
     Возвращает относительное отклонение.
     """
-    return abs(before - after) / before
+    return (after - before) / before
 
 
 def print_probability_as_percentage(probability: float) -> None:
