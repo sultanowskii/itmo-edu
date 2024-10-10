@@ -68,7 +68,7 @@ def calc_confidence_interval(data: list[float], alpha: float = 0.95) -> tuple[fl
     h = scipy.stats.t.ppf((1+alpha) / 2., len(data) - 1) # квантиль распределения стьюдента
     
     # https://stackoverflow.com/questions/15033511/compute-a-confidence-interval-from-sample-data
-    return expectation - h * standard_error_mean, expectation + h * standard_error_mean
+    return expectation, h * standard_error_mean
 
 
 def relative_deviation(before: float, after: float) -> float:
@@ -87,44 +87,41 @@ def calc_values(data: list[float], representative: ProcessResult = dict()) -> Pr
     print(f'Последовательность из {len(data)} случайных величин')
 
     expectation = calc_expectation(data)
-    print(f'Мат.ожидание: {expectation}')
+    print(f'Мат.ожидание: {expectation:.4f}')
     expectation_relative_deviation = relative_deviation(expectation, representative.get('expectation', expectation))
     print(f'Относительное отклонение мат.ожидания:', end=' ')
     print_probability_as_percentage(expectation_relative_deviation)
     print()
 
     dispersion = calc_dispersion(data)
-    print(f'Дисперсия: {dispersion}')
+    print(f'Дисперсия: {dispersion:.4f}')
     dispersion_relative_deviation = relative_deviation(dispersion, representative.get('dispersion', dispersion))
     print(f'Относительное отклонение дисперсии:', end=' ')
     print_probability_as_percentage(dispersion_relative_deviation)
     print()
 
     standard_deviation = calc_standard_deviation(data)
-    print(f'Среднеквадратичное отклонение: {standard_deviation}')
+    print(f'Среднеквадратичное отклонение: {standard_deviation:.4f}')
     standard_deviation_relative_deviation = relative_deviation(standard_deviation, representative.get('standard_deviation', standard_deviation))
     print(f'Относительное отклонение среднеквадратичного отклонения:', end=' ')
     print_probability_as_percentage(standard_deviation_relative_deviation)
     print()
 
     variation_coefficient = calc_variation_coefficient(data)
-    print(f'Коэффициент вариации: {variation_coefficient}')
+    print(f'Коэффициент вариации: {variation_coefficient:.4f}')
     variation_coefficient_relative_deviation = relative_deviation(variation_coefficient, representative.get('variation_coefficient', variation_coefficient))
     print(f'Относительное отклонение коэффициента вариации:', end=' ')
     print_probability_as_percentage(variation_coefficient_relative_deviation)
     print()
 
-    confidence_interval = calc_confidence_interval(data)
-    confidence_interval_left, confidence_interval_right = confidence_interval[0], confidence_interval[1]
-    print(f'Доверительный интервал: {confidence_interval_left}; {confidence_interval_right}')
-    representative_confidence_interval_left, representative_confidence_interval_right = representative.get('confidence_interval', confidence_interval)
-    confidence_interval_left_relative_deviation = relative_deviation(confidence_interval_left, representative_confidence_interval_left)
-    confidence_interval_right_relative_deviation = relative_deviation(confidence_interval_right, representative_confidence_interval_right)
-    print(f'Относительное отклонение доверительного интервала:', end=' ')
-    print_probability_as_percentage(confidence_interval_left_relative_deviation)
-    print(';', end=' ')
-    print_probability_as_percentage(confidence_interval_right_relative_deviation)
-    print()
+    for prob in (0.9, 0.95, 0.99):
+        expectation, confidence_interval_delta = calc_confidence_interval(data, prob)
+        print(f'Доверительный интервал (при дов.вероятности {prob}): {expectation:.4f} ± {confidence_interval_delta:.4f}')
+        representative_delta = representative.get('confidence_interval_delta', confidence_interval_delta)
+        delta_relative_deviation = relative_deviation(confidence_interval_delta, representative_delta)
+        print(f'Относительное отклонение доверительного интервала (при дов.вероятности {prob}):', end=' ')
+        print_probability_as_percentage(delta_relative_deviation)
+        print()
 
     print()
 
@@ -133,7 +130,7 @@ def calc_values(data: list[float], representative: ProcessResult = dict()) -> Pr
         dispersion=dispersion,
         standard_deviation=standard_deviation,
         variation_coefficient=variation_coefficient,
-        confidence_interval=confidence_interval,
+        confidence_interval_delta=confidence_interval_delta,
     )
 
 
