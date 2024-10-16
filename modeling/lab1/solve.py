@@ -176,9 +176,11 @@ def draw_value_chart(data: list[float]):
     axs[0, 1].plot(range(1, length + 1), sorted_data)
     axs[0, 1].set_ylabel("Значение")
 
+    limit = length if length != 300 else 12
+
     autocorrelation_coefficients = [
         calc_autocorrelation_coefficient(data, i)
-        for i in range(1, length - 1)
+        for i in range(1, limit - 1)
     ]
 
     axs[1, 0].set_ylim([-1, 1])
