@@ -19,6 +19,7 @@ public class AsinPowerSeries {
 
         double res = 0;
 
+        // https://www.calc.ru/Ryad-Teylora-Ryady-Maklorena.html?print=1
         for (int k = 0; k <= n; k++) {
             double a1 = factorial(2 * k);
             double a2 = Math.pow(4, k) * Math.pow(factorial(k), 2);
