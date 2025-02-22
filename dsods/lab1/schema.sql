@@ -83,12 +83,18 @@ DECLARE
             parent_table_column.attname column_name,
             trigger.tgname trigger_name
         FROM pg_trigger trigger
+            -- Only for specified table
             INNER JOIN pg_class parent_table
                 ON parent_table.oid = trigger.tgrelid
                 AND parent_table.relname = table_name
+            -- Only for table's columns
             INNER JOIN pg_attribute parent_table_column
-                ON parent_table_column.attrelid = trigger.tgrelid
+                ON parent_table_column.attrelid = parent_table.oid
                 AND parent_table_column.attnum = ANY(trigger.tgattr::smallint[])
+            -- Only for current schema
+            INNER JOIN pg_namespace parent_table_namespace
+                ON parent_table_namespace.oid = parent_table.relnamespace
+                AND parent_table_namespace.nspname = current_schema()
     );
     column_name_length INTEGER;
     max_column_name_length INTEGER;
@@ -117,16 +123,16 @@ BEGIN
 
     max_line_length := max_column_name_length + GAP_LENGTH + max_trigger_name_length;
 
-    RAISE NOTICE '%', CONCAT(
+    RAISE NOTICE E'\r%', CONCAT(
         RPAD(COLUMN_NAME, max_column_name_length, ' '),
         REPEAT(' ', GAP_LENGTH),
         RPAD(TRIGGER_NAME, max_trigger_name_length, ' ')
     );
-    RAISE NOTICE '%', REPEAT('-', max_line_length);
+    RAISE NOTICE E'\r%', REPEAT('-', max_line_length);
 
     FOR e IN results
     LOOP
-        RAISE NOTICE '%', CONCAT(
+        RAISE NOTICE E'\r%', CONCAT(
             RPAD(e.column_name, max_column_name_length, ' '),
             REPEAT(' ', GAP_LENGTH),
             RPAD(e.trigger_name, max_trigger_name_length, ' ')
