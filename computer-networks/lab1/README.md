@@ -80,6 +80,7 @@
 ![assets/img/stage4-comp2-log.jpg](assets/img/stage4-comp2-log.jpg)
 
 Последовательность событий:
+
 - comp1 отправляет ARP-запрос на "поиск" MAC-адреса с указанным (равным comp2) IP-адресом:
 
     ![assets/img/stage4-arp-request.jpg](assets/img/stage4-arp-request.jpg)
@@ -93,7 +94,6 @@
 
 - comp1 получает этот ответ
 - comp1 заносит в ARP-таблицу информацию о comp2
-
 
 В результате у обоих компьютеров в их ARP-таблицах появилась инфомрация о друг друге:
 
@@ -176,7 +176,6 @@
 | `comp3 eth1`: |
 |:--:|
 | ![assets/img/stage8-comp3-eth1-log.jpg](assets/img/stage8-comp3-eth1-log.jpg) |
-
 
 | `comp1 eth1`: |
 |:--:|
