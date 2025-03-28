@@ -342,7 +342,7 @@ E → cE | ϵ
 [OK]  'aacccccccccc': success
 ```
 
-Смысловая часть исходного кода (полностью доступен по [ссылке](https://github.com/sultanowskii/itmo-edu/blob/master/compilers/hw2/ll1.c)):
+Смысловая часть исходного кода (полностью доступен по [ссылке](https://github.com/sultanowskii/itmo-edu/blob/master/compilers/hw3/ll1.c)):
 
 ```c
 enum RuleType {

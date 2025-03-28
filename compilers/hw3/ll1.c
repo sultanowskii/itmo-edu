@@ -369,7 +369,6 @@ void showcase() {
     char str[4096];
     scanf("%4096s", str);
 
-
     char *err = analyze_string(str);
     if (err == NULL) {
         puts("OK");
@@ -380,8 +379,8 @@ void showcase() {
 }
 
 int main() {
-    test();
-    // showcase();
+    // test();
+    showcase();
 
     return 0;
 }
