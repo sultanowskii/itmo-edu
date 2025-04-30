@@ -1,0 +1,13 @@
+a = 4; b = 2
+c = a * b + 1;
+d = 0
+if (c == 9) {
+    print(-123)
+} else {
+    print(456)
+
+    while (c != 0) {
+        c = c - 1
+        print(c)
+    }
+}

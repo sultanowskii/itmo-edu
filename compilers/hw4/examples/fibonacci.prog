@@ -1,0 +1,18 @@
+n = 30
+
+cntr = 1
+a = 0
+b = 1
+
+if (n == 0) {
+    print(0)
+} else {
+    while (cntr != n) {
+        tmp = b
+        b = a + b
+        a = tmp
+
+        cntr = cntr + 1
+    }
+    print(b)
+}

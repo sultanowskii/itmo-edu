@@ -1,3 +1,6 @@
 [submodule "web/lab3"]
 	path = web/lab3
 	url = https://github.com/amphyxs/web-lab3
+[submodule "compilers/hw4/antlr4"]
+	path = compilers/hw4/antlr4
+	url = git@github.com:antlr/antlr4.git
