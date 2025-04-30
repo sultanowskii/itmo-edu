@@ -1,7 +1,7 @@
      VMA      LMA     Size Align Out     In      Symbol
        0        0 80200000     1 . = 0x80200000
 80200000 80200000      ac2     2 .text
-80200000 80200000        e     2         /tmp/kernel-239a20.o:(.text.boot)
+80200000 80200000        e     2         /tmp/kernel-81a9de.o:(.text.boot)
 80200000 80200000        0     1                 .L0 
 80200000 80200000        0     1                 .L0 
 80200000 80200000        0     1                 $x
@@ -9,7 +9,7 @@
 80200000 80200000        e     1                 boot
 8020000e 8020000e        0     1                 .L0 
 8020000e 8020000e        0     1                 .L0 
-8020000e 8020000e      ab4     2         /tmp/kernel-239a20.o:(.text)
+8020000e 8020000e      ab4     2         /tmp/kernel-81a9de.o:(.text)
 8020000e 8020000e        0     1                 .L0 
 8020000e 8020000e        0     1                 .L0 
 8020000e 8020000e        0     1                 $x
@@ -579,7 +579,7 @@
 80200ac2 80200ac2        0     1                 .L0 
 80200ac2 80200ac2        0     1                 .L0 
 80200ac4 80200ac4       f2     4 .rodata
-80200ac4 80200ac4        8     4         /tmp/kernel-239a20.o:(.rodata)
+80200ac4 80200ac4        8     4         /tmp/kernel-81a9de.o:(.rodata)
 80200ac4 80200ac4        0     1                 $d
 80200ac4 80200ac4        4     1                 SBI_SUCCESS
 80200ac8 80200ac8        4     1                 SBI_ERR_INVALID_PARAM
@@ -591,27 +591,27 @@
 80200bb8 80200bb8    20000     1 . += 128 * 1024
 80220bb8 80220bb8        0     1 __stack_top = .
        0        0      f43     1 .debug_loclists
-       0        0      f43     1         /tmp/kernel-239a20.o:(.debug_loclists)
+       0        0      f43     1         /tmp/kernel-81a9de.o:(.debug_loclists)
        0        0        0     1                 $d
        c        c        0     1                 .L0 
        0        0      23a     1 .debug_abbrev
-       0        0      23a     1         /tmp/kernel-239a20.o:(.debug_abbrev)
+       0        0      23a     1         /tmp/kernel-81a9de.o:(.debug_abbrev)
        0        0        0     1                 $d
        0        0     1f26     1 .debug_info
-       0        0     1f26     1         /tmp/kernel-239a20.o:(.debug_info)
+       0        0     1f26     1         /tmp/kernel-81a9de.o:(.debug_info)
        0        0        0     1                 $d
        0        0       8f     1 .debug_rnglists
-       0        0       8f     1         /tmp/kernel-239a20.o:(.debug_rnglists)
+       0        0       8f     1         /tmp/kernel-81a9de.o:(.debug_rnglists)
        0        0        0     1                 $d
        c        c        0     1                 .L0 
        0        0      140     1 .debug_str_offsets
-       0        0      140     1         /tmp/kernel-239a20.o:(.debug_str_offsets)
+       0        0      140     1         /tmp/kernel-81a9de.o:(.debug_str_offsets)
        0        0        0     1                 $d
        8        8        0     1                 .L0 
        0        0      2c3     1 .debug_str
        0        0      2c3     1         <internal>:(.debug_str)
        0        0      164     1 .debug_addr
-       0        0      164     1         /tmp/kernel-239a20.o:(.debug_addr)
+       0        0      164     1         /tmp/kernel-81a9de.o:(.debug_addr)
        0        0        0     1                 $d
        8        8        0     1                 .L0 
        0        0       29     1 .comment
@@ -619,11 +619,11 @@
        0        0       34     1 .riscv.attributes
        0        0       34     1         <internal>:(.riscv.attributes)
        0        0      114     4 .debug_frame
-       0        0      114     4         /tmp/kernel-239a20.o:(.debug_frame)
+       0        0      114     4         /tmp/kernel-81a9de.o:(.debug_frame)
        0        0        0     1                 .L0 
        0        0        0     1                 $d
        0        0      86c     1 .debug_line
-       0        0      86c     1         /tmp/kernel-239a20.o:(.debug_line)
+       0        0      86c     1         /tmp/kernel-81a9de.o:(.debug_line)
        0        0        0     1                 .Lline_table_start0
        0        0        0     1                 $d
        0        0       4e     1 .debug_line_str
