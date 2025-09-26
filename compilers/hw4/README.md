@@ -17,3 +17,18 @@ $ cmake ..
 $ make
 $
 ```
+
+## Рекомендации
+
+`.vscode/settings.json`:
+
+```json
+{
+    // ...
+    "C_Cpp.default.includePath": [
+        "src/",
+        "antlr4/runtime/Cpp/runtime/src/"
+    ]
+    // ...
+}
+```

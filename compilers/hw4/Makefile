@@ -3,9 +3,9 @@ ANTLR4_CPP_RUNTIME_STATIC_LIBRARY := $(ANTLR4_CPP_RUNTIME_DIR)/build/runtime/lib
 
 GEN_DIR := src/gen
 
-TARGET        := lang.elf
-CFLAGS        := -Wall -std=c++23 -g
-INCLUDES      := -Isrc -I$(ANTLR4_CPP_RUNTIME_DIR)/runtime/src
+TARGET   := lang.elf
+CFLAGS   := -Wall -std=c++23 -g
+INCLUDES := -Isrc -I$(ANTLR4_CPP_RUNTIME_DIR)/runtime/src
 
 SRCS := $(shell find src/ -type f -name '*.cpp')
 HDRS := $(shell find src/ -type f -name '*.h')
