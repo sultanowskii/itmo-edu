@@ -6,12 +6,15 @@
 #include <fcntl.h>
 
 #include "args.h"
+#include "chan_matrix.h"
 
 int main(int argc, char **argv) {
-    struct arguments args = {0};
+    struct Args args = {0};
 
     argp_parse(&argp, argc, argv, 0, NULL, &args);
-    
+
+    ChanMatrix *cm = chan_matrix_create(args.process_count);
+
     puts("hey");
 
     char buf[65];
@@ -55,6 +58,8 @@ int main(int argc, char **argv) {
             puts("parent: sent!");
         }
     }
+
+    chan_matrix_destroy(cm);
 
     return 0;
 }

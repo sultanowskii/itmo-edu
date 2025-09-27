@@ -18,7 +18,7 @@ char         args_doc[]               = "";
 struct argp argp = {options, parse_opt, args_doc, doc, 0, 0, 0};
 
 error_t parse_opt(int key, char *arg, struct argp_state *state) {
-    struct arguments *arguments = state->input;
+    struct Args *arguments = state->input;
 
     switch (key) {
 		case 'p': {
