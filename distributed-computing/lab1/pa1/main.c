@@ -7,13 +7,32 @@
 
 #include "args.h"
 #include "chan_matrix.h"
+#include "ipc.h"
 
 int main(int argc, char **argv) {
     struct Args args = {0};
 
     argp_parse(&argp, argc, argv, 0, NULL, &args);
 
-    ChanMatrix *cm = chan_matrix_create(args.process_count);
+    int subprocess_count = args.process_count;
+    int process_count = subprocess_count + 1;
+
+    ChanMatrix *cm = chan_matrix_create(process_count);
+
+    for (local_id from = 0; from < process_count; from++) {
+        for (local_id to = 0; to < process_count; to++) {
+            if (from == to) {
+                continue;
+            }
+
+            Chan chan = { .fds = {-1, -1}, };
+            pipe2(chan.fds, 0);
+
+            chan_matrix_set_at(cm, from, to, chan);
+        }
+    }
+    puts("lets go");
+    chan_matrix_print(cm);
 
     puts("hey");
 

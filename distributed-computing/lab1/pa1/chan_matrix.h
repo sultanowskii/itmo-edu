@@ -15,4 +15,6 @@ void chan_matrix_destroy(ChanMatrix *chan_matrix);
 void chan_matrix_set_at(ChanMatrix *chan_matrix, local_id from, local_id to, Chan chan);
 Chan chan_matrix_get_at(ChanMatrix *chan_matrix, local_id from, local_id to);
 
+void chan_matrix_print(ChanMatrix *chan_matrix);
+
 #endif // __CHAN_MATRIX_H
