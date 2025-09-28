@@ -1,81 +1,162 @@
+
+#include "log.h"
 #define _GNU_SOURCE
 
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 #include "args.h"
+#include "chan.h"
 #include "chan_matrix.h"
 #include "ipc.h"
+#include "msg.h"
+#include "pa1.h"
+#include "worker.h"
 
-int main(int argc, char **argv) {
-    struct Args args = {0};
+void close_unrelated_chans(ChanMatrix *cm, local_id self) {
+    for (local_id from = 0; from < cm->process_count; from++) {
+        for (local_id to = 0; to < cm->process_count; to++) {
+            if (from == to) {
+                continue;
+            }
 
-    argp_parse(&argp, argc, argv, 0, NULL, &args);
+            Chan chan = chan_matrix_get_at(cm, from, to);
+            if (from != self) {
+                close(chan.fds[CHAN_IDX_WRITE]);
+                chan.fds[CHAN_IDX_WRITE] = CHAN_FD_CLOSED;
+            }
+            if (to != self) {
+                close(chan.fds[CHAN_IDX_READ]);
+                chan.fds[CHAN_IDX_READ] = CHAN_FD_CLOSED;
+            }
+            chan_matrix_set_at(cm, from, to, chan);
+        }
+    }
+}
 
-    int subprocess_count = args.process_count;
-    int process_count = subprocess_count + 1;
+void handle_child(Worker self, int subprocess_count) {
+    write_log(LOG_FILES[LOG_FILE_EVENTS], log_started_fmt, self.id, self.pid, self.parent_pid);
 
+    chan_matrix_print(self.chan_matrix);
+
+    Message start_msg = build_msg(STARTED, log_started_fmt, self.id, self.pid, self.parent_pid);
+    int start_multicast_res = send_multicast(&self, &start_msg);
+    if (start_multicast_res != 0) {
+        // TODO: handle
+    }
+
+    // TODO: extract into a function
+    // TODO: check type, check magic&message (?)
+    for (local_id id = 1; id <= subprocess_count; id++) {
+        if (id == self.id) {
+            continue;
+        }
+        Message start_message_from;
+        int res = receive(&self, id, &start_message_from);
+        if (res != 0) {
+            // TODO: handle
+        }
+    }
+    write_log(LOG_FILES[LOG_FILE_EVENTS], log_received_all_started_fmt, self.id);
+
+    /* some job here (empty for lab1) */
+
+    Message done_msg = build_msg(STARTED, log_done_fmt, self.id);
+    int done_multicast_res = send_multicast(&self, &done_msg);
+    if (done_multicast_res != 0) {
+        // TODO: handle
+    }
+
+    write_log(LOG_FILES[LOG_FILE_EVENTS], log_done_fmt, self.id);
+
+    // TODO: extract into a function
+    // TODO: check type, check magic&message (?)
+    for (local_id id = 1; id <= subprocess_count; id++) {
+        if (id == self.id) {
+            continue;
+        }
+        Message done_message_from;
+        int res = receive(&self, id, &done_message_from);
+        if (res != 0) {
+            // TODO: handle
+        }
+    }
+
+    write_log(LOG_FILES[LOG_FILE_EVENTS], log_received_all_done_fmt, self.id);
+}
+
+void handle_parent(Worker self, int subprocess_count) {
+    chan_matrix_print(self.chan_matrix);
+
+    // TODO: extract into a function
+    // TODO: check type, check magic&message (?)
+    for (local_id id = 1; id <= subprocess_count; id++) {
+        Message start_message_from;
+        int res = receive(&self, id, &start_message_from);
+        if (res != 0) {
+            // TODO: handle
+        }
+    }
+    write_log(LOG_FILES[LOG_FILE_EVENTS], log_received_all_started_fmt, self.id);
+
+    // TODO: extract into a function
+    // TODO: check type, check magic&message (?)
+    for (local_id id = 1; id <= subprocess_count; id++) {
+        if (id == self.id) {
+            continue;
+        }
+        Message done_message_from;
+        int res = receive(&self, id, &done_message_from);
+        if (res != 0) {
+            // TODO: handle
+        }
+    }
+    write_log(LOG_FILES[LOG_FILE_EVENTS], log_received_all_done_fmt, self.id);
+}
+
+ChanMatrix *create_and_open_chan_matrix(int process_count) {
     ChanMatrix *cm = chan_matrix_create(process_count);
-
     for (local_id from = 0; from < process_count; from++) {
         for (local_id to = 0; to < process_count; to++) {
             if (from == to) {
                 continue;
             }
 
-            Chan chan = { .fds = {-1, -1}, };
+            Chan chan = {.fds = {CHAN_FD_CLOSED, CHAN_FD_CLOSED}};
             pipe2(chan.fds, 0);
 
             chan_matrix_set_at(cm, from, to, chan);
         }
     }
-    puts("lets go");
-    chan_matrix_print(cm);
+    return cm;
+}
 
-    puts("hey");
+int main(int argc, char **argv) {
+    struct Args args = {0};
+    argp_parse(&argp, argc, argv, 0, NULL, &args);
 
-    char buf[65];
+    int subprocess_count = args.process_count;
+    int process_count = subprocess_count + 1;
 
-    int pipefds[2];
-    pipe2(pipefds, 0);
+    ChanMatrix *cm = create_and_open_chan_matrix(process_count);
 
-    pid_t pid = fork();
-    if (pid == 0) {
-        puts("child: hi!");
-        close(pipefds[1]);
+    pid_t parent_pid = getpid();
 
-        while (1) {
-            puts("child: now waiting for parent");
-            int bytes_read = read(pipefds[0], buf, 64);
-            if (bytes_read == -1) {
-                perror("child: read() error");
-                continue;
-            } else if (bytes_read == 0) {
-                puts("child: parent closed the channel, bye!");
-                close(pipefds[0]);
-                break;
-            }
-            buf[bytes_read] = '\0';
-            printf("child: parent said '%s'\n", buf);
+    int is_parent = 1;
+    for (local_id id = 1; id <= subprocess_count; id++) {
+        pid_t pid = fork();
+        if (pid == 0) {
+            is_parent = 0;
+            close_unrelated_chans(cm, id);
+            Worker worker = (Worker){.chan_matrix = cm, .id = id, .parent_pid = parent_pid, .pid = getpid()};
+            handle_child(worker, subprocess_count);
+            break;
         }
-    } else {
-        puts("parent: hi!");
-        close(pipefds[0]);
-
-        while (1) {
-            puts("parent: say something! (say 'bye' if you want to finish)");
-            int res = scanf("%64s", buf);
-            if (res == EOF || ((res == 1) && (strcmp(buf, "bye") == 0))) {
-                puts("parent: ok, bye!");
-                close(pipefds[1]);
-                break;
-            }
-            puts("parent: ok, now sending it to the child...");
-            write(pipefds[1], buf, strlen(buf));
-            puts("parent: sent!");
-        }
+    }
+    if (is_parent) {
+        close_unrelated_chans(cm, PARENT_ID);
+        Worker worker = (Worker){.chan_matrix = cm, .id = PARENT_ID, .pid = parent_pid};
+        handle_parent(worker, subprocess_count);
     }
 
     chan_matrix_destroy(cm);

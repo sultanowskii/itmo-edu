@@ -37,8 +37,9 @@ void chan_matrix_print(ChanMatrix *chan_matrix) {
                 printf("{ itself } ");
                 continue;
             }
-            Chan chan = chan_matrix_get_at(chan_matrix, from, to); 
-            printf("{ r=%d w=%d } ", chan.fds[CHAN_IDX_READ], chan.fds[CHAN_IDX_WRITE]);
+            Chan chan = chan_matrix_get_at(chan_matrix, from, to);
+            chan_print(chan);
+            printf(" ");
         }
         printf("\n");
     }
