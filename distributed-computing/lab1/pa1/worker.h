@@ -6,9 +6,11 @@
 
 #include "chan_matrix.h"
 #include "ipc.h"
+#include "log.h"
 
 typedef struct {
     ChanMatrix *chan_matrix;
+    Logger logger;
     local_id id;
 
     pid_t pid;

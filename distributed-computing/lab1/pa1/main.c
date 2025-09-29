@@ -84,7 +84,7 @@ int wait_for_message_from_all_subprocesses(Worker *self, MessageType type) {
 }
 
 void handle_child(Worker self) {
-    write_log(LOG_FILES[LOG_FILE_EVENTS], log_started_fmt, self.id, self.pid, self.parent_pid);
+    logger_log_event(&self.logger,  log_started_fmt, self.id, self.pid, self.parent_pid);
     // chan_matrix_print(self.chan_matrix);
 
     Message started_msg = build_msg(STARTED, log_started_fmt, self.id, self.pid, self.parent_pid);
@@ -97,11 +97,11 @@ void handle_child(Worker self) {
     if (started_wait_res != 0) {
         // TODO: handle error
     }
-    write_log(LOG_FILES[LOG_FILE_EVENTS], log_received_all_started_fmt, self.id);
+    logger_log_event(&self.logger, log_received_all_started_fmt, self.id);
 
     /* some job here (empty for lab1) */
 
-    write_log(LOG_FILES[LOG_FILE_EVENTS], log_done_fmt, self.id);
+    logger_log_event(&self.logger, log_done_fmt, self.id);
 
     Message done_msg = build_msg(DONE, log_done_fmt, self.id);
     int done_multicast_res = send_multicast(&self, &done_msg);
@@ -113,7 +113,7 @@ void handle_child(Worker self) {
     if (done_wait_res != 0) {
         // TODO: handle error
     }
-    write_log(LOG_FILES[LOG_FILE_EVENTS], log_received_all_done_fmt, self.id);
+    logger_log_event(&self.logger,log_received_all_done_fmt, self.id);
 }
 
 void handle_parent(Worker self) {
@@ -124,14 +124,14 @@ void handle_parent(Worker self) {
         // TODO: handle error
         puts("oh no...");
     }
-    write_log(LOG_FILES[LOG_FILE_EVENTS], log_received_all_started_fmt, self.id);
+    logger_log_event(&self.logger,log_received_all_started_fmt, self.id);
 
     int done_wait_res = wait_for_message_from_all_subprocesses(&self, DONE);
     if (done_wait_res != 0) {
         // TODO: handle error
         puts("oh no 2...");
     }
-    write_log(LOG_FILES[LOG_FILE_EVENTS], log_received_all_done_fmt, self.id);
+    logger_log_event(&self.logger,log_received_all_done_fmt, self.id);
 }
 
 ChanMatrix *create_and_open_chan_matrix(int process_count) {
@@ -163,6 +163,8 @@ int main(int argc, char **argv) {
     int process_count = subprocess_count + 1;
 
     ChanMatrix *cm = create_and_open_chan_matrix(process_count);
+    Logger logger;
+    logger_open(&logger);
 
     pid_t parent_pid = getpid();
 
@@ -174,6 +176,7 @@ int main(int argc, char **argv) {
             close_unrelated_chans(cm, id);
             Worker worker = (Worker){
                 .chan_matrix = cm,
+                .logger = logger,
                 .id = id,
                 .parent_pid = parent_pid,
                 .pid = getpid(),
@@ -188,6 +191,7 @@ int main(int argc, char **argv) {
         close_unrelated_chans(cm, PARENT_ID);
         Worker worker = (Worker){
             .chan_matrix = cm,
+            .logger = logger,
             .id = PARENT_ID,
             .pid = parent_pid,
             .process_count = process_count,
@@ -196,6 +200,7 @@ int main(int argc, char **argv) {
         handle_parent(worker);
     }
 
+    logger_close(&logger);
     chan_matrix_destroy(cm);
 
     return 0;
