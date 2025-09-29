@@ -57,14 +57,13 @@ static inline int _receive(ChanMatrix *cm, local_id from, local_id to, Message *
 
     ssize_t read_header_res = read(fd, &msg->s_header, sizeof(MessageHeader));
     if (read_header_res == -1) {
-        // TODO: return error
         return -1;
     }
 
+    // TODO: read atomically with the read above?
     ssize_t read_payload_res = read(fd, &msg->s_payload, msg->s_header.s_payload_len);
     if (read_payload_res == -1) {
-        // TODO: return error
-        return -2;
+        return -1;
     }
 
     return 0;

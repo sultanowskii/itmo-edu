@@ -13,6 +13,9 @@ typedef struct {
 
     pid_t pid;
     pid_t parent_pid;
+
+    int process_count;
+    int subprocess_count;
 } Worker;
 
 #endif // __WORKER_H

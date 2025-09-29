@@ -6,7 +6,7 @@
 
 typedef struct {
     Chan *data;
-    size_t process_count;
+    int process_count;
 } ChanMatrix;
 
 ChanMatrix *chan_matrix_create(int process_count);
